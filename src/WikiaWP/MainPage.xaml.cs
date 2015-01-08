@@ -36,7 +36,9 @@ namespace WikiaWP
 
         private void SearchApplicationBarIconButton_OnClick(object sender, EventArgs e)
         {
-            NavigationService.Navigate(new Uri("/SearchPage.xaml", UriKind.Relative));
+            //NavigationService.Navigate(new Uri("/SearchPage.xaml", UriKind.Relative));
+            var vm = LayoutRoot.DataContext as MainPage_Model;
+            vm.CommandNavigateToSearch.Execute(null);
         }
     }
 }

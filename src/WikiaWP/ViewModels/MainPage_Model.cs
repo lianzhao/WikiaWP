@@ -15,7 +15,6 @@ using System.Runtime.Serialization;
 
 namespace WikiaWP.ViewModels
 {
-
     //[DataContract]
     public class MainPage_Model : ViewModelBase<MainPage_Model>
     {
@@ -102,6 +101,39 @@ namespace WikiaWP.ViewModels
 
         #endregion
 
+
+        public CommandModel<ReactiveCommand, String> CommandNavigateToSearch
+        {
+            get { return _CommandNavigateToSearchLocator(this).Value; }
+            set { _CommandNavigateToSearchLocator(this).SetValueAndTryNotify(value); }
+        }
+        #region Property CommandModel<ReactiveCommand, String> CommandNavigateToSearch Setup
+        protected Property<CommandModel<ReactiveCommand, String>> _CommandNavigateToSearch = new Property<CommandModel<ReactiveCommand, String>> { LocatorFunc = _CommandNavigateToSearchLocator };
+        static Func<BindableBase, ValueContainer<CommandModel<ReactiveCommand, String>>> _CommandNavigateToSearchLocator = RegisterContainerLocator<CommandModel<ReactiveCommand, String>>("CommandNavigateToSearch", model => model.Initialize("CommandNavigateToSearch", ref model._CommandNavigateToSearch, ref _CommandNavigateToSearchLocator, _CommandNavigateToSearchDefaultValueFactory));
+        static Func<BindableBase, CommandModel<ReactiveCommand, String>> _CommandNavigateToSearchDefaultValueFactory =
+            model =>
+            {
+                var resource = "NavigateToSearch";           // Command resource  
+                var commandId = "NavigateToSearch";
+                var cmd = new ReactiveCommand(canExecute: true) { ViewModel = model }; //New Command Core
+                cmd
+                    .Subscribe(async _ =>
+                    {
+                        var vms = await
+                            CastToCurrentType(model)
+                            .StageManager
+                            .DefaultStage
+                            .ShowAndGetViewModel<SearchPage_Model>();
+                        await vms.Closing;
+
+
+                    })
+                    .DisposeWith(model);
+
+                var cmdmdl = cmd.CreateCommandModel(resource);
+                return cmdmdl;
+            };
+        #endregion
 
     }
 
