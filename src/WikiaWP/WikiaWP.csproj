@@ -196,6 +196,10 @@
       <Project>{E605BF40-0AE6-4E92-AF2C-DEDE63FA6064}</Project>
       <Name>WikiaSdk</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ZhAsoiafWikiaSDK\ZhAsoiafWikiaSDK.csproj">
+      <Project>{1D4E2A60-ADCB-4058-96C1-70962B651878}</Project>
+      <Name>ZhAsoiafWikiaSDK</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).CSharp.targets" />

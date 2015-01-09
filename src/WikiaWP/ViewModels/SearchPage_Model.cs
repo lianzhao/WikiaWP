@@ -13,6 +13,8 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 
+using LianZhao.Collections.Generic;
+
 using Microsoft.Phone.Wallet;
 
 using Wikia;
@@ -98,7 +100,22 @@ namespace WikiaWP.ViewModels
                             }
                             
                             var api = new ApiClient("http://zh.asoiaf.wikia.com");
-                            var article = await api.Articles.GetArticleAsync(vm.SearchText);
+                            var api2 = new Wikia.Asoiaf.Zh.ApiClient();
+                            await api2.Dictionaries.RefreshAsync();
+                            string mapped = null;
+                            var searchText = vm.SearchText;
+                            if (api2.Dictionaries.MainDictionary.TryGetValue(
+                                vm.SearchText,
+                                out mapped,
+                                StringComparison.OrdinalIgnoreCase)
+                                || api2.Dictionaries.RedirectDictionary.TryGetValue(
+                                    vm.SearchText,
+                                    out mapped,
+                                    StringComparison.OrdinalIgnoreCase))
+                            {
+                                searchText = mapped;
+                            }
+                            var article = await api.Articles.GetArticleAsync(searchText);
                             if (article == null)
                             {
                                 //todo

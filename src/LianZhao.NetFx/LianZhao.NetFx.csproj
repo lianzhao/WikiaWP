@@ -37,6 +37,7 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections\Generic\DictionaryExtensions.cs" />
     <Compile Include="DisposableObject.cs" />
     <Compile Include="DisposableObjectOwner.cs" />
     <Compile Include="Linq\Enumerable_JoinToString.cs" />
