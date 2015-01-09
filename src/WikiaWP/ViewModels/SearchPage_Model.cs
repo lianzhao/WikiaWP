@@ -108,6 +108,17 @@ namespace WikiaWP.ViewModels
             };
         #endregion
 
+        public SearchPage_Model()
+        {
+            if (IsInDesignMode)
+            {
+                MatchItemTitle = "提利昂·兰尼斯特";
+                MatchItemContent =
+                    "提利昂·兰尼斯特（Tyrion Lannister）是泰温公爵和乔安娜夫人的第三个也是最小的孩子。因为是个侏儒，他有时候被戏称为小恶魔和半人。他利用自己的智慧屡次化险为夷，帮助兰尼斯特家族赢得了五王之战，但命运的不公使得他成为了一个弑亲者和通缉犯，踏上了流亡之路。 提利昂是书中一个非常重要的POV人物。在电视剧中，由皮特·丁拉基扮演。";
+                MatchItemImageSource =
+                    "http://vignette3.wikia.nocookie.net/asoiaf/images/0/04/Tyrion_Lannister_personal_arms.png/revision/latest/window-crop/width/200/x-offset/0/y-offset/0/window-width/400/window-height/400?cb=20120205044455&path-prefix=zh";
+            }
+        }
 
         #region Life Time Event Handling
 
