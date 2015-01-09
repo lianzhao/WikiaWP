@@ -187,6 +187,16 @@
     </Reference>
     <Reference Include="System.Windows.Interactivity, Version=3.9.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LianZhao.NetFx\LianZhao.NetFx.csproj">
+      <Project>{397EB213-EAAE-46EE-9385-ADE458C4EA59}</Project>
+      <Name>LianZhao.NetFx</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WikiaSdk\WikiaSdk.csproj">
+      <Project>{E605BF40-0AE6-4E92-AF2C-DEDE63FA6064}</Project>
+      <Name>WikiaSdk</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

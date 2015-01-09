@@ -21,7 +21,8 @@
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel Grid.Row="0" Margin="12,17,0,28">
             <TextBlock Text="MY APPLICATION" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBox x:Name="SearchTextBox" AcceptsReturn="False" InputScope="Search"
+            <TextBox x:Name="SearchTextBox" Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                     AcceptsReturn="False" InputScope="Search"
                      KeyDown="SearchTextBox_OnKeyDown"></TextBox>
         </StackPanel>
 
@@ -44,6 +45,7 @@
                                TextWrapping="Wrap" Style="{StaticResource PhoneTextSmallStyle}"/>
                 </StackPanel>
             </Grid>
+            <!--<Button Grid.Row="1" Content="更多" Command="{Binding CommandLoadMore}"/>-->
         </Grid>
     </Grid>
 

@@ -15,6 +15,8 @@ using System.Runtime.Serialization;
 
 using Microsoft.Phone.Wallet;
 
+using Wikia;
+
 namespace WikiaWP.ViewModels
 {
 
@@ -35,7 +37,7 @@ namespace WikiaWP.ViewModels
         static Func<BindableBase, ValueContainer<string>> _SearchTextLocator = RegisterContainerLocator<string>("SearchText", model => model.Initialize("SearchText", ref model._SearchText, ref _SearchTextLocator, _SearchTextDefaultValueFactory));
         static Func<string> _SearchTextDefaultValueFactory = () => { return default(string); };
         #endregion
-        
+
         public string MatchItemTitle
         {
             get { return _MatchItemTitleLocator(this).Value; }
@@ -89,12 +91,57 @@ namespace WikiaWP.ViewModels
                     .DoExecuteUIBusyTask(
                         vm,
                         async e =>
+                        {
+                            if (string.IsNullOrWhiteSpace(vm.SearchText))
                             {
-                                vm.MatchItemTitle = "提利昂·兰尼斯特";
-                                vm.MatchItemContent =
-                                    "提利昂·兰尼斯特（Tyrion Lannister）是泰温公爵和乔安娜夫人的第三个也是最小的孩子。因为是个侏儒，他有时候被戏称为小恶魔和半人。他利用自己的智慧屡次化险为夷，帮助兰尼斯特家族赢得了五王之战，但命运的不公使得他成为了一个弑亲者和通缉犯，踏上了流亡之路。 提利昂是书中一个非常重要的POV人物。在电视剧中，由皮特·丁拉基扮演。";
-                                vm.MatchItemImageSource =
-                                    "http://vignette3.wikia.nocookie.net/asoiaf/images/0/04/Tyrion_Lannister_personal_arms.png/revision/latest/window-crop/width/200/x-offset/0/y-offset/0/window-width/400/window-height/400?cb=20120205044455&path-prefix=zh";
+                                return;
+                            }
+                            
+                            var api = new ApiClient("http://zh.asoiaf.wikia.com");
+                            var article = await api.Articles.GetArticleAsync(vm.SearchText);
+                            if (article == null)
+                            {
+                                //todo
+                                return;
+                            }
+                            vm.MatchItemTitle = article.title;
+                            vm.MatchItemContent = article.@abstract;
+                            vm.MatchItemImageSource = article.thumbnail;
+                        }
+                    )
+                    .DoNotifyDefaultEventRouter(vm, commandId)
+                    .Subscribe()
+                    .DisposeWith(vm);
+
+                var cmdmdl = cmd.CreateCommandModel(resource);
+                cmdmdl.ListenToIsUIBusy(model: vm, canExecuteWhenBusy: false);
+                return cmdmdl;
+            };
+        #endregion
+
+
+        public CommandModel<ReactiveCommand, String> CommandLoadMore
+        {
+            get { return _CommandLoadMoreLocator(this).Value; }
+            set { _CommandLoadMoreLocator(this).SetValueAndTryNotify(value); }
+        }
+        #region Property CommandModel<ReactiveCommand, String> CommandLoadMore Setup
+        protected Property<CommandModel<ReactiveCommand, String>> _CommandLoadMore = new Property<CommandModel<ReactiveCommand, String>> { LocatorFunc = _CommandLoadMoreLocator };
+        static Func<BindableBase, ValueContainer<CommandModel<ReactiveCommand, String>>> _CommandLoadMoreLocator = RegisterContainerLocator<CommandModel<ReactiveCommand, String>>("CommandLoadMore", model => model.Initialize("CommandLoadMore", ref model._CommandLoadMore, ref _CommandLoadMoreLocator, _CommandLoadMoreDefaultValueFactory));
+        static Func<BindableBase, CommandModel<ReactiveCommand, String>> _CommandLoadMoreDefaultValueFactory =
+            model =>
+            {
+                var resource = "LoadMore";           // Command resource  
+                var commandId = "LoadMore";
+                var vm = CastToCurrentType(model);
+                var cmd = new ReactiveCommand(canExecute: true) { ViewModel = model }; //New Command Core
+                cmd
+                    .DoExecuteUIBusyTask(
+                        vm,
+                        async e =>
+                            {
+                                var tmp = vm.SearchText;
+                            //Todo: Add LoadMore logic here, or
                             await MVVMSidekick.Utilities.TaskExHelper.Yield();
                         }
                     )
@@ -107,6 +154,7 @@ namespace WikiaWP.ViewModels
                 return cmdmdl;
             };
         #endregion
+
 
         public SearchPage_Model()
         {

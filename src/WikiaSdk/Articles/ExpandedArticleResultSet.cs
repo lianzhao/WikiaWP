@@ -4,7 +4,7 @@ namespace Wikia.Articles
 {
     public class ExpandedArticleResultSet
     {
-        public IEnumerable<ExpandedArticle> items { get; set; }
+        public IDictionary<int, ExpandedArticle> items { get; set; }
 
         public string basepath { get; set; }
     }

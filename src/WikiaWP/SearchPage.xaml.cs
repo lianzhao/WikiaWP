@@ -46,6 +46,8 @@ namespace WikiaWP
             {
                 Focus();// hide keyboard
                 var vm = LayoutRoot.DataContext as SearchPage_Model;
+                var binding = SearchTextBox.GetBindingExpression(TextBox.TextProperty);
+                binding.UpdateSource();
                 vm.CommandSearch.Execute(null);
             }
         }

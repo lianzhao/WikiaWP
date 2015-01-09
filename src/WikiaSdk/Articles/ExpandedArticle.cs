@@ -9,7 +9,7 @@ namespace Wikia.Articles
         public Revision revision { get; set; }
         public int comments { get; set; }
         public string type { get; set; }
-        public string _abstract { get; set; }
+        public string @abstract { get; set; }
         public string thumbnail { get; set; }
         public Original_Dimensions original_dimensions { get; set; }
     }
