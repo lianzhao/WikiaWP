@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LianZhao.NetFx", "LianZhao.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZhAsoiafWikiaSDK", "ZhAsoiafWikiaSDK\ZhAsoiafWikiaSDK.csproj", "{1D4E2A60-ADCB-4058-96C1-70962B651878}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaWikiSDK", "MediaWikiSDK\MediaWikiSDK.csproj", "{374873A0-41A9-4318-9A3F-9E838BE7F30F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,14 @@ Global
 		{1D4E2A60-ADCB-4058-96C1-70962B651878}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1D4E2A60-ADCB-4058-96C1-70962B651878}.Release|ARM.ActiveCfg = Release|Any CPU
 		{1D4E2A60-ADCB-4058-96C1-70962B651878}.Release|x86.ActiveCfg = Release|Any CPU
+		{374873A0-41A9-4318-9A3F-9E838BE7F30F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{374873A0-41A9-4318-9A3F-9E838BE7F30F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{374873A0-41A9-4318-9A3F-9E838BE7F30F}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{374873A0-41A9-4318-9A3F-9E838BE7F30F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{374873A0-41A9-4318-9A3F-9E838BE7F30F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{374873A0-41A9-4318-9A3F-9E838BE7F30F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{374873A0-41A9-4318-9A3F-9E838BE7F30F}.Release|ARM.ActiveCfg = Release|Any CPU
+		{374873A0-41A9-4318-9A3F-9E838BE7F30F}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
