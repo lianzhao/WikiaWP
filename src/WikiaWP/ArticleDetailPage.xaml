@@ -16,8 +16,8 @@
         <phone:WebBrowser x:Name="WebBrowser"
                           Loaded="WebBrowser_OnLoaded"
                           Navigating="WebBrowser_OnNavigating"
-                          LoadCompleted="WebBrowser_OnLoadCompleted"></phone:WebBrowser>
-        <ProgressBar x:Name="ProgressBar" IsIndeterminate="True"></ProgressBar>
+                          LoadCompleted="WebBrowser_OnLoadCompleted"/>
+        <ProgressBar x:Name="ProgressBar" IsIndeterminate="True"/>
     </Grid>
 
 </mvvm:MVVMPage>

@@ -49,19 +49,21 @@ namespace WikiaWP
 
         private void WebBrowser_OnNavigating(object sender, NavigatingEventArgs e)
         {
-            const string NormalUriPrefix = "http://zh.asoiaf.wikia.com/wik/";
+            const string NormalUriPrefix = "http://zh.asoiaf.wikia.com/wiki/";
             var uri = e.Uri.AbsoluteUri;
             if (uri.StartsWith(NormalUriPrefix, StringComparison.OrdinalIgnoreCase))
             {
                 e.Cancel = true;
                 NavigateToWikiPage(uri.Substring(NormalUriPrefix.Length));
             }
+            WebBrowser.Opacity = 0;
             ProgressBar.Visibility = Visibility.Visible;
             ProgressBar.IsIndeterminate = true;
         }
 
         private void WebBrowser_OnLoadCompleted(object sender, NavigationEventArgs e)
         {
+            WebBrowser.Opacity = 1;
             ProgressBar.Visibility = Visibility.Collapsed;
             ProgressBar.IsIndeterminate = false;
         }
