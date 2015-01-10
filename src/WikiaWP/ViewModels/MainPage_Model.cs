@@ -123,7 +123,7 @@ namespace WikiaWP.ViewModels
                             CastToCurrentType(model)
                             .StageManager
                             .DefaultStage
-                            .ShowAndGetViewModel<SearchPage_Model>();
+                            .ShowAndGetViewModel<ArticleDetailPage_Model>();
                         await vms.Closing;
 
 

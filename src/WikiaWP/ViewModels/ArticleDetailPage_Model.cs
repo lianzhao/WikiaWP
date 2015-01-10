@@ -23,6 +23,17 @@ namespace WikiaWP.ViewModels
         // 如果您已经安装了 MVVMSidekick 代码片段，请用 propvm +tab +tab 输入属性
 
 
+        public string Title
+        {
+            get { return _TitleLocator(this).Value; }
+            set { _TitleLocator(this).SetValueAndTryNotify(value); }
+        }
+        #region Property string Title Setup
+        protected Property<string> _Title = new Property<string> { LocatorFunc = _TitleLocator };
+        static Func<BindableBase, ValueContainer<string>> _TitleLocator = RegisterContainerLocator<string>("Title", model => model.Initialize("Title", ref model._Title, ref _TitleLocator, _TitleDefaultValueFactory));
+        static Func<string> _TitleDefaultValueFactory = () => { return default(string); };
+        #endregion
+
 
         #region Life Time Event Handling
 

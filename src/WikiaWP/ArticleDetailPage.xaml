@@ -6,13 +6,18 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"    
     xmlns:vm="clr-namespace:WikiaWP.ViewModels" 
-    xmlns:mvvm="clr-namespace:MVVMSidekick.Views;assembly=MVVMSidekick_Wp8">
+    xmlns:mvvm="clr-namespace:MVVMSidekick.Views;assembly=MVVMSidekick_Wp8"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone">
     <FrameworkElement.Resources>
         <vm:ArticleDetailPage_Model x:Key="DesignVM" />
     </FrameworkElement.Resources>
 
-    <Grid x:Name="LayoutRoot" Background="White" DataContext="{StaticResource DesignVM}" >
-     
+    <Grid x:Name="LayoutRoot" DataContext="{StaticResource DesignVM}" >
+        <phone:WebBrowser x:Name="WebBrowser"
+                          Loaded="WebBrowser_OnLoaded"
+                          Navigating="WebBrowser_OnNavigating"
+                          LoadCompleted="WebBrowser_OnLoadCompleted"></phone:WebBrowser>
+        <ProgressBar x:Name="ProgressBar" IsIndeterminate="True"></ProgressBar>
     </Grid>
 
 </mvvm:MVVMPage>
