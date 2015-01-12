@@ -7,6 +7,7 @@ using MVVMSidekick.Services;
 using MVVMSidekick.Commands;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Net;
 using System.Windows;
@@ -28,8 +29,7 @@ namespace WikiaWP
 {
     public partial class ArticleDetailPage : MVVMPage
     {
-
-
+        private readonly Stack<string> Histories = new Stack<string>();
 
         public ArticleDetailPage()
             : base(null)
@@ -40,6 +40,20 @@ namespace WikiaWP
             : base(model)
         {
             this.InitializeComponent();
+        }
+
+        protected override void OnBackKeyPress(CancelEventArgs e)
+        {
+            if (WebBrowser.CanGoBack)
+            {
+                e.Cancel = true;
+                WebBrowser.GoBack();
+                var title = Histories.Pop();
+                var vm = LayoutRoot.DataContext as ArticleDetailPage_Model;
+                vm.Title = title;
+                return;
+            }
+            base.OnBackKeyPress(e);
         }
 
         private void WebBrowser_OnLoaded(object sender, RoutedEventArgs e)
@@ -54,7 +68,11 @@ namespace WikiaWP
             if (uri.StartsWith(NormalUriPrefix, StringComparison.OrdinalIgnoreCase))
             {
                 e.Cancel = true;
-                NavigateToWikiPage(uri.Substring(NormalUriPrefix.Length));
+                var vm = LayoutRoot.DataContext as ArticleDetailPage_Model;
+                Histories.Push(vm.Title);
+                var newTitle = uri.Substring(NormalUriPrefix.Length);
+                NavigateToWikiPage(newTitle);
+                vm.Title = WebUtility.UrlDecode(newTitle);
             }
             WebBrowser.Opacity = 0;
             ProgressBar.Visibility = Visibility.Visible;
