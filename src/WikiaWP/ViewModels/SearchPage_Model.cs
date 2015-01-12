@@ -102,8 +102,14 @@ namespace WikiaWP.ViewModels
                             var searchText = vm.SearchText;
                             using (var api = new ApiClient())
                             {
-                                if (api.MainDictionary.TryGetValue(vm.SearchText, out mapped)
-                                    || api.RedirectDictionary.TryGetValue(vm.SearchText, out mapped))
+                                if (ApiClient.MainDictionary.TryGetValue(
+                                    vm.SearchText,
+                                    out mapped,
+                                    StringComparison.OrdinalIgnoreCase)
+                                    || ApiClient.RedirectDictionary.TryGetValue(
+                                        vm.SearchText,
+                                        out mapped,
+                                        StringComparison.OrdinalIgnoreCase))
                                 {
                                     searchText = mapped;
                                 }

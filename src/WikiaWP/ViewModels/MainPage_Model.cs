@@ -123,8 +123,7 @@ namespace WikiaWP.ViewModels
                             CastToCurrentType(model)
                             .StageManager
                             .DefaultStage
-                            .ShowAndGetViewModel<ArticleDetailPage_Model>();
-                        vms.ViewModel.Title = "凯特琳·徒利";
+                            .ShowAndGetViewModel<SearchPage_Model>();
                         await vms.Closing;
 
 

@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.IsolatedStorage;
 using System.Net.Http;
 using System.Threading.Tasks;
 
 using LianZhao;
+
+using Newtonsoft.Json;
 
 namespace WikiaWP
 {
@@ -17,9 +21,9 @@ namespace WikiaWP
 
         private readonly Lazy<Wikia.Asoiaf.Zh.ApiClient> _zhAsoiafWikiLazy;
 
-        public IDictionary<string, string> MainDictionary { get; private set; }
+        public static IDictionary<string, string> MainDictionary { get; private set; }
 
-        public IDictionary<string,string> RedirectDictionary { get; private set; }
+        public static IDictionary<string,string> RedirectDictionary { get; private set; }
 
         public ApiClient()
             : this(new HttpClient(), true)
@@ -55,22 +59,28 @@ namespace WikiaWP
             }
         }
 
-        public async Task RefreshCacheAsync()
+        public static async Task RefreshCacheAsync()
         {
-            var tasks = new[] { RefreshMainDictionaryAsync(), RefreshRedirectDictionary() };
-            await Task.WhenAll(tasks);
+            using (var api = new ApiClient())
+            {
+                var tasks = new[]
+                            {
+                                api.ZhAsoiafWiki.Dictionaries.GetMainDictAsync(),
+                                api.ZhAsoiafWiki.Dictionaries.GetRedirectDictAsync()
+                            };
+                var dicts = await Task.WhenAll(tasks);
+                MainDictionary = dicts[0];
+                RedirectDictionary = dicts[1];
+            }
+            //await AppCache.SaveToCachedDictionaryAsync(MainDictionary, @"cache\mainDict.json");
+            //await AppCache.SaveToCachedDictionaryAsync(RedirectDictionary, @"cache\redirectDict.json");
         }
 
-        private async Task RefreshMainDictionaryAsync()
-        {
-            var dict = await ZhAsoiafWiki.Dictionaries.GetMainDictAsync();
-            MainDictionary = new Dictionary<string, string>(dict, StringComparer.OrdinalIgnoreCase);
-        }
-
-        private async Task RefreshRedirectDictionary()
-        {
-            var dict = await ZhAsoiafWiki.Dictionaries.GetRedirectDictAsync();
-            RedirectDictionary = new Dictionary<string, string>(dict, StringComparer.OrdinalIgnoreCase);
-        }
+        //public async Task LoadCacheFromIsolatedStorage()
+        //{
+        //    MainDictionary = await AppCache.LoadCachedDictionaryAsync(@"cache\mainDict.json") ?? new Dictionary<string, string>();
+        //    RedirectDictionary = await AppCache.LoadCachedDictionaryAsync(@"cache\redirectDict.json")
+        //                         ?? new Dictionary<string, string>();
+        //}
     }
 }
