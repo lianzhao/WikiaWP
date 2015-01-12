@@ -13,10 +13,30 @@
     </FrameworkElement.Resources>
 
     <Grid x:Name="LayoutRoot" DataContext="{StaticResource DesignVM}" >
-        <phone:WebBrowser x:Name="WebBrowser"
+        <phone:Pivot Title="{Binding Title}" LoadingPivotItem="Pivot_OnLoadingPivotItem">
+            <phone:PivotItem x:Name="OverviewPivotItem" Header="概览">
+                <phone:WebBrowser x:Name="WebBrowser"
                           Loaded="WebBrowser_OnLoaded"
                           Navigating="WebBrowser_OnNavigating"
                           LoadCompleted="WebBrowser_OnLoadCompleted"/>
+            </phone:PivotItem>
+            <phone:PivotItem x:Name="CommentsPivotItem" Header="评价">
+                <phone:LongListSelector ItemsSource="{Binding Comments}">
+                    <phone:LongListSelector.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" Text="{Binding CreateUser}" TextWrapping="NoWrap" Margin="12,0,0,0" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
+                                <TextBlock Grid.Row="1" Text="{Binding Content}" TextWrapping="Wrap" Margin="12,-6,0,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </phone:LongListSelector.ItemTemplate>
+                </phone:LongListSelector>
+            </phone:PivotItem>
+        </phone:Pivot>
         <ProgressBar x:Name="ProgressBar" IsIndeterminate="True"/>
     </Grid>
 

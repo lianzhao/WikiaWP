@@ -124,6 +124,7 @@ namespace WikiaWP.ViewModels
                             .StageManager
                             .DefaultStage
                             .ShowAndGetViewModel<ArticleDetailPage_Model>();
+                        vms.ViewModel.Title = "凯特琳·徒利";
                         await vms.Closing;
 
 

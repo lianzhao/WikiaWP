@@ -98,8 +98,8 @@ namespace WikiaWP.ViewModels
                             {
                                 return;
                             }
-                            
-                            var api = new ApiClient("http://zh.asoiaf.wikia.com");
+
+                            var api = new Wikia.ApiClient("http://zh.asoiaf.wikia.com");
                             var api2 = new Wikia.Asoiaf.Zh.ApiClient();
                             await api2.Dictionaries.RefreshAsync();
                             string mapped = null;

@@ -87,6 +87,15 @@ namespace WikiaWP
             //    "User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 8_0 like Mac OS X) AppleWebKit/600.1.3 (KHTML, like Gecko) Version/8.0 Mobile/12A4345d Safari/600.1.4");
 
         }
+
+        private void Pivot_OnLoadingPivotItem(object sender, PivotItemEventArgs e)
+        {
+            var vm = LayoutRoot.DataContext as ArticleDetailPage_Model;
+            if (e.Item == CommentsPivotItem)
+            {
+                vm.CommandLoadComments.Execute(null);
+            }
+        }
     }
 }
 
