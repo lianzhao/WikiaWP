@@ -20,6 +20,7 @@ using System.Windows.Shapes;
 using System.Windows.Navigation;
 
 using Microsoft.Phone.Controls;
+using Microsoft.Phone.Shell;
 
 using WikiaWP;
 using WikiaWP.ViewModels;
@@ -116,6 +117,21 @@ namespace WikiaWP
             {
                 vm.CommandLoadComments.Execute(null);
             }
+        }
+
+        private void ApplicationBarMenuItem_OnClick(object sender, EventArgs e)
+        {
+            NavigationService.GoBack();
+        }
+
+        private void ApplicationBar_OnStateChanged(object sender, ApplicationBarStateChangedEventArgs e)
+        {
+            var appbar = sender as ApplicationBar;
+            if (appbar == null)
+            {
+                return;
+            }
+            appbar.Opacity = e.IsMenuVisible ? 1 : 0.25;
         }
     }
 }

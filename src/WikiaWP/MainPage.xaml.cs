@@ -16,6 +16,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
+
+using Microsoft.Phone.Shell;
+
 using WikiaWP.ViewModels;
 
 namespace WikiaWP
@@ -36,9 +39,18 @@ namespace WikiaWP
 
         private void SearchApplicationBarIconButton_OnClick(object sender, EventArgs e)
         {
-            //NavigationService.Navigate(new Uri("/SearchPage.xaml", UriKind.Relative));
             var vm = LayoutRoot.DataContext as MainPage_Model;
             vm.CommandNavigateToSearch.Execute(null);
+        }
+
+        private void ApplicationBar_OnStateChanged(object sender, ApplicationBarStateChangedEventArgs e)
+        {
+            var appbar = sender as ApplicationBar;
+            if (appbar == null)
+            {
+                return;
+            }
+            appbar.Opacity = e.IsMenuVisible ? 1 : 0.25;
         }
     }
 }
