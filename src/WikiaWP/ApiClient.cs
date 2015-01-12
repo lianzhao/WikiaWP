@@ -11,8 +11,6 @@ namespace WikiaWP
     {
         private const string Site = "http://zh.asoiaf.wikia.com";
 
-        public static ApiClient Instance { get; set; }
-
         private readonly HttpClient _httpClient;
 
         private readonly Lazy<Wikia.ApiClient> _wikiaLazy;

@@ -100,20 +100,24 @@ namespace WikiaWP.ViewModels
                             }
                             string mapped = null;
                             var searchText = vm.SearchText;
-                            if (ApiClient.Instance.MainDictionary.TryGetValue(vm.SearchText, out mapped)
-                                || ApiClient.Instance.RedirectDictionary.TryGetValue(vm.SearchText, out mapped))
+                            using (var api = new ApiClient())
                             {
-                                searchText = mapped;
+                                if (api.MainDictionary.TryGetValue(vm.SearchText, out mapped)
+                                    || api.RedirectDictionary.TryGetValue(vm.SearchText, out mapped))
+                                {
+                                    searchText = mapped;
+                                }
+                                var article = await api.WikiaApi.Articles.GetArticleAsync(searchText);
+                                if (article == null)
+                                {
+                                    //todo
+                                    return;
+                                }
+                                vm.MatchItemTitle = article.title;
+                                vm.MatchItemContent = article.@abstract;
+                                vm.MatchItemImageSource = article.thumbnail;
+                                
                             }
-                            var article = await ApiClient.Instance.WikiaApi.Articles.GetArticleAsync(searchText);
-                            if (article == null)
-                            {
-                                //todo
-                                return;
-                            }
-                            vm.MatchItemTitle = article.title;
-                            vm.MatchItemContent = article.@abstract;
-                            vm.MatchItemImageSource = article.thumbnail;
                         }
                     )
                     .DoNotifyDefaultEventRouter(vm, commandId)

@@ -88,12 +88,19 @@ namespace WikiaWP.ViewModels
                         vm,
                         async e =>
                             {
-                                var comments =
-                                    await ApiClient.Instance.WikiaApi.Articles.GetArticleCommentsAsync(vm.Title);
-                                var commentModels =
-                                    comments.payload.comments.OrderByDescending(c => c.CreatedUtc)
-                                        .Select(c => c.ToArticleComment_Model(comments));
-                                vm.Comments = new ObservableCollection<ArticleComment_Model>(commentModels);
+                                if (vm.Comments != null && vm.Comments.Any())
+                                {
+                                    return;
+                                }
+                                using (var api = new ApiClient())
+                                {
+                                    var comments =
+                                        await api.WikiaApi.Articles.GetArticleCommentsAsync(vm.Title);
+                                    var commentModels =
+                                        comments.payload.comments.OrderByDescending(c => c.CreatedUtc)
+                                            .Select(c => c.ToArticleComment_Model(comments));
+                                    vm.Comments = new ObservableCollection<ArticleComment_Model>(commentModels);
+                                }
                             }
                     )
                     .DoNotifyDefaultEventRouter(vm, commandId)
