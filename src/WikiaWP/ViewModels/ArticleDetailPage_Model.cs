@@ -120,6 +120,12 @@ namespace WikiaWP.ViewModels
             };
         #endregion
 
+        public void ClearData()
+        {
+            Title = null;
+            Comments = null;
+        }
+
         #region Life Time Event Handling
 
         ///// <summary>

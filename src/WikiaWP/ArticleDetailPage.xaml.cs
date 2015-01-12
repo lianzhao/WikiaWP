@@ -50,7 +50,9 @@ namespace WikiaWP
                 WebBrowser.GoBack();
                 var title = Histories.Pop();
                 var vm = LayoutRoot.DataContext as ArticleDetailPage_Model;
+                vm.ClearData();
                 vm.Title = title;
+                Pivot.SelectedItem = OverviewPivotItem;
                 return;
             }
             base.OnBackKeyPress(e);
@@ -72,6 +74,7 @@ namespace WikiaWP
                 Histories.Push(vm.Title);
                 var newTitle = uri.Substring(NormalUriPrefix.Length);
                 NavigateToWikiPage(newTitle);
+                vm.ClearData();
                 vm.Title = WebUtility.UrlDecode(newTitle);
             }
             WebBrowser.Opacity = 0;
