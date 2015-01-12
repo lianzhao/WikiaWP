@@ -101,7 +101,7 @@ namespace WikiaWP.ViewModels
                                                                : c.userName;
                                             var rv = new ArticleComment_Model
                                                          {
-                                                             Content = c.text,
+                                                             Content = c.text.Replace("<p>", string.Empty).Replace("</p>", string.Empty),
                                                              CreateUser = userName,
                                                              CreateDateTimeUtc = c.CreatedUtc
                                                          };
