@@ -98,24 +98,14 @@ namespace WikiaWP.ViewModels
                             {
                                 return;
                             }
-
-                            var api = new Wikia.ApiClient("http://zh.asoiaf.wikia.com");
-                            var api2 = new Wikia.Asoiaf.Zh.ApiClient();
-                            await api2.Dictionaries.RefreshAsync();
                             string mapped = null;
                             var searchText = vm.SearchText;
-                            if (api2.Dictionaries.MainDictionary.TryGetValue(
-                                vm.SearchText,
-                                out mapped,
-                                StringComparison.OrdinalIgnoreCase)
-                                || api2.Dictionaries.RedirectDictionary.TryGetValue(
-                                    vm.SearchText,
-                                    out mapped,
-                                    StringComparison.OrdinalIgnoreCase))
+                            if (ApiClient.Instance.MainDictionary.TryGetValue(vm.SearchText, out mapped)
+                                || ApiClient.Instance.RedirectDictionary.TryGetValue(vm.SearchText, out mapped))
                             {
                                 searchText = mapped;
                             }
-                            var article = await api.Articles.GetArticleAsync(searchText);
+                            var article = await ApiClient.Instance.WikiaApi.Articles.GetArticleAsync(searchText);
                             if (article == null)
                             {
                                 //todo
