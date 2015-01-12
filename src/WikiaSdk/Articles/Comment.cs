@@ -1,5 +1,7 @@
 ﻿using System;
 
+using LianZhao;
+
 namespace Wikia.Articles
 {
     public class Comment
@@ -14,7 +16,7 @@ namespace Wikia.Articles
         {
             get
             {
-                return DateTime.UtcNow.AddSeconds(-created);
+                return DateTimeExtensions.FromUnixTimeStamp(created);
             }
         }
     }

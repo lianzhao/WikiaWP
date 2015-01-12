@@ -1,4 +1,7 @@
 using System;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Windows;
 
 using MVVMSidekick.ViewModels;
 
@@ -56,5 +59,23 @@ namespace WikiaWP.Models
         static Func<string> _CreateUserDefaultValueFactory = () => { return default(string); };
         #endregion
 
+        public ObservableCollection<ArticleComment_Model> SubComments
+        {
+            get { return _SubCommentsLocator(this).Value; }
+            set { _SubCommentsLocator(this).SetValueAndTryNotify(value); }
+        }
+        #region Property ObservableCollection<ArticleComment_Model> SubComments Setup
+        protected Property<ObservableCollection<ArticleComment_Model>> _SubComments = new Property<ObservableCollection<ArticleComment_Model>> { LocatorFunc = _SubCommentsLocator };
+        static Func<BindableBase, ValueContainer<ObservableCollection<ArticleComment_Model>>> _SubCommentsLocator = RegisterContainerLocator<ObservableCollection<ArticleComment_Model>>("SubComments", model => model.Initialize("SubComments", ref model._SubComments, ref _SubCommentsLocator, _SubCommentsDefaultValueFactory));
+        static Func<ObservableCollection<ArticleComment_Model>> _SubCommentsDefaultValueFactory = () => { return default(ObservableCollection<ArticleComment_Model>); };
+        #endregion
+
+        public Visibility SubCommentsVisibility
+        {
+            get
+            {
+                return SubComments == null || !SubComments.Any() ? Visibility.Collapsed : Visibility.Visible;
+            }
+        }
     }
 }

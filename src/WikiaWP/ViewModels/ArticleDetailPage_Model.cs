@@ -90,23 +90,9 @@ namespace WikiaWP.ViewModels
                             {
                                 var comments =
                                     await ApiClient.Instance.WikiaApi.Articles.GetArticleCommentsAsync(vm.Title);
-                                var commentModels = comments.payload.comments.OrderBy(c => c.CreatedUtc).Select(
-                                    c =>
-                                        {
-                                            var user = comments.payload.users[c.userName];
-                                            var userName = user.url.StartsWith(
-                                                "/wiki/Special:",
-                                                StringComparison.OrdinalIgnoreCase)
-                                                               ? ArticleComment_Model.DefaultUserName
-                                                               : c.userName;
-                                            var rv = new ArticleComment_Model
-                                                         {
-                                                             Content = c.text.Replace("<p>", string.Empty).Replace("</p>", string.Empty),
-                                                             CreateUser = userName,
-                                                             CreateDateTimeUtc = c.CreatedUtc
-                                                         };
-                                            return rv;
-                                        });
+                                var commentModels =
+                                    comments.payload.comments.OrderByDescending(c => c.CreatedUtc)
+                                        .Select(c => c.ToArticleComment_Model(comments));
                                 vm.Comments = new ObservableCollection<ArticleComment_Model>(commentModels);
                             }
                     )
