@@ -40,9 +40,13 @@
   <ItemGroup>
     <Compile Include="ApiClient.cs" />
     <Compile Include="Articles\ArticlesApiClient.cs" />
+    <Compile Include="Articles\Comment.cs" />
     <Compile Include="Articles\ExpandedArticle.cs" />
     <Compile Include="Articles\ExpandedArticleResultSet.cs" />
+    <Compile Include="Articles\GetArticleCommentsResultSet.cs" />
     <Compile Include="Articles\Original_Dimensions.cs" />
+    <Compile Include="Articles\Payload.cs" />
+    <Compile Include="Articles\User.cs" />
     <Compile Include="Pages\GetPageResultSet.cs" />
     <Compile Include="Pages\ImgOriginaldimensions.cs" />
     <Compile Include="Pages\PagesApiClient.cs" />
