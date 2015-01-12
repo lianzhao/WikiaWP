@@ -37,7 +37,7 @@ namespace Wikia.Pages
 
         public async Task<GetPageResultSet> GetPageAsync(string pageTitle)
         {
-            var uri = string.Format("{0}//wikia.php?controller=GameGuides&method=getPage&page={1}", _site, pageTitle);
+            var uri = string.Format("{0}/wikia.php?controller=GameGuides&method=getPage&page={1}", _site, pageTitle);
             try
             {
                 var json = await _httpClient.GetStringAsync(uri);
