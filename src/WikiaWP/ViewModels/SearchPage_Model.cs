@@ -309,6 +309,7 @@ namespace WikiaWP.ViewModels
                         ImageSource =
                             "http://vignette3.wikia.nocookie.net/asoiaf/images/6/67/Catelyn_Stark.jpg/revision/latest/window-crop/width/200/x-offset/0/y-offset/0/window-width/300/window-height/300?cb=20120206101506&path-prefix=zh"
                     });
+                SearchResults.Add(new ListItem_Model { Title = "某某某", ImageSource = PlaceHolderImageSource });
                 SearchResultCount = SearchResults.Count;
                 SearchResultPanelVisibility = Visibility.Visible;
             }
