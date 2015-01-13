@@ -166,7 +166,8 @@ namespace WikiaWP.ViewModels
                                 var article = await api.WikiaApi.Articles.GetArticleAsync(searchText, @abstract: 500);
                                 if (article == null)
                                 {
-                                    vm.CommandLoadMore.Execute(null);
+                                    vm.SearchResults.Clear();
+                                    await LoadMoreAsyncImpl(vm);
                                     return;
                                 }
                                 vm.MatchItemTitle = article.title;
@@ -208,33 +209,8 @@ namespace WikiaWP.ViewModels
                         vm,
                         async e =>
                         {
-                            vm.MatchItemPanelVisibility = Visibility.Collapsed;
-                            vm.SearchResultPanelVisibility = Visibility.Collapsed;
-                            if (string.IsNullOrWhiteSpace(vm.SearchText))
-                            {
-                                return;
-                            }
-                            using (var api = new ApiClient())
-                            {
-                                var result = await api.WikiaApi.Search.Search(vm.SearchText);
-                                vm.SearchResultCount = result.total;
-                                var ids = result.items.Select(item => item.id).ToArray();
-                                var articles = await api.WikiaApi.Articles.GetArticlesAsync(ids, @abstract: 500);
-                                foreach (var item in result.items)
-                                {
-                                    var id = item.id;
-                                    var listItem = new ListItem_Model { Title = item.title };
-                                    var article = articles.FirstOrDefault(art => art.id == id);
-                                    if (article != null)
-                                    {
-                                        listItem.SubTitle = article.@abstract;
-                                        listItem.ImageSource = article.thumbnail ?? PlaceHolderImageSource;
-                                    }
-                                    vm.SearchResults.Add(listItem);
-                                }
-                            }
-                            vm.MatchItemPanelVisibility = Visibility.Collapsed;
-                            vm.SearchResultPanelVisibility = Visibility.Visible;
+                            vm.SearchResults.Clear();
+                            await LoadMoreAsyncImpl(vm);
                         }
                     )
                     .DoNotifyDefaultEventRouter(vm, commandId)
@@ -246,6 +222,37 @@ namespace WikiaWP.ViewModels
                 return cmdmdl;
             };
         #endregion
+
+        private static async Task LoadMoreAsyncImpl(SearchPage_Model vm)
+        {
+            vm.MatchItemPanelVisibility = Visibility.Collapsed;
+            vm.SearchResultPanelVisibility = Visibility.Collapsed;
+            if (string.IsNullOrWhiteSpace(vm.SearchText))
+            {
+                return;
+            }
+            using (var api = new ApiClient())
+            {
+                var result = await api.WikiaApi.Search.Search(vm.SearchText);
+                vm.SearchResultCount = result.total;
+                var ids = result.items.Select(item => item.id).ToArray();
+                var articles = await api.WikiaApi.Articles.GetArticlesAsync(ids, @abstract: 500);
+                foreach (var item in result.items)
+                {
+                    var id = item.id;
+                    var listItem = new ListItem_Model { Title = item.title };
+                    var article = articles.FirstOrDefault(art => art.id == id);
+                    if (article != null)
+                    {
+                        listItem.SubTitle = article.@abstract;
+                        listItem.ImageSource = article.thumbnail ?? PlaceHolderImageSource;
+                    }
+                    vm.SearchResults.Add(listItem);
+                }
+            }
+            vm.MatchItemPanelVisibility = Visibility.Collapsed;
+            vm.SearchResultPanelVisibility = Visibility.Visible;
+        }
 
 
         public CommandModel<ReactiveCommand, String> CommandNavigateToDetailPage
