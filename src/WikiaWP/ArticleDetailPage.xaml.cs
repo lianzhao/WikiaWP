@@ -61,17 +61,28 @@ namespace WikiaWP
 
         private void WebBrowser_OnLoaded(object sender, RoutedEventArgs e)
         {
-            NavigateToWikiPage("%E5%87%AF%E7%89%B9%E7%90%B3%C2%B7%E5%BE%92%E5%88%A9");
+            var vm = LayoutRoot.DataContext as ArticleDetailPage_Model;
+            if (vm == null)
+            {
+                return;
+            }
+
+            NavigateToWikiPage(vm.Title);
         }
 
         private void WebBrowser_OnNavigating(object sender, NavigatingEventArgs e)
         {
             const string NormalUriPrefix = "http://zh.asoiaf.wikia.com/wiki/";
+            var vm = LayoutRoot.DataContext as ArticleDetailPage_Model;
+            if (vm == null)
+            {
+                return;
+            }
+
             var uri = e.Uri.AbsoluteUri;
             if (uri.StartsWith(NormalUriPrefix, StringComparison.OrdinalIgnoreCase))
             {
                 e.Cancel = true;
-                var vm = LayoutRoot.DataContext as ArticleDetailPage_Model;
                 Histories.Push(vm.Title);
                 var newTitle = uri.Substring(NormalUriPrefix.Length);
                 NavigateToWikiPage(newTitle);

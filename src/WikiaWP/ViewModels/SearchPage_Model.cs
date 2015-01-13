@@ -14,6 +14,8 @@ using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 using System.Windows;
 
+using Windows.Phone.Management.Deployment;
+
 using LianZhao.Collections.Generic;
 
 using Microsoft.Phone.Wallet;
@@ -44,37 +46,15 @@ namespace WikiaWP.ViewModels
         static Func<string> _SearchTextDefaultValueFactory = () => { return default(string); };
         #endregion
 
-        public string MatchItemTitle
+        public ListItem_Model MatchItem
         {
-            get { return _MatchItemTitleLocator(this).Value; }
-            set { _MatchItemTitleLocator(this).SetValueAndTryNotify(value); }
+            get { return _MatchItemLocator(this).Value; }
+            set { _MatchItemLocator(this).SetValueAndTryNotify(value); }
         }
-        #region Property string MatchItemTitle Setup
-        protected Property<string> _MatchItemTitle = new Property<string> { LocatorFunc = _MatchItemTitleLocator };
-        static Func<BindableBase, ValueContainer<string>> _MatchItemTitleLocator = RegisterContainerLocator<string>("MatchItemTitle", model => model.Initialize("MatchItemTitle", ref model._MatchItemTitle, ref _MatchItemTitleLocator, _MatchItemTitleDefaultValueFactory));
-        static Func<string> _MatchItemTitleDefaultValueFactory = () => { return default(string); };
-        #endregion
-
-        public string MatchItemContent
-        {
-            get { return _MatchItemContentLocator(this).Value; }
-            set { _MatchItemContentLocator(this).SetValueAndTryNotify(value); }
-        }
-        #region Property string MatchItemContent Setup
-        protected Property<string> _MatchItemContent = new Property<string> { LocatorFunc = _MatchItemContentLocator };
-        static Func<BindableBase, ValueContainer<string>> _MatchItemContentLocator = RegisterContainerLocator<string>("MatchItemContent", model => model.Initialize("MatchItemContent", ref model._MatchItemContent, ref _MatchItemContentLocator, _MatchItemContentDefaultValueFactory));
-        static Func<string> _MatchItemContentDefaultValueFactory = () => { return default(string); };
-        #endregion
-
-        public string MatchItemImageSource
-        {
-            get { return _MatchItemImageSourceLocator(this).Value; }
-            set { _MatchItemImageSourceLocator(this).SetValueAndTryNotify(value); }
-        }
-        #region Property string MatchItemImageSource Setup
-        protected Property<string> _MatchItemImageSource = new Property<string> { LocatorFunc = _MatchItemImageSourceLocator };
-        static Func<BindableBase, ValueContainer<string>> _MatchItemImageSourceLocator = RegisterContainerLocator<string>("MatchItemImageSource", model => model.Initialize("MatchItemImageSource", ref model._MatchItemImageSource, ref _MatchItemImageSourceLocator, _MatchItemImageSourceDefaultValueFactory));
-        static Func<string> _MatchItemImageSourceDefaultValueFactory = () => { return default(string); };
+        #region Property ListItem_Model MatchItem Setup
+        protected Property<ListItem_Model> _MatchItem = new Property<ListItem_Model> { LocatorFunc = _MatchItemLocator };
+        static Func<BindableBase, ValueContainer<ListItem_Model>> _MatchItemLocator = RegisterContainerLocator<ListItem_Model>("MatchItem", model => model.Initialize("MatchItem", ref model._MatchItem, ref _MatchItemLocator, _MatchItemDefaultValueFactory));
+        static Func<ListItem_Model> _MatchItemDefaultValueFactory = () => { return default(ListItem_Model); };
         #endregion
 
         public ObservableCollection<ListItem_Model> SearchResults
@@ -86,6 +66,17 @@ namespace WikiaWP.ViewModels
         protected Property<ObservableCollection<ListItem_Model>> _SearchResults = new Property<ObservableCollection<ListItem_Model>> { LocatorFunc = _SearchResultsLocator };
         static Func<BindableBase, ValueContainer<ObservableCollection<ListItem_Model>>> _SearchResultsLocator = RegisterContainerLocator<ObservableCollection<ListItem_Model>>("SearchResults", model => model.Initialize("SearchResults", ref model._SearchResults, ref _SearchResultsLocator, _SearchResultsDefaultValueFactory));
         static Func<ObservableCollection<ListItem_Model>> _SearchResultsDefaultValueFactory = () => { return default(ObservableCollection<ListItem_Model>); };
+        #endregion
+
+        public ListItem_Model SelectedSearchResult
+        {
+            get { return _SelectedSearchResultLocator(this).Value; }
+            set { _SelectedSearchResultLocator(this).SetValueAndTryNotify(value); }
+        }
+        #region Property ListItem_Model SelectedSearchResult Setup
+        protected Property<ListItem_Model> _SelectedSearchResult = new Property<ListItem_Model> { LocatorFunc = _SelectedSearchResultLocator };
+        static Func<BindableBase, ValueContainer<ListItem_Model>> _SelectedSearchResultLocator = RegisterContainerLocator<ListItem_Model>("SelectedSearchResult", model => model.Initialize("SelectedSearchResult", ref model._SelectedSearchResult, ref _SelectedSearchResultLocator, _SelectedSearchResultDefaultValueFactory));
+        static Func<ListItem_Model> _SelectedSearchResultDefaultValueFactory = () => { return default(ListItem_Model); };
         #endregion
 
         public int SearchResultCount
@@ -163,16 +154,26 @@ namespace WikiaWP.ViewModels
                                 {
                                     searchText = mapped;
                                 }
-                                var article = await api.WikiaApi.Articles.GetArticleAsync(searchText, @abstract: 500);
+                                var article =
+                                    await
+                                    api.WikiaApi.Articles.GetArticleAsync(
+                                        searchText,
+                                        @abstract: 500,
+                                        width: 400,
+                                        height: 500);
                                 if (article == null)
                                 {
-                                    vm.SearchResults.Clear();
+                                    vm.ClearMatchItemAndSearchResult();
                                     await LoadMoreAsyncImpl(vm);
                                     return;
                                 }
-                                vm.MatchItemTitle = article.title;
-                                vm.MatchItemContent = article.@abstract;
-                                vm.MatchItemImageSource = article.thumbnail;
+                                vm.MatchItem = new ListItem_Model
+                                                   {
+                                                       Title = article.title,
+                                                       Content = article.@abstract,
+                                                       ImageSource =
+                                                           article.thumbnail ?? PlaceHolderImageSource
+                                                   };
                                 vm.MatchItemPanelVisibility = Visibility.Visible;
                                 vm.SearchResultPanelVisibility = Visibility.Collapsed;
                             }
@@ -209,7 +210,7 @@ namespace WikiaWP.ViewModels
                         vm,
                         async e =>
                         {
-                            vm.SearchResults.Clear();
+                            vm.ClearMatchItemAndSearchResult();
                             await LoadMoreAsyncImpl(vm);
                         }
                     )
@@ -244,7 +245,7 @@ namespace WikiaWP.ViewModels
                     var article = articles.FirstOrDefault(art => art.id == id);
                     if (article != null)
                     {
-                        listItem.SubTitle = article.@abstract;
+                        listItem.Content = article.@abstract;
                         listItem.ImageSource = article.thumbnail ?? PlaceHolderImageSource;
                     }
                     vm.SearchResults.Add(listItem);
@@ -273,12 +274,21 @@ namespace WikiaWP.ViewModels
                     .Subscribe(async _ =>
                         {
                             var vm = CastToCurrentType(model);
+                            var navigateTo = vm.MatchItem == null
+                                                 ? (vm.SelectedSearchResult == null
+                                                        ? null
+                                                        : vm.SelectedSearchResult.Title)
+                                                 : vm.MatchItem.Title;
+                            if (string.IsNullOrEmpty(navigateTo))
+                            {
+                                return;
+                            }
                             var vms = await
                                 CastToCurrentType(model)
                                 .StageManager
                                 .DefaultStage
                                 .ShowAndGetViewModel<ArticleDetailPage_Model>();
-                            vms.ViewModel.Title = vm.MatchItemTitle;
+                            vms.ViewModel.Title = navigateTo;
                             await vms.Closing;
                         })
                     .DisposeWith(model);
@@ -295,11 +305,14 @@ namespace WikiaWP.ViewModels
             SearchResultPanelVisibility = Visibility.Collapsed;
             if (IsInDesignMode)
             {
-                MatchItemTitle = "提利昂·兰尼斯特";
-                MatchItemContent =
-                    "提利昂·兰尼斯特（Tyrion Lannister）是泰温公爵和乔安娜夫人的第三个也是最小的孩子。因为是个侏儒，他有时候被戏称为小恶魔和半人。他利用自己的智慧屡次化险为夷，帮助兰尼斯特家族赢得了五王之战，但命运的不公使得他成为了一个弑亲者和通缉犯，踏上了流亡之路。 提利昂是书中一个非常重要的POV人物。在电视剧中，由皮特·丁拉基扮演。";
-                MatchItemImageSource =
-                    "http://vignette3.wikia.nocookie.net/asoiaf/images/0/04/Tyrion_Lannister_personal_arms.png/revision/latest/window-crop/width/200/x-offset/0/y-offset/0/window-width/400/window-height/400?cb=20120205044455&path-prefix=zh";
+                MatchItem = new ListItem_Model
+                                {
+                                    Title = "提利昂·兰尼斯特",
+                                    Content =
+                                        "提利昂·兰尼斯特（Tyrion Lannister）是泰温公爵和乔安娜夫人的第三个也是最小的孩子。因为是个侏儒，他有时候被戏称为小恶魔和半人。他利用自己的智慧屡次化险为夷，帮助兰尼斯特家族赢得了五王之战，但命运的不公使得他成为了一个弑亲者和通缉犯，踏上了流亡之路。 提利昂是书中一个非常重要的POV人物。在电视剧中，由皮特·丁拉基扮演。",
+                                    ImageSource =
+                                        "http://vignette3.wikia.nocookie.net/asoiaf/images/0/04/Tyrion_Lannister_personal_arms.png/revision/latest/window-crop/width/200/x-offset/0/y-offset/0/window-width/400/window-height/400?cb=20120205044455&path-prefix=zh"
+                                };
 
                 SearchResults.Add(
                     new ListItem_Model
@@ -380,7 +393,12 @@ namespace WikiaWP.ViewModels
 
         #endregion
 
-
+        private void ClearMatchItemAndSearchResult()
+        {
+            MatchItem = null;
+            SearchResults.Clear();
+            SelectedSearchResult = null;
+        }
 
     }
 
