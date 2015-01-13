@@ -56,6 +56,17 @@ namespace WikiaWP
         {
             SearchTextBox.Focus();
         }
+
+        private void MatchItemGrid_OnTap(object sender, GestureEventArgs e)
+        {
+            var vm = LayoutRoot.DataContext as SearchPage_Model;
+            if (vm == null)
+            {
+                return;
+            }
+
+            vm.CommandNavigateToDetailPage.Execute(null);
+        }
     }
 }
 

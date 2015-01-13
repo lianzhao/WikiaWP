@@ -125,8 +125,6 @@ namespace WikiaWP.ViewModels
                             .DefaultStage
                             .ShowAndGetViewModel<SearchPage_Model>();
                         await vms.Closing;
-
-
                     })
                     .DisposeWith(model);
 

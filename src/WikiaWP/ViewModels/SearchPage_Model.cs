@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
+using System.Windows;
 
 using LianZhao.Collections.Generic;
 
@@ -73,6 +74,28 @@ namespace WikiaWP.ViewModels
         static Func<string> _MatchItemImageSourceDefaultValueFactory = () => { return default(string); };
         #endregion
 
+        public Visibility MatchItemPanelVisibility
+        {
+            get { return _MatchItemPanelVisibilityLocator(this).Value; }
+            set { _MatchItemPanelVisibilityLocator(this).SetValueAndTryNotify(value); }
+        }
+        #region Property Visibility MatchItemPanelVisibility Setup
+        protected Property<Visibility> _MatchItemPanelVisibility = new Property<Visibility> { LocatorFunc = _MatchItemPanelVisibilityLocator };
+        static Func<BindableBase, ValueContainer<Visibility>> _MatchItemPanelVisibilityLocator = RegisterContainerLocator<Visibility>("MatchItemPanelVisibility", model => model.Initialize("MatchItemPanelVisibility", ref model._MatchItemPanelVisibility, ref _MatchItemPanelVisibilityLocator, _MatchItemPanelVisibilityDefaultValueFactory));
+        static Func<Visibility> _MatchItemPanelVisibilityDefaultValueFactory = () => { return default(Visibility); };
+        #endregion
+
+        public Visibility SearchResultPanelVisibility
+        {
+            get { return _SearchResultPanelVisibilityLocator(this).Value; }
+            set { _SearchResultPanelVisibilityLocator(this).SetValueAndTryNotify(value); }
+        }
+        #region Property Visibility SearchResultPanelVisibility Setup
+        protected Property<Visibility> _SearchResultPanelVisibility = new Property<Visibility> { LocatorFunc = _SearchResultPanelVisibilityLocator };
+        static Func<BindableBase, ValueContainer<Visibility>> _SearchResultPanelVisibilityLocator = RegisterContainerLocator<Visibility>("SearchResultPanelVisibility", model => model.Initialize("SearchResultPanelVisibility", ref model._SearchResultPanelVisibility, ref _SearchResultPanelVisibilityLocator, _SearchResultPanelVisibilityDefaultValueFactory));
+        static Func<Visibility> _SearchResultPanelVisibilityDefaultValueFactory = () => { return default(Visibility); };
+        #endregion
+
 
         public CommandModel<ReactiveCommand, String> CommandSearch
         {
@@ -94,6 +117,8 @@ namespace WikiaWP.ViewModels
                         vm,
                         async e =>
                         {
+                            vm.MatchItemPanelVisibility = Visibility.Collapsed;
+                            vm.SearchResultPanelVisibility = Visibility.Collapsed;
                             if (string.IsNullOrWhiteSpace(vm.SearchText))
                             {
                                 return;
@@ -113,7 +138,7 @@ namespace WikiaWP.ViewModels
                                 {
                                     searchText = mapped;
                                 }
-                                var article = await api.WikiaApi.Articles.GetArticleAsync(searchText);
+                                var article = await api.WikiaApi.Articles.GetArticleAsync(searchText, @abstract: 500);
                                 if (article == null)
                                 {
                                     //todo
@@ -122,7 +147,8 @@ namespace WikiaWP.ViewModels
                                 vm.MatchItemTitle = article.title;
                                 vm.MatchItemContent = article.@abstract;
                                 vm.MatchItemImageSource = article.thumbnail;
-                                
+                                vm.MatchItemPanelVisibility = Visibility.Visible;
+                                vm.SearchResultPanelVisibility = Visibility.Collapsed;
                             }
                         }
                     )
@@ -156,8 +182,8 @@ namespace WikiaWP.ViewModels
                     .DoExecuteUIBusyTask(
                         vm,
                         async e =>
-                            {
-                                var tmp = vm.SearchText;
+                        {
+                            var tmp = vm.SearchText;
                             //Todo: Add LoadMore logic here, or
                             await MVVMSidekick.Utilities.TaskExHelper.Yield();
                         }
@@ -172,6 +198,39 @@ namespace WikiaWP.ViewModels
             };
         #endregion
 
+
+        public CommandModel<ReactiveCommand, String> CommandNavigateToDetailPage
+        {
+            get { return _CommandNavigateToDetailPageLocator(this).Value; }
+            set { _CommandNavigateToDetailPageLocator(this).SetValueAndTryNotify(value); }
+        }
+        #region Property CommandModel<ReactiveCommand, String> CommandNavigateToDetailPage Setup
+        protected Property<CommandModel<ReactiveCommand, String>> _CommandNavigateToDetailPage = new Property<CommandModel<ReactiveCommand, String>> { LocatorFunc = _CommandNavigateToDetailPageLocator };
+        static Func<BindableBase, ValueContainer<CommandModel<ReactiveCommand, String>>> _CommandNavigateToDetailPageLocator = RegisterContainerLocator<CommandModel<ReactiveCommand, String>>("CommandNavigateToDetailPage", model => model.Initialize("CommandNavigateToDetailPage", ref model._CommandNavigateToDetailPage, ref _CommandNavigateToDetailPageLocator, _CommandNavigateToDetailPageDefaultValueFactory));
+        static Func<BindableBase, CommandModel<ReactiveCommand, String>> _CommandNavigateToDetailPageDefaultValueFactory =
+            model =>
+            {
+                var resource = "NavigateToDetailPage";           // Command resource  
+                var commandId = "NavigateToDetailPage";
+                var cmd = new ReactiveCommand(canExecute: true) { ViewModel = model }; //New Command Core
+                cmd
+                    .Subscribe(async _ =>
+                        {
+                            var vm = CastToCurrentType(model);
+                            var vms = await
+                                CastToCurrentType(model)
+                                .StageManager
+                                .DefaultStage
+                                .ShowAndGetViewModel<ArticleDetailPage_Model>();
+                            vms.ViewModel.Title = vm.MatchItemTitle;
+                            await vms.Closing;
+                        })
+                    .DisposeWith(model);
+
+                var cmdmdl = cmd.CreateCommandModel(resource);
+                return cmdmdl;
+            };
+        #endregion
 
         public SearchPage_Model()
         {
