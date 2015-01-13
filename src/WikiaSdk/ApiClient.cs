@@ -6,6 +6,7 @@ using LianZhao;
 
 using Wikia.Articles;
 using Wikia.Pages;
+using Wikia.Search;
 
 namespace Wikia
 {
@@ -18,6 +19,8 @@ namespace Wikia
         private readonly Lazy<ArticlesApiClient> _articlesLazy;
 
         private readonly Lazy<PagesApiClient> _pagesLazy;
+
+        private readonly Lazy<SearchApiClient> _searchLazy;
 
         public ApiClient(string site)
             : this(site, new HttpClient(), isOwner: true)
@@ -39,6 +42,7 @@ namespace Wikia
             _httpClient = httpClient;
             _articlesLazy = new Lazy<ArticlesApiClient>(() => new ArticlesApiClient(_site, _httpClient, isOwner: false));
             _pagesLazy = new Lazy<PagesApiClient>(() => new PagesApiClient(_site, _httpClient, isOwner: false));
+            _searchLazy = new Lazy<SearchApiClient>(() => new SearchApiClient(_site, _httpClient, isOwner: false));
         }
 
         public ArticlesApiClient Articles
@@ -54,6 +58,14 @@ namespace Wikia
             get
             {
                 return _pagesLazy.Value;
+            }
+        }
+
+        public SearchApiClient Search
+        {
+            get
+            {
+                return _searchLazy.Value;
             }
         }
     }
