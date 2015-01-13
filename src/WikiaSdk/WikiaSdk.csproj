@@ -53,7 +53,9 @@
     <Compile Include="Pages\RelatedPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Articles\Revision.cs" />
+    <Compile Include="Search\Item.cs" />
     <Compile Include="Search\SearchApiClient.cs" />
+    <Compile Include="Search\SearchResultSet.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
