@@ -214,6 +214,7 @@
     <Content Include="Assets\Light\transport.rew.png" />
     <Content Include="Assets\Light\upload.png" />
     <Content Include="Assets\Logo.png" />
+    <Content Include="Assets\Placeholder.png" />
     <Content Include="Assets\SplashScreen.png" />
     <Content Include="Assets\SquareTile150x150.png" />
     <Content Include="Assets\SquareTile71x71.png" />

@@ -20,12 +20,15 @@ using Microsoft.Phone.Wallet;
 
 using Wikia;
 
+using WikiaWP.Models;
+
 namespace WikiaWP.ViewModels
 {
-
     //[DataContract]
     public class SearchPage_Model : ViewModelBase<SearchPage_Model>
     {
+        public const string PlaceHolderImageSource = "/Assets/Placeholder.png";
+
         // If you have install the code sniplets, use "propvm + [tab] +[tab]" create a property。
         // 如果您已经安装了 MVVMSidekick 代码片段，请用 propvm +tab +tab 输入属性
 
@@ -72,6 +75,28 @@ namespace WikiaWP.ViewModels
         protected Property<string> _MatchItemImageSource = new Property<string> { LocatorFunc = _MatchItemImageSourceLocator };
         static Func<BindableBase, ValueContainer<string>> _MatchItemImageSourceLocator = RegisterContainerLocator<string>("MatchItemImageSource", model => model.Initialize("MatchItemImageSource", ref model._MatchItemImageSource, ref _MatchItemImageSourceLocator, _MatchItemImageSourceDefaultValueFactory));
         static Func<string> _MatchItemImageSourceDefaultValueFactory = () => { return default(string); };
+        #endregion
+
+        public ObservableCollection<ListItem_Model> SearchResults
+        {
+            get { return _SearchResultsLocator(this).Value; }
+            set { _SearchResultsLocator(this).SetValueAndTryNotify(value); }
+        }
+        #region Property ObservableCollection<ListItem_Model> SearchResults Setup
+        protected Property<ObservableCollection<ListItem_Model>> _SearchResults = new Property<ObservableCollection<ListItem_Model>> { LocatorFunc = _SearchResultsLocator };
+        static Func<BindableBase, ValueContainer<ObservableCollection<ListItem_Model>>> _SearchResultsLocator = RegisterContainerLocator<ObservableCollection<ListItem_Model>>("SearchResults", model => model.Initialize("SearchResults", ref model._SearchResults, ref _SearchResultsLocator, _SearchResultsDefaultValueFactory));
+        static Func<ObservableCollection<ListItem_Model>> _SearchResultsDefaultValueFactory = () => { return default(ObservableCollection<ListItem_Model>); };
+        #endregion
+
+        public int SearchResultCount
+        {
+            get { return _SearchResultCountLocator(this).Value; }
+            set { _SearchResultCountLocator(this).SetValueAndTryNotify(value); }
+        }
+        #region Property int SearchResultCount Setup
+        protected Property<int> _SearchResultCount = new Property<int> { LocatorFunc = _SearchResultCountLocator };
+        static Func<BindableBase, ValueContainer<int>> _SearchResultCountLocator = RegisterContainerLocator<int>("SearchResultCount", model => model.Initialize("SearchResultCount", ref model._SearchResultCount, ref _SearchResultCountLocator, _SearchResultCountDefaultValueFactory));
+        static Func<int> _SearchResultCountDefaultValueFactory = () => { return default(int); };
         #endregion
 
         public Visibility MatchItemPanelVisibility
@@ -141,7 +166,7 @@ namespace WikiaWP.ViewModels
                                 var article = await api.WikiaApi.Articles.GetArticleAsync(searchText, @abstract: 500);
                                 if (article == null)
                                 {
-                                    //todo
+                                    vm.CommandLoadMore.Execute(null);
                                     return;
                                 }
                                 vm.MatchItemTitle = article.title;
@@ -183,9 +208,33 @@ namespace WikiaWP.ViewModels
                         vm,
                         async e =>
                         {
-                            var tmp = vm.SearchText;
-                            //Todo: Add LoadMore logic here, or
-                            await MVVMSidekick.Utilities.TaskExHelper.Yield();
+                            vm.MatchItemPanelVisibility = Visibility.Collapsed;
+                            vm.SearchResultPanelVisibility = Visibility.Collapsed;
+                            if (string.IsNullOrWhiteSpace(vm.SearchText))
+                            {
+                                return;
+                            }
+                            using (var api = new ApiClient())
+                            {
+                                var result = await api.WikiaApi.Search.Search(vm.SearchText);
+                                vm.SearchResultCount = result.total;
+                                var ids = result.items.Select(item => item.id).ToArray();
+                                var articles = await api.WikiaApi.Articles.GetArticlesAsync(ids, @abstract: 500);
+                                foreach (var item in result.items)
+                                {
+                                    var id = item.id;
+                                    var listItem = new ListItem_Model { Title = item.title };
+                                    var article = articles.FirstOrDefault(art => art.id == id);
+                                    if (article != null)
+                                    {
+                                        listItem.SubTitle = article.@abstract;
+                                        listItem.ImageSource = article.thumbnail ?? PlaceHolderImageSource;
+                                    }
+                                    vm.SearchResults.Add(listItem);
+                                }
+                            }
+                            vm.MatchItemPanelVisibility = Visibility.Collapsed;
+                            vm.SearchResultPanelVisibility = Visibility.Visible;
                         }
                     )
                     .DoNotifyDefaultEventRouter(vm, commandId)
@@ -234,6 +283,9 @@ namespace WikiaWP.ViewModels
 
         public SearchPage_Model()
         {
+            SearchResults = new ObservableCollection<ListItem_Model>();
+            MatchItemPanelVisibility = Visibility.Collapsed;
+            SearchResultPanelVisibility = Visibility.Collapsed;
             if (IsInDesignMode)
             {
                 MatchItemTitle = "提利昂·兰尼斯特";
@@ -241,6 +293,24 @@ namespace WikiaWP.ViewModels
                     "提利昂·兰尼斯特（Tyrion Lannister）是泰温公爵和乔安娜夫人的第三个也是最小的孩子。因为是个侏儒，他有时候被戏称为小恶魔和半人。他利用自己的智慧屡次化险为夷，帮助兰尼斯特家族赢得了五王之战，但命运的不公使得他成为了一个弑亲者和通缉犯，踏上了流亡之路。 提利昂是书中一个非常重要的POV人物。在电视剧中，由皮特·丁拉基扮演。";
                 MatchItemImageSource =
                     "http://vignette3.wikia.nocookie.net/asoiaf/images/0/04/Tyrion_Lannister_personal_arms.png/revision/latest/window-crop/width/200/x-offset/0/y-offset/0/window-width/400/window-height/400?cb=20120205044455&path-prefix=zh";
+
+                SearchResults.Add(
+                    new ListItem_Model
+                        {
+                            Title = "提利昂·兰尼斯特",
+                            SubTitle = "提利昂·兰尼斯特（Tyrion Lannister）是泰温公爵和乔安娜夫人的第三个也是最小的孩子。因为是个侏儒，他有时候被戏称为小恶魔和半人。他利用自己的智慧屡次化险为夷，帮助兰尼斯特家族赢得了五王之战，但命运的不公使得他成为了一个弑亲者和通缉犯，踏上了流亡之路。 提利昂是书中一个非常重要的POV人物。在电视剧中，由皮特·丁拉基扮演。",
+                            ImageSource =
+                                "http://vignette3.wikia.nocookie.net/asoiaf/images/0/04/Tyrion_Lannister_personal_arms.png/revision/latest/window-crop/width/200/x-offset/0/y-offset/0/window-width/400/window-height/400?cb=20120205044455&path-prefix=zh"
+                        });
+                SearchResults.Add(
+                    new ListItem_Model
+                    {
+                        Title = "凯特琳·徒利",
+                        ImageSource =
+                            "http://vignette3.wikia.nocookie.net/asoiaf/images/6/67/Catelyn_Stark.jpg/revision/latest/window-crop/width/200/x-offset/0/y-offset/0/window-width/300/window-height/300?cb=20120206101506&path-prefix=zh"
+                    });
+                SearchResultCount = SearchResults.Count;
+                SearchResultPanelVisibility = Visibility.Visible;
             }
         }
 

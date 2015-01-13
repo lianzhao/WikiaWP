@@ -36,7 +36,7 @@ namespace Wikia.Search
             _httpClient = httpClient;
         }
 
-        public async Task<SearchResultSet> GetPageAsync(string query, int page = 0, int pageSize = 0)
+        public async Task<SearchResultSet> Search(string query, int page = 0, int pageSize = 0)
         {
             if (string.IsNullOrEmpty(query))
             {
