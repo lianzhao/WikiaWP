@@ -104,6 +104,7 @@
     <Compile Include="ArticleDetailPage.xaml.cs">
       <DependentUpon>ArticleDetailPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\ListItem_Model.cs" />
     <Compile Include="Models\ModelExtensions.cs" />
     <Compile Include="Resources\AppResources.Designer.cs">
       <AutoGen>True</AutoGen>
