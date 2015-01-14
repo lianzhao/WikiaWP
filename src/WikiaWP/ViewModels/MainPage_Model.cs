@@ -133,6 +133,38 @@ namespace WikiaWP.ViewModels
             };
         #endregion
 
+        public CommandModel<ReactiveCommand, String> CommandNavigateToAbout
+        {
+            get { return _CommandNavigateToAboutLocator(this).Value; }
+            set { _CommandNavigateToAboutLocator(this).SetValueAndTryNotify(value); }
+        }
+        #region Property CommandModel<ReactiveCommand, String> CommandNavigateToAbout Setup
+        protected Property<CommandModel<ReactiveCommand, String>> _CommandNavigateToAbout = new Property<CommandModel<ReactiveCommand, String>> { LocatorFunc = _CommandNavigateToAboutLocator };
+        static Func<BindableBase, ValueContainer<CommandModel<ReactiveCommand, String>>> _CommandNavigateToAboutLocator = RegisterContainerLocator<CommandModel<ReactiveCommand, String>>("CommandNavigateToAbout", model => model.Initialize("CommandNavigateToAbout", ref model._CommandNavigateToAbout, ref _CommandNavigateToAboutLocator, _CommandNavigateToAboutDefaultValueFactory));
+        static Func<BindableBase, CommandModel<ReactiveCommand, String>> _CommandNavigateToAboutDefaultValueFactory =
+            model =>
+            {
+                var resource = "NavigateToAbout";           // Command resource  
+                var commandId = "NavigateToAbout";
+                var cmd = new ReactiveCommand(canExecute: true) { ViewModel = model }; //New Command Core
+                cmd
+                    .Subscribe(async _ =>
+                    {
+                        var vms = await
+                            CastToCurrentType(model)
+                            .StageManager
+                            .DefaultStage
+                            .ShowAndGetViewModel<AboutPage_Model>();
+                        vms.ViewModel.Init();
+                        await vms.Closing;
+                    })
+                    .DisposeWith(model);
+
+                var cmdmdl = cmd.CreateCommandModel(resource);
+                return cmdmdl;
+            };
+        #endregion
+
     }
 
 }

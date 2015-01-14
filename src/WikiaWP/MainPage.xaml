@@ -23,7 +23,7 @@
         <shell:ApplicationBar Opacity="0.25" StateChanged="ApplicationBar_OnStateChanged">
             <shell:ApplicationBarIconButton IconUri="/Assets/Dark/feature.search.png" Text="检索" Click="SearchApplicationBarIconButton_OnClick"/>
             <shell:ApplicationBar.MenuItems>
-                <shell:ApplicationBarMenuItem Text="关于..."/>
+                <shell:ApplicationBarMenuItem Text="关于..." Click="AboutApplicationBarMenuItem_OnClick"/>
             </shell:ApplicationBar.MenuItems>
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>

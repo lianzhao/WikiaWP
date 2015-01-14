@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using System.Reflection;
 using System.Runtime.Serialization;
 
 namespace WikiaWP.ViewModels
@@ -23,6 +24,24 @@ namespace WikiaWP.ViewModels
         // 如果您已经安装了 MVVMSidekick 代码片段，请用 propvm +tab +tab 输入属性
 
 
+        public string Version
+        {
+            get { return _VersionLocator(this).Value; }
+            set { _VersionLocator(this).SetValueAndTryNotify(value); }
+        }
+        #region Property string Version Setup
+        protected Property<string> _Version = new Property<string> { LocatorFunc = _VersionLocator };
+        static Func<BindableBase, ValueContainer<string>> _VersionLocator = RegisterContainerLocator<string>("Version", model => model.Initialize("Version", ref model._Version, ref _VersionLocator, _VersionDefaultValueFactory));
+        static Func<string> _VersionDefaultValueFactory = () => { return default(string); };
+        #endregion
+
+        public AboutPage_Model()
+        {
+            if (IsInDesignMode)
+            {
+                Version = "1.0";
+            }
+        }
 
         #region Life Time Event Handling
 
@@ -82,8 +101,10 @@ namespace WikiaWP.ViewModels
 
         #endregion
 
-
-
+        public void Init()
+        {
+            Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        }
     }
 
 }

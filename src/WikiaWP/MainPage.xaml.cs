@@ -40,6 +40,11 @@ namespace WikiaWP
         private void SearchApplicationBarIconButton_OnClick(object sender, EventArgs e)
         {
             var vm = LayoutRoot.DataContext as MainPage_Model;
+            if (vm == null)
+            {
+                return;
+            }
+
             vm.CommandNavigateToSearch.Execute(null);
         }
 
@@ -51,6 +56,17 @@ namespace WikiaWP
                 return;
             }
             appbar.Opacity = e.IsMenuVisible ? 1 : 0.25;
+        }
+
+        private void AboutApplicationBarMenuItem_OnClick(object sender, EventArgs e)
+        {
+            var vm = LayoutRoot.DataContext as MainPage_Model;
+            if (vm == null)
+            {
+                return;
+            }
+
+            vm.CommandNavigateToAbout.Execute(null);
         }
     }
 }

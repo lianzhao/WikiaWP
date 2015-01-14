@@ -17,6 +17,9 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Windows.Navigation;
+
+using Microsoft.Phone.Tasks;
+
 using WikiaWP;
 using WikiaWP.ViewModels;
 
@@ -39,8 +42,12 @@ namespace WikiaWP
             this.InitializeComponent();
         }
 
-
-
+        private void ThirdPartyNoticeHyperLinkButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            var task = new WebBrowserTask();
+            task.Uri = new Uri("https://github.com/lianzhao/WikiaWP/blob/master/ThirdPartyNotice.md", UriKind.Absolute);
+            task.Show();
+        }
     }
 }
 

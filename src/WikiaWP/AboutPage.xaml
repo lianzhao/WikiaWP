@@ -6,13 +6,34 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"    
     xmlns:vm="clr-namespace:WikiaWP.ViewModels" 
-    xmlns:mvvm="clr-namespace:MVVMSidekick.Views;assembly=MVVMSidekick_Wp8">
+    xmlns:mvvm="clr-namespace:MVVMSidekick.Views;assembly=MVVMSidekick_Wp8"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone">
     <FrameworkElement.Resources>
         <vm:AboutPage_Model x:Key="DesignVM" />
     </FrameworkElement.Resources>
 
-    <Grid x:Name="LayoutRoot" Background="White" DataContext="{StaticResource DesignVM}" >
-     
+    <Grid x:Name="LayoutRoot" DataContext="{StaticResource DesignVM}" >
+        <phone:Pivot Title="设置">
+            <phone:PivotItem Header="关于">
+                <StackPanel>
+                    <TextBlock Text="冰与火之歌中文维基非官方版"
+                               TextWrapping="Wrap" Style="{StaticResource PhoneTextTitle3Style}"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="版本    " Style="{StaticResource PhoneTextTitle3Style}"/>
+                        <TextBlock Text="{Binding Version}" Style="{StaticResource PhoneTextTitle3Style}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="作者" Style="{StaticResource PhoneTextTitle3Style}"/>
+                        <TextBlock Text="" Style="{StaticResource PhoneTextTitle3Style}"/>
+                        <HyperlinkButton NavigateUri="https://github.com/lianzhao" HorizontalAlignment="Left">Lianzhao</HyperlinkButton>
+                    </StackPanel>
+                    <HyperlinkButton HorizontalContentAlignment="Left" Click="ThirdPartyNoticeHyperLinkButton_OnClick">第三方软件声明</HyperlinkButton>
+                </StackPanel>
+            </phone:PivotItem>
+            <phone:PivotItem Header="选项">
+
+            </phone:PivotItem>
+        </phone:Pivot>
     </Grid>
 
 </mvvm:MVVMPage>
