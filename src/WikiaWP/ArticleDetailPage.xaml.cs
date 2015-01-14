@@ -132,6 +132,7 @@ namespace WikiaWP
 
         private void ApplicationBarMenuItem_OnClick(object sender, EventArgs e)
         {
+            // todo
             NavigationService.GoBack();
         }
 

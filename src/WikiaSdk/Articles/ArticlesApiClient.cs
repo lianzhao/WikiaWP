@@ -122,6 +122,35 @@ namespace Wikia.Articles
             }
         }
 
+        public async Task<IEnumerable<ExpandedArticle>> GetTopArticlesAsync(string category = null, int count = 0)
+        {
+            var builder = new StringBuilder(_site).Append("/api/v1/Articles/Top?expand=1");
+            if (!string.IsNullOrEmpty(category))
+            {
+                builder.Append("&category=").Append(category);
+            }
+            if (count > 0)
+            {
+                builder.Append("&limit=").Append(count);
+            }
+
+            var uri = builder.ToString();
+            try
+            {
+                var json = await _httpClient.GetStringAsync(uri);
+                var result = JsonConvert.DeserializeObject<ExpandedArticleResultSet>(json);
+                return result.items.Values;
+            }
+            catch (Exception ex)
+            {
+                if (Debugger.IsAttached)
+                {
+                    Debugger.Break();
+                }
+                throw;
+            }
+        }
+
         public async Task<GetArticleCommentsResultSet> GetArticleCommentsAsync(string pageTitle)
         {
             var uri = string.Format("{0}/wikia.php?controller=MercuryApi&method=getArticleComments&title={1}", _site, pageTitle);
