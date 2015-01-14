@@ -101,11 +101,6 @@ namespace WikiaWP.ViewModels
                         vm,
                         async e =>
                             {
-                                if (vm.Comments != null && vm.Comments.Any())
-                                {
-                                    vm.CommentsHeaderText = "暂无评论";
-                                    return;
-                                }
                                 using (var api = new ApiClient())
                                 {
                                     var comments =
