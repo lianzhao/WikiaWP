@@ -41,7 +41,12 @@
     <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="DisposableObject.cs" />
     <Compile Include="DisposableObjectOwner.cs" />
+    <Compile Include="ExceptionEventArgs.cs" />
     <Compile Include="Linq\Enumerable_JoinToString.cs" />
+    <Compile Include="Patterns\Composite\CompositeExceptionEventArgs.cs" />
+    <Compile Include="Patterns\Composite\CompositeObject.cs" />
+    <Compile Include="Patterns\Composite\Composites.cs" />
+    <Compile Include="Patterns\Composite\IComposite.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
