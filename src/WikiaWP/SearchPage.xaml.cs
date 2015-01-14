@@ -7,6 +7,7 @@ using MVVMSidekick.Services;
 using MVVMSidekick.Commands;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Windows;
@@ -88,6 +89,30 @@ namespace WikiaWP
 
             vm.SelectedSearchResult = (ListItem_Model)control.SelectedItem;
             vm.CommandNavigateToDetailPage.Execute(null);
+        }
+
+        private void LongListSelector_OnItemRealized(object sender, ItemRealizationEventArgs e)
+        {
+            if (LayoutRoot == null)
+            {
+                return;
+            }
+
+            var vm = LayoutRoot.DataContext as SearchPage_Model;
+            var control = sender as LongListSelector;
+            if (vm == null || control == null)
+            {
+                return;
+            }
+
+            if (!vm.IsUIBusy && control.ItemsSource != null && e.ItemKind == LongListSelectorItemKind.Item)
+            {
+                if (e.Container.Content
+                    == control.ItemsSource[control.ItemsSource.Count - vm.PagingInfo.LoadNextPageOffset])
+                {
+                    vm.CommandLoadMore.Execute(null);
+                }
+            }
         }
     }
 }

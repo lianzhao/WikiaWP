@@ -78,16 +78,16 @@ namespace WikiaWP.ViewModels
         static Func<BindableBase, ValueContainer<ListItem_Model>> _SelectedSearchResultLocator = RegisterContainerLocator<ListItem_Model>("SelectedSearchResult", model => model.Initialize("SelectedSearchResult", ref model._SelectedSearchResult, ref _SelectedSearchResultLocator, _SelectedSearchResultDefaultValueFactory));
         static Func<ListItem_Model> _SelectedSearchResultDefaultValueFactory = () => { return default(ListItem_Model); };
         #endregion
-
-        public int SearchResultCount
+        
+        public PagingInfo_Model PagingInfo
         {
-            get { return _SearchResultCountLocator(this).Value; }
-            set { _SearchResultCountLocator(this).SetValueAndTryNotify(value); }
+            get { return _PagingInfoLocator(this).Value; }
+            set { _PagingInfoLocator(this).SetValueAndTryNotify(value); }
         }
-        #region Property int SearchResultCount Setup
-        protected Property<int> _SearchResultCount = new Property<int> { LocatorFunc = _SearchResultCountLocator };
-        static Func<BindableBase, ValueContainer<int>> _SearchResultCountLocator = RegisterContainerLocator<int>("SearchResultCount", model => model.Initialize("SearchResultCount", ref model._SearchResultCount, ref _SearchResultCountLocator, _SearchResultCountDefaultValueFactory));
-        static Func<int> _SearchResultCountDefaultValueFactory = () => { return default(int); };
+        #region Property PagingInfo_Model PagingInfo Setup
+        protected Property<PagingInfo_Model> _PagingInfo = new Property<PagingInfo_Model> { LocatorFunc = _PagingInfoLocator };
+        static Func<BindableBase, ValueContainer<PagingInfo_Model>> _PagingInfoLocator = RegisterContainerLocator<PagingInfo_Model>("PagingInfo", model => model.Initialize("PagingInfo", ref model._PagingInfo, ref _PagingInfoLocator, _PagingInfoDefaultValueFactory));
+        static Func<PagingInfo_Model> _PagingInfoDefaultValueFactory = () => { return default(PagingInfo_Model); };
         #endregion
 
         public Visibility MatchItemPanelVisibility
@@ -210,7 +210,6 @@ namespace WikiaWP.ViewModels
                         vm,
                         async e =>
                         {
-                            vm.ClearMatchItemAndSearchResult();
                             await LoadMoreAsyncImpl(vm);
                         }
                     )
@@ -232,10 +231,25 @@ namespace WikiaWP.ViewModels
             {
                 return;
             }
+
+            vm.PagingInfo = vm.PagingInfo ?? new PagingInfo_Model();
             using (var api = new ApiClient())
             {
-                var result = await api.WikiaApi.Search.Search(vm.SearchText);
-                vm.SearchResultCount = result.total;
+                var result =
+                    await
+                    api.WikiaApi.Search.Search(
+                        vm.SearchText,
+                        vm.PagingInfo.CurrentPage + 1,
+                        vm.PagingInfo.PageSize > 0 ? vm.PagingInfo.PageSize : 0);
+                vm.PagingInfo = new PagingInfo_Model
+                                    {
+                                        TotalCount = result.total,
+                                        PageCount = result.batches,
+                                        CurrentPage = result.currentBatch,
+                                        PageSize = (result.next - 1) / result.currentBatch,
+                                        HasMore = result.batches > result.currentBatch
+                                    };
+                vm.PagingInfo.LoadNextPageOffset = vm.PagingInfo.PageSize / 5;
                 var ids = result.items.Select(item => item.id).ToArray();
                 var articles = await api.WikiaApi.Articles.GetArticlesAsync(ids, @abstract: 500);
                 foreach (var item in result.items)
@@ -330,7 +344,7 @@ namespace WikiaWP.ViewModels
                             "http://vignette3.wikia.nocookie.net/asoiaf/images/6/67/Catelyn_Stark.jpg/revision/latest/window-crop/width/200/x-offset/0/y-offset/0/window-width/300/window-height/300?cb=20120206101506&path-prefix=zh"
                     });
                 SearchResults.Add(new ListItem_Model { Title = "某某某", ImageSource = PlaceHolderImageSource });
-                SearchResultCount = SearchResults.Count;
+                PagingInfo = new PagingInfo_Model { TotalCount = SearchResults.Count };
                 SearchResultPanelVisibility = Visibility.Visible;
             }
         }
@@ -398,6 +412,7 @@ namespace WikiaWP.ViewModels
             MatchItem = null;
             SearchResults.Clear();
             SelectedSearchResult = null;
+            PagingInfo = null;
         }
 
     }

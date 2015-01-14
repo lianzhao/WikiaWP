@@ -63,7 +63,8 @@
             <Grid Visibility="{Binding SearchResultPanelVisibility}">
                 <phone:LongListSelector Margin="0,-38,-22,2" ItemsSource="{Binding SearchResults}"
                                         SelectedItem="{Binding SelectedSearchResult}"
-                                        SelectionChanged="LongListSelector_OnSelectionChanged">
+                                        SelectionChanged="LongListSelector_OnSelectionChanged"
+                                        ItemRealized="LongListSelector_OnItemRealized">
                     <phone:LongListSelector.ListHeaderTemplate>
                         <DataTemplate>
                             <Grid Margin="12,0,0,38">
@@ -73,7 +74,7 @@
                                 </Grid.RowDefinitions>
                                 <StackPanel Grid.Row="0" Orientation="Horizontal">
                                     <TextBlock Text="共" Style="{StaticResource PanoramaItemHeaderTextStyle}"/>
-                                    <TextBlock Text="{Binding DataContext.SearchResultCount, ElementName=LayoutRoot}" Style="{StaticResource PanoramaItemHeaderTextStyle}"/>
+                                    <TextBlock Text="{Binding DataContext.PagingInfo.TotalCount, ElementName=LayoutRoot}" Style="{StaticResource PanoramaItemHeaderTextStyle}"/>
                                     <TextBlock Text="条结果" Style="{StaticResource PanoramaItemHeaderTextStyle}"/>
                                 </StackPanel>
                             </Grid>
