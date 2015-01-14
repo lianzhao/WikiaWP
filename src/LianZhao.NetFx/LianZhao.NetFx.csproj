@@ -54,6 +54,7 @@
     <Compile Include="Patterns\Func\CompositeAsyncAction.cs" />
     <Compile Include="Patterns\Func\CompositeAsyncFunc.cs" />
     <Compile Include="Patterns\Func\CompositeFunc.cs" />
+    <Compile Include="Patterns\Func\CompositeMappingFunc.cs" />
     <Compile Include="Patterns\Func\DelegateFunc.cs" />
     <Compile Include="Patterns\Func\EmptyAction.cs" />
     <Compile Include="Patterns\Func\EmptyFunc.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="Patterns\Func\IAsyncAction.cs" />
     <Compile Include="Patterns\Func\IAsyncFunc.cs" />
     <Compile Include="Patterns\Func\IFunc.cs" />
+    <Compile Include="Patterns\Func\IMappingFunc.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Void.cs" />
   </ItemGroup>
