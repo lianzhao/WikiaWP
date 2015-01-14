@@ -64,6 +64,7 @@
     <Compile Include="Patterns\Func\IAsyncFunc.cs" />
     <Compile Include="Patterns\Func\IFunc.cs" />
     <Compile Include="Patterns\Func\IMappingFunc.cs" />
+    <Compile Include="Patterns\Func\MappingFunc.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Void.cs" />
   </ItemGroup>

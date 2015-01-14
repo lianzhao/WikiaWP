@@ -29,7 +29,7 @@ namespace LianZhao.Patterns.Func
                     return true;
                 }
             }
-            to = default (T);
+            to = from;
             return false;
         }
     }

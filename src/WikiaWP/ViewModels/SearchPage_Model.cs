@@ -31,6 +31,8 @@ namespace WikiaWP.ViewModels
     {
         public const string PlaceHolderImageSource = "/Assets/Placeholder.png";
 
+        public Func<string, string> SearchTextMappingFunc { get; set; }
+
         // If you have install the code sniplets, use "propvm + [tab] +[tab]" create a property。
         // 如果您已经安装了 MVVMSidekick 代码片段，请用 propvm +tab +tab 输入属性
 
@@ -139,20 +141,12 @@ namespace WikiaWP.ViewModels
                             {
                                 return;
                             }
-                            string mapped = null;
-                            var searchText = vm.SearchText;
                             using (var api = new ApiClient())
                             {
-                                if (ApiClient.MainDictionary.TryGetValue(
-                                    vm.SearchText,
-                                    out mapped,
-                                    StringComparison.OrdinalIgnoreCase)
-                                    || ApiClient.RedirectDictionary.TryGetValue(
-                                        vm.SearchText,
-                                        out mapped,
-                                        StringComparison.OrdinalIgnoreCase))
+                                var searchText = vm.SearchText;
+                                if (vm.SearchTextMappingFunc != null)
                                 {
-                                    searchText = mapped;
+                                    searchText = vm.SearchTextMappingFunc.Invoke(vm.SearchText);
                                 }
                                 var article =
                                     await
