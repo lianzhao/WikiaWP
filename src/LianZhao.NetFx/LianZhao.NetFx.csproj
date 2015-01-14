@@ -37,17 +37,33 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionExtensions.cs" />
     <Compile Include="Collections\Generic\DictionaryExtensions.cs" />
     <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="DisposableObject.cs" />
     <Compile Include="DisposableObjectOwner.cs" />
     <Compile Include="ExceptionEventArgs.cs" />
+    <Compile Include="FuncExtensions.cs" />
     <Compile Include="Linq\Enumerable_JoinToString.cs" />
     <Compile Include="Patterns\Composite\CompositeExceptionEventArgs.cs" />
     <Compile Include="Patterns\Composite\CompositeObject.cs" />
     <Compile Include="Patterns\Composite\Composites.cs" />
     <Compile Include="Patterns\Composite\IComposite.cs" />
+    <Compile Include="Patterns\Func\AsyncFunc.cs" />
+    <Compile Include="Patterns\Func\CompositeAction.cs" />
+    <Compile Include="Patterns\Func\CompositeAsyncAction.cs" />
+    <Compile Include="Patterns\Func\CompositeAsyncFunc.cs" />
+    <Compile Include="Patterns\Func\CompositeFunc.cs" />
+    <Compile Include="Patterns\Func\DelegateFunc.cs" />
+    <Compile Include="Patterns\Func\EmptyAction.cs" />
+    <Compile Include="Patterns\Func\EmptyFunc.cs" />
+    <Compile Include="Patterns\Func\Func.cs" />
+    <Compile Include="Patterns\Func\IAction.cs" />
+    <Compile Include="Patterns\Func\IAsyncAction.cs" />
+    <Compile Include="Patterns\Func\IAsyncFunc.cs" />
+    <Compile Include="Patterns\Func\IFunc.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Void.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
