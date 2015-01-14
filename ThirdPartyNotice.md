@@ -1,4 +1,4 @@
-﻿This file is based on or incorporates material from the projects listed below (collectively, "Third Party Code"). I (the app author) am not the original author of the Third Party Code. The original copyright notice and the license under which I received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. I, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for the My App.
+﻿This file is based on or incorporates material from the projects listed below (collectively, "Third Party Code"). I (the app author) am not the original author of the Third Party Code. The original copyright notice and the license under which I received such Third Party Code, are set forth below. Such licenses and notices are provided for informational purposes only. I, not the third party, licenses the Third Party Code to you under the terms set forth in the EULA for my App.
 
 * MVVM-Sidekick
 
