@@ -102,7 +102,7 @@ namespace Wikia.Articles
             }
             if (height > 0)
             {
-                builder.Append("&abstract=").Append(height);
+                builder.Append("&height=").Append(height);
             }
 
             var uri = builder.ToString();
@@ -128,6 +128,7 @@ namespace Wikia.Articles
             try
             {
                 var json = await _httpClient.GetStringAsync(uri);
+                json = json.Replace("\"users\":[]", "\"users\":{}");//hack
                 return JsonConvert.DeserializeObject<GetArticleCommentsResultSet>(json);
             }
             catch (Exception ex)
