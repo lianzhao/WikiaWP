@@ -11,7 +11,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Runtime.Serialization;
+
+using LianZhao.Patterns.Composite;
 
 using WikiaWP.Models;
 
@@ -66,7 +69,17 @@ namespace WikiaWP.ViewModels
         static Func<BindableBase, ValueContainer<ObservableCollection<ArticleComment_Model>>> _CommentsLocator = RegisterContainerLocator<ObservableCollection<ArticleComment_Model>>("Comments", model => model.Initialize("Comments", ref model._Comments, ref _CommentsLocator, _CommentsDefaultValueFactory));
         static Func<ObservableCollection<ArticleComment_Model>> _CommentsDefaultValueFactory = () => { return default(ObservableCollection<ArticleComment_Model>); };
         #endregion
-        
+
+        public string CommentsHeaderText
+        {
+            get { return _CommentsHeaderTextLocator(this).Value; }
+            set { _CommentsHeaderTextLocator(this).SetValueAndTryNotify(value); }
+        }
+        #region Property string CommentsHeaderText Setup
+        protected Property<string> _CommentsHeaderText = new Property<string> { LocatorFunc = _CommentsHeaderTextLocator };
+        static Func<BindableBase, ValueContainer<string>> _CommentsHeaderTextLocator = RegisterContainerLocator<string>("CommentsHeaderText", model => model.Initialize("CommentsHeaderText", ref model._CommentsHeaderText, ref _CommentsHeaderTextLocator, _CommentsHeaderTextDefaultValueFactory));
+        static Func<string> _CommentsHeaderTextDefaultValueFactory = () => { return default(string); };
+        #endregion
 
         public CommandModel<ReactiveCommand, String> CommandLoadComments
         {
@@ -90,6 +103,7 @@ namespace WikiaWP.ViewModels
                             {
                                 if (vm.Comments != null && vm.Comments.Any())
                                 {
+                                    vm.CommentsHeaderText = "暂无评论";
                                     return;
                                 }
                                 using (var api = new ApiClient())
@@ -99,6 +113,9 @@ namespace WikiaWP.ViewModels
                                     var commentModels =
                                         comments.payload.comments.OrderByDescending(c => c.CreatedUtc)
                                             .Select(c => c.ToArticleComment_Model(comments));
+                                    vm.CommentsHeaderText = string.Format(
+                                        "共{0}条评论",
+                                        comments.payload.GetAllDescendants().Count().ToString(CultureInfo.InvariantCulture));
                                     vm.Comments = new ObservableCollection<ArticleComment_Model>(commentModels);
                                 }
                             }
@@ -117,6 +134,7 @@ namespace WikiaWP.ViewModels
         {
             Title = null;
             Comments = null;
+            CommentsHeaderText = null;
         }
 
         #region Life Time Event Handling

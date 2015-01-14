@@ -29,8 +29,11 @@
                           Navigating="WebBrowser_OnNavigating"
                           LoadCompleted="WebBrowser_OnLoadCompleted"/>
             </phone:PivotItem>
-            <phone:PivotItem x:Name="CommentsPivotItem" Header="评价">
+            <phone:PivotItem x:Name="CommentsPivotItem" Header="评论">
                 <phone:LongListSelector ItemsSource="{Binding Comments}">
+                    <phone:LongListSelector.ListHeader>
+                        <TextBlock Text="{Binding CommentsHeaderText}" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                    </phone:LongListSelector.ListHeader>
                     <phone:LongListSelector.ItemTemplate>
                         <DataTemplate>
                             <Grid>

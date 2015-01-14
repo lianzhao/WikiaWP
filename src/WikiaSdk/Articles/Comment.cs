@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using LianZhao;
+using LianZhao.Patterns.Composite;
 
 namespace Wikia.Articles
 {
-    public class Comment
+    public class Comment : IComposite<Comment>
     {
         public int id { get; set; }
         public string text { get; set; }
@@ -17,6 +19,14 @@ namespace Wikia.Articles
             get
             {
                 return DateTimeExtensions.FromUnixTimeStamp(created);
+            }
+        }
+
+        ICollection<Comment> IComposite<Comment>.Items
+        {
+            get
+            {
+                return comments;
             }
         }
     }
