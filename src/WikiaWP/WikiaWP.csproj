@@ -99,6 +99,9 @@
     <PlatformTarget />
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AboutPage.xaml.cs">
+      <DependentUpon>AboutPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ApiClient.cs" />
     <Compile Include="AppCache.cs" />
     <Compile Include="ArticleDetailPage.xaml.cs">
@@ -115,9 +118,11 @@
     <Compile Include="SearchPage.xaml.cs">
       <DependentUpon>SearchPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Startups\AboutPage.cs" />
     <Compile Include="Startups\ArticleDetailPage.cs" />
     <Compile Include="Startups\SearchPage.cs" />
     <Compile Include="Models\ArticleComment_Model.cs" />
+    <Compile Include="ViewModels\AboutPage_Model.cs" />
     <Compile Include="ViewModels\ArticleDetailPage_Model.cs" />
     <Compile Include="ViewModels\MainPage_Model.cs">
     </Compile>
@@ -248,6 +253,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
+    <Page Include="AboutPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ArticleDetailPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
