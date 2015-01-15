@@ -58,7 +58,7 @@ namespace Wikia.CuratedContent
             }
         }
 
-        public async Task<CuratedContentSection> GetCuratedContentSection(string tag)
+        public async Task<CuratedContentSection> GetCuratedContentSectionAsync(string tag)
         {
             var uri = string.Format("{0}/wikia.php?controller=GameGuides&method=getList&tags={1}", _site, tag);
             try
