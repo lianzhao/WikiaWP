@@ -1,0 +1,1 @@
+﻿[test](weixin://contacts/profile/zhasoiaf)
