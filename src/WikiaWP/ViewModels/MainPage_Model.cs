@@ -16,6 +16,7 @@ using System.Runtime.Serialization;
 using Windows.Media.MediaProperties;
 
 using WikiaWP.Models;
+using WikiaWP.Resources;
 
 namespace WikiaWP.ViewModels
 {
@@ -143,7 +144,7 @@ namespace WikiaWP.ViewModels
                             new ListItem_Model
                                 {
                                     Title = tag.title,
-                                    ImageSource = article.thumbnail == null ? null : article.thumbnail
+                                    ImageSource = article.thumbnail ?? AppResources.PlaceholderImageSource
                                 });
                         foreach (var item in items)
                         {

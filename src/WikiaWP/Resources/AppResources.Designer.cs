@@ -88,6 +88,15 @@ namespace WikiaWP.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to /Assets/Placeholder.png.
+        /// </summary>
+        public static string PlaceholderImageSource {
+            get {
+                return ResourceManager.GetString("PlaceholderImageSource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to LeftToRight.
         /// </summary>
         public static string ResourceFlowDirection {

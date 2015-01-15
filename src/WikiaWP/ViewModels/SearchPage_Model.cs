@@ -23,14 +23,13 @@ using Microsoft.Phone.Wallet;
 using Wikia;
 
 using WikiaWP.Models;
+using WikiaWP.Resources;
 
 namespace WikiaWP.ViewModels
 {
     //[DataContract]
     public class SearchPage_Model : ViewModelBase<SearchPage_Model>
     {
-        public const string PlaceHolderImageSource = "/Assets/Placeholder.png";
-
         public Func<string, string> SearchTextMappingFunc { get; set; }
 
         // If you have install the code sniplets, use "propvm + [tab] +[tab]" create a property。
@@ -166,7 +165,7 @@ namespace WikiaWP.ViewModels
                                                        Title = article.title,
                                                        Content = article.@abstract,
                                                        ImageSource =
-                                                           article.thumbnail ?? PlaceHolderImageSource
+                                                           article.thumbnail ?? AppResources.PlaceholderImageSource
                                                    };
                                 vm.MatchItemPanelVisibility = Visibility.Visible;
                                 vm.SearchResultPanelVisibility = Visibility.Collapsed;
@@ -254,7 +253,7 @@ namespace WikiaWP.ViewModels
                     if (article != null)
                     {
                         listItem.Content = article.@abstract;
-                        listItem.ImageSource = article.thumbnail ?? PlaceHolderImageSource;
+                        listItem.ImageSource = article.thumbnail ?? AppResources.PlaceholderImageSource;
                     }
                     vm.SearchResults.Add(listItem);
                 }
@@ -337,7 +336,7 @@ namespace WikiaWP.ViewModels
                         ImageSource =
                             "http://vignette3.wikia.nocookie.net/asoiaf/images/6/67/Catelyn_Stark.jpg/revision/latest/window-crop/width/200/x-offset/0/y-offset/0/window-width/300/window-height/300?cb=20120206101506&path-prefix=zh"
                     });
-                SearchResults.Add(new ListItem_Model { Title = "某某某", ImageSource = PlaceHolderImageSource });
+                SearchResults.Add(new ListItem_Model { Title = "某某某", ImageSource = AppResources.PlaceholderImageSource });
                 PagingInfo = new PagingInfo_Model { TotalCount = SearchResults.Count };
                 SearchResultPanelVisibility = Visibility.Visible;
             }

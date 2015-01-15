@@ -17,7 +17,14 @@
     xmlns:vm="clr-namespace:WikiaWP.ViewModels">
     <FrameworkElement.Resources>
         <vm:MainPage_Model x:Key="DesignVM" />
+        <shell:ProgressIndicator x:Key="idk" Text="正在加载..."
+                                 IsVisible="{Binding DataContext.IsUIBusy, ElementName=LayoutRoot}"
+                                 IsIndeterminate="True"/>
     </FrameworkElement.Resources>
+
+    <shell:SystemTray.ProgressIndicator>
+        <Binding Source="{StaticResource idk}"/>
+    </shell:SystemTray.ProgressIndicator>
 
     <phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar Opacity="0.25" StateChanged="ApplicationBar_OnStateChanged">
@@ -58,17 +65,7 @@
 
             <!--Panorama item one-->
             <phone:PanoramaItem Header="精选">
-                <!--Single line list with text wrapping-->
-                <!--<phone:LongListSelector Margin="0,0,-22,0" ItemsSource="{Binding List1}">
-                    <phone:LongListSelector.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Margin="0,-6,0,12">
-                                <TextBlock Text="{Binding LineOne}" TextWrapping="Wrap" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeExtraLarge}"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </phone:LongListSelector.ItemTemplate>
-                </phone:LongListSelector>-->
-                <phone:LongListSelector Margin="0,0,-22,0" ItemsSource="{Binding List1}"
+                <phone:LongListSelector x:Name="List1ListSelector" ItemsSource="{Binding List1}"
                                         LayoutMode="Grid" GridCellSize="200,200">
                     <phone:LongListSelector.ItemTemplate>
                         <DataTemplate>
