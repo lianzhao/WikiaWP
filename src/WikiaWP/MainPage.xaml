@@ -58,15 +58,24 @@
          -->
 
         <!--Panorama control-->
-        <phone:Panorama Title="冰与火之歌中文维基">
+        <phone:Panorama Margin="0,0,0,0">
+            <phone:Panorama.TitleTemplate>
+                <DataTemplate>
+                    <TextBlock Text="冰与火之歌中文维基" Style="{StaticResource PhoneTextTitle1Style}" Margin="0,15,0,0"/>
+                </DataTemplate>
+            </phone:Panorama.TitleTemplate>
             <phone:Panorama.Background>
                 <ImageBrush ImageSource="/PanoramaApp1;component/Assets/PanoramaBackground.png"/>
             </phone:Panorama.Background>
 
             <!--Panorama item one-->
-            <phone:PanoramaItem Header="精选">
+            <phone:PanoramaItem x:Name="PanoramaItem1" Loaded="PanoramaItem1_OnLoaded">
+                <phone:PanoramaItem.HeaderTemplate>
+                    <DataTemplate></DataTemplate>
+                </phone:PanoramaItem.HeaderTemplate>
                 <phone:LongListSelector x:Name="List1ListSelector" ItemsSource="{Binding List1}"
-                                        LayoutMode="Grid" GridCellSize="200,200">
+                                        LayoutMode="Grid" GridCellSize="200,200"
+                                        IsGroupingEnabled="True">
                     <phone:LongListSelector.ItemTemplate>
                         <DataTemplate>
                             <Grid Margin="0,-6,0,12">

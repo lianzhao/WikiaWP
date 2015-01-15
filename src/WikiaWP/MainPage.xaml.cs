@@ -68,5 +68,16 @@ namespace WikiaWP
 
             vm.CommandNavigateToAbout.Execute(null);
         }
+
+        private void PanoramaItem1_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            var vm = LayoutRoot.DataContext as MainPage_Model;
+            if (vm == null)
+            {
+                return;
+            }
+
+            vm.CommandLoadList1.Execute(null);
+        }
     }
 }

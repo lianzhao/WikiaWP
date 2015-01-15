@@ -43,6 +43,7 @@
     <Compile Include="Articles\Comment.cs" />
     <Compile Include="Articles\ExpandedArticle.cs" />
     <Compile Include="Articles\ExpandedArticleResultSet.cs" />
+    <Compile Include="Articles\ExpandedArticleResultSet_ArrayItems.cs" />
     <Compile Include="Articles\GetArticleCommentsResultSet.cs" />
     <Compile Include="Articles\Original_Dimensions.cs" />
     <Compile Include="Articles\Payload.cs" />

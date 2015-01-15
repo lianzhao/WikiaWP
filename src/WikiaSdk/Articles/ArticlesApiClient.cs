@@ -138,8 +138,8 @@ namespace Wikia.Articles
             try
             {
                 var json = await _httpClient.GetStringAsync(uri);
-                var result = JsonConvert.DeserializeObject<ExpandedArticleResultSet>(json);
-                return result.items.Values;
+                var result = JsonConvert.DeserializeObject<ExpandedArticleResultSet_ArrayItems>(json);
+                return result.items;
             }
             catch (Exception ex)
             {

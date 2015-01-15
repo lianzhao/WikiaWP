@@ -38,12 +38,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionExtensions.cs" />
+    <Compile Include="Collections\Generic\CollectionExtensions.cs" />
     <Compile Include="Collections\Generic\DictionaryExtensions.cs" />
     <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="DisposableObject.cs" />
     <Compile Include="DisposableObjectOwner.cs" />
     <Compile Include="ExceptionEventArgs.cs" />
     <Compile Include="FuncExtensions.cs" />
+    <Compile Include="Linq\Enumerable_Concat.cs" />
     <Compile Include="Linq\Enumerable_JoinToString.cs" />
     <Compile Include="Patterns\Composite\CompositeExceptionEventArgs.cs" />
     <Compile Include="Patterns\Composite\CompositeObject.cs" />
