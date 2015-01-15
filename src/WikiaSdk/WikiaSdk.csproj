@@ -47,6 +47,11 @@
     <Compile Include="Articles\Original_Dimensions.cs" />
     <Compile Include="Articles\Payload.cs" />
     <Compile Include="Articles\User.cs" />
+    <Compile Include="CuratedContent\CuratedContent.cs" />
+    <Compile Include="CuratedContent\CuratedContentApiClient.cs" />
+    <Compile Include="CuratedContent\CuratedContentSection.cs" />
+    <Compile Include="CuratedContent\Item.cs" />
+    <Compile Include="CuratedContent\Tag.cs" />
     <Compile Include="Pages\GetPageResultSet.cs" />
     <Compile Include="Pages\ImgOriginaldimensions.cs" />
     <Compile Include="Pages\PagesApiClient.cs" />
