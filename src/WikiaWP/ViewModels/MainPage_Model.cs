@@ -32,43 +32,9 @@ namespace WikiaWP.ViewModels
         public MainPage_Model()
         {
             List1 = new ObservableCollection<IGrouping<string, ListItem_Model>>();
-            List2 = new ObservableCollection<ListItem_Model>();
+            List2 = new ObservableCollection<IGrouping<string, ListItem_Model>>();
             if (IsInDesignMode)
             {
-                List2.Add(
-                    new ListItem_Model
-                        {
-                            Title = "电视剧",
-                            ImageSource =
-                                "http://vignette3.wikia.nocookie.net/asoiaf/images/7/7a/Unknown_TV.jpg/revision/latest/window-crop/width/200/x-offset/281/y-offset/0/window-width/721/window-height/720?cb=20120507130022&path-prefix=zh"
-                        });
-                List2.Add(
-                    new ListItem_Model
-                    {
-                        Title = "理论推测",
-                        ImageSource =
-                            "http://vignette1.wikia.nocookie.net/asoiaf/images/e/ed/Jon_baby.png/revision/latest/window-crop/width/200/x-offset/282/y-offset/0/window-width/733/window-height/732?cb=20140912061846&path-prefix=zh"
-                    });
-                List2.Add(
-                    new ListItem_Model
-                    {
-                        Title = "历史",
-                        ImageSource =
-                            "http://vignette4.wikia.nocookie.net/asoiaf/images/7/78/BookOfBrothersDayne.jpg/revision/latest/window-crop/width/200/x-offset/425/y-offset/0/window-width/1073/window-height/1072?cb=20140912060347&path-prefix=zh"
-                    });
-                List2.Add(
-                    new ListItem_Model
-                    {
-                        Title = "小说",
-                        ImageSource =
-                            "http://vignette2.wikia.nocookie.net/asoiaf/images/1/1f/GRRM_Books_Slider.jpg/revision/latest/window-crop/width/200/x-offset/156/y-offset/0/window-width/361/window-height/360?cb=20140912061039&path-prefix=zh"
-                    });
-                List2.Add(
-                    new ListItem_Model
-                    {
-                        Title = "其他",
-                        ImageSource =AppResources.PlaceholderImageSource
-                    });
             }
         }
 
@@ -85,16 +51,15 @@ namespace WikiaWP.ViewModels
         static Func<ObservableCollection<IGrouping<string, ListItem_Model>>> _List1DefaultValueFactory = () => { return default(ObservableCollection<IGrouping<string, ListItem_Model>>); };
         #endregion
 
-        
-        public ObservableCollection<ListItem_Model> List2
+        public ObservableCollection<IGrouping<string, ListItem_Model>> List2
         {
             get { return _List2Locator(this).Value; }
             set { _List2Locator(this).SetValueAndTryNotify(value); }
         }
-        #region Property ObservableCollection<ListItem_Model> List2 Setup
-        protected Property<ObservableCollection<ListItem_Model>> _List2 = new Property<ObservableCollection<ListItem_Model>> { LocatorFunc = _List2Locator };
-        static Func<BindableBase, ValueContainer<ObservableCollection<ListItem_Model>>> _List2Locator = RegisterContainerLocator<ObservableCollection<ListItem_Model>>("List2", model => model.Initialize("List2", ref model._List2, ref _List2Locator, _List2DefaultValueFactory));
-        static Func<ObservableCollection<ListItem_Model>> _List2DefaultValueFactory = () => { return default(ObservableCollection<ListItem_Model>); };
+        #region Property ObservableCollection<IGrouping<string, ListItem_Model>> List2 Setup
+        protected Property<ObservableCollection<IGrouping<string, ListItem_Model>>> _List2 = new Property<ObservableCollection<IGrouping<string, ListItem_Model>>> { LocatorFunc = _List2Locator };
+        static Func<BindableBase, ValueContainer<ObservableCollection<IGrouping<string, ListItem_Model>>>> _List2Locator = RegisterContainerLocator<ObservableCollection<IGrouping<string, ListItem_Model>>>("List2", model => model.Initialize("List2", ref model._List2, ref _List2Locator, _List2DefaultValueFactory));
+        static Func<ObservableCollection<IGrouping<string, ListItem_Model>>> _List2DefaultValueFactory = () => { return default(ObservableCollection<IGrouping<string, ListItem_Model>>); };
         #endregion
 
 
@@ -297,7 +262,9 @@ namespace WikiaWP.ViewModels
                             using (var api = new ApiClient())
                             {
                                 var list = await vm.GetCuratedContentAsync(api);
-                                vm.List2.AddRange(list);
+                                vm.List2.AddRange(
+                                    list.GroupBy(m => m.Group)
+                                        .Select(group => new GroupingList<string, ListItem_Model>(group)));
                             }
                         }
                     )
