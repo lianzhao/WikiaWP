@@ -311,17 +311,24 @@ namespace WikiaWP.ViewModels
                         async e =>
                         {
                             vm.List3.Clear();
-                            var categories = new[] { "维基动态" };
                             using (var api = new ApiClient())
                             {
-                                var apiClient = api;
-                                var tasks = categories.Select(c => vm.GetArticlesInCategory(apiClient, c, count: 7));
-                                var list = await Task.WhenAll(tasks);
+                                var items = await api.ZhAsoiafWiki.Pages.GetWikiNews();
+                                var list =
+                                    items.Select(
+                                        item =>
+                                        new ListItem_Model
+                                            {
+                                                Title = item.title,
+                                                SubTitle = item.@abstract,
+                                                ImageSource = item.thumbnail,
+                                                Content = item.title,
+                                                Group = "维基动态"
+                                            });
                                 // LongListSelector grouping feature not work with IEnumerable...
                                 // http://stackoverflow.com/questions/13479727/grouped-longlistselector-headers-appear-items-dont
                                 vm.List3.AddRange(
-                                    list.SelectMany(m => m)
-                                        .GroupBy(m => m.Group)
+                                    list.GroupBy(m => m.Group)
                                         .Select(group => new GroupingList<string, ListItem_Model>(group)));
                             }
                         }

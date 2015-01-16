@@ -8,18 +8,18 @@ using LianZhao;
 
 using Newtonsoft.Json;
 
-namespace Wikia.Asoiaf.Zh.Categories
+namespace Wikia.Asoiaf.Zh.Pages
 {
-    public class CategoriesApiClient : DisposableObjectOwner
+    public class PagesApiClient : DisposableObjectOwner
     {
         private readonly HttpClient _httpClient;
 
-        public CategoriesApiClient()
+        public PagesApiClient()
             : this(new HttpClient(), isOwner: true)
         {
         }
 
-        public CategoriesApiClient(HttpClient httpClient, bool isOwner = false)
+        public PagesApiClient(HttpClient httpClient, bool isOwner = false)
             : base(httpClient, isOwner)
         {
             if (httpClient == null)
@@ -29,14 +29,19 @@ namespace Wikia.Asoiaf.Zh.Categories
             _httpClient = httpClient;
         }
 
-        public async Task<IEnumerable<string>> GetTopCategoriesAsync()
+        public async Task<IEnumerable<PageItem>> GetWikiNews()
+        {
+            return await GetPageItemsAsync("App/WikiNews");
+        }
+
+        public async Task<IEnumerable<PageItem>> GetPageItemsAsync(string pageTitle)
         {
             try
             {
                 using (var api = new MediaWiki.ApiClient(ApiClient.Site, _httpClient, isOwner: false))
                 {
-                    var json = await api.Parse.ParseAsync("App/TopCategories", "wikitext");
-                    return JsonConvert.DeserializeObject<string[]>(json);
+                    var json = await api.Parse.ParseAsync(pageTitle, "wikitext");
+                    return JsonConvert.DeserializeObject<PageItem[]>(json);
                 }
             }
             catch (Exception ex)

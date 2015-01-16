@@ -163,11 +163,14 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="*"/>
                                     <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
-                                <Image Grid.Row="0" Grid.RowSpan="2" Source="{Binding ImageSource}"/>
-                                <Rectangle Grid.Row="1" Fill="Gray" Opacity="0.5"></Rectangle>
+                                <Image Grid.Row="0" Grid.RowSpan="3" Source="{Binding ImageSource}"/>
+                                <Rectangle Grid.Row="1" Grid.RowSpan="2" Fill="Gray" Opacity="0.5"></Rectangle>
                                 <TextBlock Grid.Row="1" Text="{Binding Title}" VerticalAlignment="Bottom"
                                            TextWrapping="Wrap" Style="{StaticResource PhoneTextLargeStyle}"/>
+                                <TextBlock Grid.Row="2" Text="{Binding SubTitle}" VerticalAlignment="Bottom"
+                                           TextWrapping="Wrap" Style="{StaticResource PhoneTextSmallStyle}"/>
                             </Grid>
                         </DataTemplate>
                     </phone:LongListSelector.ItemTemplate>
