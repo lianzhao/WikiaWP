@@ -68,12 +68,12 @@
                 <ImageBrush ImageSource="/Assets/ApplicationBackground.jpg" Stretch="UniformToFill"/>
             </phone:Panorama.Background>
 
-            <!--Panorama item one-->
-            <phone:PanoramaItem x:Name="PanoramaItem1" Loaded="PanoramaItem1_OnLoaded">
+            <!--Panorama item two-->
+            <phone:PanoramaItem x:Name="PanoramaItem2" Loaded="PanoramaItem2_OnLoaded">
                 <phone:PanoramaItem.HeaderTemplate>
                     <DataTemplate></DataTemplate>
                 </phone:PanoramaItem.HeaderTemplate>
-                <phone:LongListSelector x:Name="List1ListSelector" ItemsSource="{Binding List1}"
+                <phone:LongListSelector x:Name="List2ListSelector" ItemsSource="{Binding List2}"
                                         LayoutMode="Grid" GridCellSize="200,200"
                                         IsGroupingEnabled="True">
                     <phone:LongListSelector.GroupHeaderTemplate>
@@ -105,13 +105,13 @@
                     </phone:LongListSelector.ListFooterTemplate>
                 </phone:LongListSelector>
             </phone:PanoramaItem>
-
-            <!--Panorama item two-->
-            <phone:PanoramaItem x:Name="PanoramaItem2" Loaded="PanoramaItem2_OnLoaded">
+            
+            <!--Panorama item one-->
+            <phone:PanoramaItem x:Name="PanoramaItem1" Loaded="PanoramaItem1_OnLoaded">
                 <phone:PanoramaItem.HeaderTemplate>
                     <DataTemplate></DataTemplate>
                 </phone:PanoramaItem.HeaderTemplate>
-                <phone:LongListSelector x:Name="List2ListSelector" ItemsSource="{Binding List2}"
+                <phone:LongListSelector x:Name="List1ListSelector" ItemsSource="{Binding List1}"
                                         LayoutMode="Grid" GridCellSize="200,200"
                                         IsGroupingEnabled="True">
                     <phone:LongListSelector.GroupHeaderTemplate>
