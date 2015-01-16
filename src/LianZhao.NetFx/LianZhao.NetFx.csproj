@@ -40,6 +40,7 @@
     <Compile Include="ActionExtensions.cs" />
     <Compile Include="Collections\Generic\CollectionExtensions.cs" />
     <Compile Include="Collections\Generic\DictionaryExtensions.cs" />
+    <Compile Include="Collections\Generic\GroupingList.cs" />
     <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="DisposableObject.cs" />
     <Compile Include="DisposableObjectOwner.cs" />

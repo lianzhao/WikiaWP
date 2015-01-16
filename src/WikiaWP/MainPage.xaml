@@ -58,7 +58,7 @@
          -->
 
         <!--Panorama control-->
-        <phone:Panorama Margin="0,0,0,0">
+        <phone:Panorama>
             <phone:Panorama.TitleTemplate>
                 <DataTemplate>
                     <TextBlock Text="冰与火之歌中文维基" Style="{StaticResource PhoneTextTitle1Style}" Margin="0,15,0,0"/>
@@ -76,15 +76,33 @@
                 <phone:LongListSelector x:Name="List1ListSelector" ItemsSource="{Binding List1}"
                                         LayoutMode="Grid" GridCellSize="200,200"
                                         IsGroupingEnabled="True">
+                    <phone:LongListSelector.GroupHeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Key}" Style="{StaticResource PhoneTextNormalStyle}"
+                                       Margin="0,12,0,6"/>
+                        </DataTemplate>
+                    </phone:LongListSelector.GroupHeaderTemplate>
                     <phone:LongListSelector.ItemTemplate>
                         <DataTemplate>
-                            <Grid Margin="0,-6,0,12">
-                                <Image Source="{Binding ImageSource}"/>
-                                <TextBlock Text="{Binding Title}" VerticalAlignment="Bottom"
-                                           TextWrapping="Wrap" Style="{StaticResource PhoneTextLargeStyle}" />
+                            <Grid Margin="4">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Image Grid.Row="0" Grid.RowSpan="2" Source="{Binding ImageSource}"/>
+                                <Rectangle Grid.Row="1" Fill="Gray" Opacity="0.5"></Rectangle>
+                                <TextBlock Grid.Row="1" Text="{Binding Title}" VerticalAlignment="Bottom"
+                                           TextWrapping="Wrap" Style="{StaticResource PhoneTextLargeStyle}"
+                                           FontSize="{StaticResource PhoneFontSizeMediumLarge}"/>
                             </Grid>
                         </DataTemplate>
                     </phone:LongListSelector.ItemTemplate>
+                    <phone:LongListSelector.ListFooterTemplate>
+                        <DataTemplate>
+                            <!--Placeholder-->
+                            <Grid Height="100"></Grid>
+                        </DataTemplate>
+                    </phone:LongListSelector.ListFooterTemplate>
                 </phone:LongListSelector>
             </phone:PanoramaItem>
 

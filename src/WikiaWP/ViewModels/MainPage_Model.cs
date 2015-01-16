@@ -31,7 +31,7 @@ namespace WikiaWP.ViewModels
 
         public MainPage_Model()
         {
-            List1 = new ObservableCollection<ListItem_Model>();
+            List1 = new ObservableCollection<IGrouping<string, ListItem_Model>>();
             List2 = new ObservableCollection<ListItem_Model>();
             if (IsInDesignMode)
             {
@@ -74,17 +74,18 @@ namespace WikiaWP.ViewModels
 
         //propvm tab tab string tab Title
 
-        public ObservableCollection<ListItem_Model> List1
+        public ObservableCollection<IGrouping<string, ListItem_Model>> List1
         {
             get { return _List1Locator(this).Value; }
             set { _List1Locator(this).SetValueAndTryNotify(value); }
         }
-        #region Property ObservableCollection<ListItem_Model> List1 Setup
-        protected Property<ObservableCollection<ListItem_Model>> _List1 = new Property<ObservableCollection<ListItem_Model>> { LocatorFunc = _List1Locator };
-        static Func<BindableBase, ValueContainer<ObservableCollection<ListItem_Model>>> _List1Locator = RegisterContainerLocator<ObservableCollection<ListItem_Model>>("List1", model => model.Initialize("List1", ref model._List1, ref _List1Locator, _List1DefaultValueFactory));
-        static Func<ObservableCollection<ListItem_Model>> _List1DefaultValueFactory = () => { return default(ObservableCollection<ListItem_Model>); };
+        #region Property ObservableCollection<IGrouping<string, ListItem_Model>> List1 Setup
+        protected Property<ObservableCollection<IGrouping<string, ListItem_Model>>> _List1 = new Property<ObservableCollection<IGrouping<string, ListItem_Model>>> { LocatorFunc = _List1Locator };
+        static Func<BindableBase, ValueContainer<ObservableCollection<IGrouping<string, ListItem_Model>>>> _List1Locator = RegisterContainerLocator<ObservableCollection<IGrouping<string, ListItem_Model>>>("List1", model => model.Initialize("List1", ref model._List1, ref _List1Locator, _List1DefaultValueFactory));
+        static Func<ObservableCollection<IGrouping<string, ListItem_Model>>> _List1DefaultValueFactory = () => { return default(ObservableCollection<IGrouping<string, ListItem_Model>>); };
         #endregion
 
+        
         public ObservableCollection<ListItem_Model> List2
         {
             get { return _List2Locator(this).Value; }
@@ -253,7 +254,12 @@ namespace WikiaWP.ViewModels
                                 var apiClient = api;
                                 var tasks = categories.Select(c => vm.GetTopArticlesAsync(apiClient, c, count: 7));
                                 var list = await Task.WhenAll(tasks);
-                                vm.List1.AddRange(list.SelectMany(m => m));
+                                // LongListSelector grouping feature not work with IEnumerable...
+                                // http://stackoverflow.com/questions/13479727/grouped-longlistselector-headers-appear-items-dont
+                                vm.List1.AddRange(
+                                    list.SelectMany(m => m)
+                                        .GroupBy(m => m.Group)
+                                        .Select(group => new GroupingList<string, ListItem_Model>(group)));
                             }
                         }
                     )
@@ -335,7 +341,7 @@ namespace WikiaWP.ViewModels
                         {
                             Title = art.title,
                             Content = art.@abstract,
-                            ImageSource = art.thumbnail ?? AppResources.PlaceholderImageSource,
+                            ImageSource = art.ThumbnailFixYOffset ?? AppResources.PlaceholderImageSource,
                             Group = group
                         }).Concat(CreateLoadMoreListItem(group));
         }
