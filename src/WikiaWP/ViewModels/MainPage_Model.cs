@@ -33,6 +33,7 @@ namespace WikiaWP.ViewModels
         {
             List1 = new ObservableCollection<IGrouping<string, ListItem_Model>>();
             List2 = new ObservableCollection<IGrouping<string, ListItem_Model>>();
+            List3 = new ObservableCollection<IGrouping<string, ListItem_Model>>();
             if (IsInDesignMode)
             {
             }
@@ -60,6 +61,17 @@ namespace WikiaWP.ViewModels
         protected Property<ObservableCollection<IGrouping<string, ListItem_Model>>> _List2 = new Property<ObservableCollection<IGrouping<string, ListItem_Model>>> { LocatorFunc = _List2Locator };
         static Func<BindableBase, ValueContainer<ObservableCollection<IGrouping<string, ListItem_Model>>>> _List2Locator = RegisterContainerLocator<ObservableCollection<IGrouping<string, ListItem_Model>>>("List2", model => model.Initialize("List2", ref model._List2, ref _List2Locator, _List2DefaultValueFactory));
         static Func<ObservableCollection<IGrouping<string, ListItem_Model>>> _List2DefaultValueFactory = () => { return default(ObservableCollection<IGrouping<string, ListItem_Model>>); };
+        #endregion
+
+        public ObservableCollection<IGrouping<string, ListItem_Model>> List3
+        {
+            get { return _List3Locator(this).Value; }
+            set { _List3Locator(this).SetValueAndTryNotify(value); }
+        }
+        #region Property ObservableCollection<IGrouping<string, ListItem_Model>> List3 Setup
+        protected Property<ObservableCollection<IGrouping<string, ListItem_Model>>> _List3 = new Property<ObservableCollection<IGrouping<string, ListItem_Model>>> { LocatorFunc = _List3Locator };
+        static Func<BindableBase, ValueContainer<ObservableCollection<IGrouping<string, ListItem_Model>>>> _List3Locator = RegisterContainerLocator<ObservableCollection<IGrouping<string, ListItem_Model>>>("List3", model => model.Initialize("List3", ref model._List3, ref _List3Locator, _List3DefaultValueFactory));
+        static Func<ObservableCollection<IGrouping<string, ListItem_Model>>> _List3DefaultValueFactory = () => { return default(ObservableCollection<IGrouping<string, ListItem_Model>>); };
         #endregion
 
 
@@ -278,6 +290,52 @@ namespace WikiaWP.ViewModels
             };
         #endregion
 
+        public CommandModel<ReactiveCommand, String> CommandLoadList3
+        {
+            get { return _CommandLoadList3Locator(this).Value; }
+            set { _CommandLoadList3Locator(this).SetValueAndTryNotify(value); }
+        }
+        #region Property CommandModel<ReactiveCommand, String> CommandLoadList3 Setup
+        protected Property<CommandModel<ReactiveCommand, String>> _CommandLoadList3 = new Property<CommandModel<ReactiveCommand, String>> { LocatorFunc = _CommandLoadList3Locator };
+        static Func<BindableBase, ValueContainer<CommandModel<ReactiveCommand, String>>> _CommandLoadList3Locator = RegisterContainerLocator<CommandModel<ReactiveCommand, String>>("CommandLoadList3", model => model.Initialize("CommandLoadList3", ref model._CommandLoadList3, ref _CommandLoadList3Locator, _CommandLoadList3DefaultValueFactory));
+        static Func<BindableBase, CommandModel<ReactiveCommand, String>> _CommandLoadList3DefaultValueFactory =
+            model =>
+            {
+                var resource = "LoadList3";           // Command resource  
+                var commandId = "LoadList3";
+                var vm = CastToCurrentType(model);
+                var cmd = new ReactiveCommand(canExecute: true) { ViewModel = model }; //New Command Core
+                cmd
+                    .DoExecuteUIBusyTask(
+                        vm,
+                        async e =>
+                        {
+                            vm.List3.Clear();
+                            var categories = new[] { "维基动态" };
+                            using (var api = new ApiClient())
+                            {
+                                var apiClient = api;
+                                var tasks = categories.Select(c => vm.GetArticlesInCategory(apiClient, c, count: 7));
+                                var list = await Task.WhenAll(tasks);
+                                // LongListSelector grouping feature not work with IEnumerable...
+                                // http://stackoverflow.com/questions/13479727/grouped-longlistselector-headers-appear-items-dont
+                                vm.List3.AddRange(
+                                    list.SelectMany(m => m)
+                                        .GroupBy(m => m.Group)
+                                        .Select(group => new GroupingList<string, ListItem_Model>(group)));
+                            }
+                        }
+                    )
+                    .DoNotifyDefaultEventRouter(vm, commandId)
+                    .Subscribe()
+                    .DisposeWith(vm);
+
+                var cmdmdl = cmd.CreateCommandModel(resource);
+                cmdmdl.ListenToIsUIBusy(model: vm, canExecuteWhenBusy: false);
+                return cmdmdl;
+            };
+        #endregion
+
 
         private async Task<IEnumerable<ListItem_Model>> GetCuratedContentAsync(ApiClient api)
         {
@@ -311,6 +369,23 @@ namespace WikiaWP.ViewModels
                             ImageSource = art.ThumbnailFixYOffset ?? AppResources.PlaceholderImageSource,
                             Group = group
                         }).Concat(CreateLoadMoreListItem(group));
+        }
+
+        private async Task<IEnumerable<ListItem_Model>> GetArticlesInCategory(ApiClient api, string category, int count)
+        {
+            // todo call list api instead of top
+            var articles = await api.WikiaApi.Articles.GetTopArticlesAsync(category, count);
+            var group = category;
+            return
+                articles.Select(
+                    art =>
+                    new ListItem_Model
+                    {
+                        Title = art.title,
+                        Content = art.@abstract,
+                        ImageSource = art.ThumbnailFixYOffset ?? AppResources.PlaceholderImageSource,
+                        Group = group
+                    });
         }
 
         private static ListItem_Model CreateLoadMoreListItem(string group)
