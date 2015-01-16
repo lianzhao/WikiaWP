@@ -3,15 +3,20 @@ using System.Net.Http;
 
 using LianZhao;
 
+using Wikia.Asoiaf.Zh.Categories;
 using Wikia.Asoiaf.Zh.Dictionaries;
 
 namespace Wikia.Asoiaf.Zh
 {
     public class ApiClient : DisposableObjectOwner
     {
+        public const string Site = "http://zh.asoiaf.wikia.com";
+
         private readonly HttpClient _httpClient;
 
         private readonly Lazy<DictionariesApiClient> _dictionariesLazy;
+
+        private readonly Lazy<CategoriesApiClient> _categoriesLazy;
 
         public ApiClient()
             : this(new HttpClient(), isOwner: true)
@@ -27,6 +32,7 @@ namespace Wikia.Asoiaf.Zh
             }
             _httpClient = httpClient;
             _dictionariesLazy = new Lazy<DictionariesApiClient>(() => new DictionariesApiClient(_httpClient, isOwner: false));
+            _categoriesLazy = new Lazy<CategoriesApiClient>(() => new CategoriesApiClient(_httpClient, isOwner: false));
         }
 
         public DictionariesApiClient Dictionaries
@@ -34,6 +40,14 @@ namespace Wikia.Asoiaf.Zh
             get
             {
                 return _dictionariesLazy.Value;
+            }
+        }
+
+        public CategoriesApiClient Categories
+        {
+            get
+            {
+                return _categoriesLazy.Value;
             }
         }
     }

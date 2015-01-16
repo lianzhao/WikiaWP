@@ -65,7 +65,7 @@
                 </DataTemplate>
             </phone:Panorama.TitleTemplate>
             <phone:Panorama.Background>
-                <ImageBrush ImageSource="/PanoramaApp1;component/Assets/PanoramaBackground.png"/>
+                <ImageBrush ImageSource="/Assets/ApplicationBackground.jpg" Stretch="UniformToFill"/>
             </phone:Panorama.Background>
 
             <!--Panorama item one-->
@@ -150,7 +150,6 @@
                     <DataTemplate></DataTemplate>
                 </phone:PanoramaItem.HeaderTemplate>
                 <phone:LongListSelector x:Name="List3ListSelector" ItemsSource="{Binding List3}"
-                                        LayoutMode="Grid" GridCellSize="200,200"
                                         IsGroupingEnabled="True">
                     <phone:LongListSelector.GroupHeaderTemplate>
                         <DataTemplate>
@@ -168,8 +167,7 @@
                                 <Image Grid.Row="0" Grid.RowSpan="2" Source="{Binding ImageSource}"/>
                                 <Rectangle Grid.Row="1" Fill="Gray" Opacity="0.5"></Rectangle>
                                 <TextBlock Grid.Row="1" Text="{Binding Title}" VerticalAlignment="Bottom"
-                                           TextWrapping="Wrap" Style="{StaticResource PhoneTextLargeStyle}"
-                                           FontSize="{StaticResource PhoneFontSizeMediumLarge}"/>
+                                           TextWrapping="Wrap" Style="{StaticResource PhoneTextLargeStyle}"/>
                             </Grid>
                         </DataTemplate>
                     </phone:LongListSelector.ItemTemplate>

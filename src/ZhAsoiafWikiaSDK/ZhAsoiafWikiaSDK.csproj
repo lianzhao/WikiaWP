@@ -39,9 +39,14 @@
       <Project>{397EB213-EAAE-46EE-9385-ADE458C4EA59}</Project>
       <Name>LianZhao.NetFx</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MediaWikiSDK\MediaWikiSDK.csproj">
+      <Project>{374873A0-41A9-4318-9A3F-9E838BE7F30F}</Project>
+      <Name>MediaWikiSDK</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiClient.cs" />
+    <Compile Include="Categories\CategoriesApiClient.cs" />
     <Compile Include="Dictionaries\DictionariesApiClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

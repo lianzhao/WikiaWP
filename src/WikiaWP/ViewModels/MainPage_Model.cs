@@ -225,10 +225,10 @@ namespace WikiaWP.ViewModels
                         async e =>
                         {
                             vm.List1.Clear();
-                            var categories = new[] { "人物", "贵族家族", "事件", "地理" };
                             using (var api = new ApiClient())
                             {
                                 var apiClient = api;
+                                var categories = await apiClient.ZhAsoiafWiki.Categories.GetTopCategoriesAsync();
                                 var tasks = categories.Select(c => vm.GetTopArticlesAsync(apiClient, c, count: 7));
                                 var list = await Task.WhenAll(tasks);
                                 // LongListSelector grouping feature not work with IEnumerable...
