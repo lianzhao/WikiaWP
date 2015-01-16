@@ -34,6 +34,11 @@ namespace Wikia.Asoiaf.Zh.Pages
             return await GetPageItemsAsync("App/WikiNews");
         }
 
+        public async Task<IEnumerable<PageItem>> GetRecommendationsAsync()
+        {
+            return await GetPageItemsAsync("App/Recommendations");
+        }
+
         public async Task<IEnumerable<PageItem>> GetPageItemsAsync(string pageTitle)
         {
             try

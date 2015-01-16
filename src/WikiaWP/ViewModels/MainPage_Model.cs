@@ -18,6 +18,8 @@ using Windows.Media.MediaProperties;
 using LianZhao.Collections.Generic;
 using LianZhao.Linq;
 
+using Wikia.Asoiaf.Zh.Pages;
+
 using WikiaWP.Models;
 using WikiaWP.Resources;
 
@@ -313,22 +315,14 @@ namespace WikiaWP.ViewModels
                             vm.List3.Clear();
                             using (var api = new ApiClient())
                             {
-                                var items = await api.ZhAsoiafWiki.Pages.GetWikiNews();
-                                var list =
-                                    items.Select(
-                                        item =>
-                                        new ListItem_Model
-                                            {
-                                                Title = item.title,
-                                                SubTitle = item.@abstract,
-                                                ImageSource = item.thumbnail,
-                                                Content = item.title,
-                                                Group = "维基动态"
-                                            });
+                                var t1 = vm.GetList3Group(api.ZhAsoiafWiki.Pages.GetWikiNews(), "维基动态");
+                                var t2 = vm.GetList3Group(api.ZhAsoiafWiki.Pages.GetRecommendationsAsync(), "推荐阅读");
+                                var groups = await Task.WhenAll(new[] { t1, t2 });
                                 // LongListSelector grouping feature not work with IEnumerable...
                                 // http://stackoverflow.com/questions/13479727/grouped-longlistselector-headers-appear-items-dont
                                 vm.List3.AddRange(
-                                    list.GroupBy(m => m.Group)
+                                    groups.SelectMany(item => item)
+                                        .GroupBy(m => m.Group)
                                         .Select(group => new GroupingList<string, ListItem_Model>(group)));
                             }
                         }
@@ -378,21 +372,20 @@ namespace WikiaWP.ViewModels
                         }).Concat(CreateLoadMoreListItem(group));
         }
 
-        private async Task<IEnumerable<ListItem_Model>> GetArticlesInCategory(ApiClient api, string category, int count)
+        private async Task<IEnumerable<ListItem_Model>> GetList3Group(Task<IEnumerable<PageItem>> task, string group)
         {
-            // todo call list api instead of top
-            var articles = await api.WikiaApi.Articles.GetTopArticlesAsync(category, count);
-            var group = category;
+            var items = await task;
             return
-                articles.Select(
-                    art =>
+                items.Select(
+                    item =>
                     new ListItem_Model
-                    {
-                        Title = art.title,
-                        Content = art.@abstract,
-                        ImageSource = art.ThumbnailFixYOffset ?? AppResources.PlaceholderImageSource,
-                        Group = group
-                    });
+                        {
+                            Title = item.title,
+                            SubTitle = item.@abstract,
+                            ImageSource = item.thumbnail,
+                            Content = item.title,
+                            Group = group
+                        });
         }
 
         private static ListItem_Model CreateLoadMoreListItem(string group)
