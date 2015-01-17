@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Net.Http;
-using System.Threading.Tasks;
 
 using LianZhao;
 
 using Wikia.Articles;
 using Wikia.CuratedContent;
 using Wikia.Pages;
+using Wikia.RelatedPages;
 using Wikia.Search;
 
 namespace Wikia
@@ -24,6 +24,8 @@ namespace Wikia
         private readonly Lazy<SearchApiClient> _searchLazy;
 
         private readonly Lazy<CuratedContentApiClient> _curatedContentLazy;
+
+        private readonly Lazy<RelatedPagesApiClient> _relatedPagesLazy;
 
         public ApiClient(string site)
             : this(site, new HttpClient(), isOwner: true)
@@ -47,6 +49,7 @@ namespace Wikia
             _pagesLazy = new Lazy<PagesApiClient>(() => new PagesApiClient(_site, _httpClient, isOwner: false));
             _searchLazy = new Lazy<SearchApiClient>(() => new SearchApiClient(_site, _httpClient, isOwner: false));
             _curatedContentLazy = new Lazy<CuratedContentApiClient>(() => new CuratedContentApiClient(_site, _httpClient, isOwner: false));
+            _relatedPagesLazy = new Lazy<RelatedPagesApiClient>(() => new RelatedPagesApiClient(_site, _httpClient, isOwner: false));
         }
 
         public ArticlesApiClient Articles
@@ -78,6 +81,14 @@ namespace Wikia
             get
             {
                 return _curatedContentLazy.Value;
+            }
+        }
+
+        public RelatedPagesApiClient RelatedPages
+        {
+            get
+            {
+                return _relatedPagesLazy.Value;
             }
         }
     }
