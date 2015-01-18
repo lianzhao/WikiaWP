@@ -113,7 +113,7 @@
                 </phone:PanoramaItem.HeaderTemplate>
                 <phone:LongListSelector x:Name="List1ListSelector" ItemsSource="{Binding List1}"
                                         LayoutMode="Grid" GridCellSize="200,200"
-                                        IsGroupingEnabled="True">
+                                        IsGroupingEnabled="True" SelectionChanged="List1ListSelector_OnSelectionChanged">
                     <phone:LongListSelector.GroupHeaderTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Key}" Style="{StaticResource PhoneTextNormalStyle}"

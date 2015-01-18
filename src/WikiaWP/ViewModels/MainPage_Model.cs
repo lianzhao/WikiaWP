@@ -75,6 +75,17 @@ namespace WikiaWP.ViewModels
         static Func<BindableBase, ValueContainer<ObservableCollection<IGrouping<string, ListItem_Model>>>> _List3Locator = RegisterContainerLocator<ObservableCollection<IGrouping<string, ListItem_Model>>>("List3", model => model.Initialize("List3", ref model._List3, ref _List3Locator, _List3DefaultValueFactory));
         static Func<ObservableCollection<IGrouping<string, ListItem_Model>>> _List3DefaultValueFactory = () => { return default(ObservableCollection<IGrouping<string, ListItem_Model>>); };
         #endregion
+        
+        public ListItem_Model SelectedItem
+        {
+            get { return _SelectedItemLocator(this).Value; }
+            set { _SelectedItemLocator(this).SetValueAndTryNotify(value); }
+        }
+        #region Property ListItem_Model SelectedItem Setup        
+        protected Property<ListItem_Model> _SelectedItem = new Property<ListItem_Model>{ LocatorFunc = _SelectedItemLocator};
+        static Func<BindableBase,ValueContainer<ListItem_Model>> _SelectedItemLocator= RegisterContainerLocator<ListItem_Model>("SelectedItem", model =>model.Initialize("SelectedItem",ref model._SelectedItem, ref _SelectedItemLocator,_SelectedItemDefaultValueFactory));         
+        static Func<ListItem_Model> _SelectedItemDefaultValueFactory = ()=>{ return default(ListItem_Model); };
+        #endregion
 
 
         #region Life Time Event Handling
@@ -172,6 +183,39 @@ namespace WikiaWP.ViewModels
                 return cmdmdl;
             };
         #endregion
+
+        public CommandModel<ReactiveCommand, String> CommandNavigateToSelected
+        {
+            get { return _CommandNavigateToSelectedLocator(this).Value; }
+            set { _CommandNavigateToSelectedLocator(this).SetValueAndTryNotify(value); }
+        }
+        #region Property CommandModel<ReactiveCommand, String> CommandNavigateToSelected Setup
+        protected Property<CommandModel<ReactiveCommand, String>> _CommandNavigateToSelected = new Property<CommandModel<ReactiveCommand, String>> { LocatorFunc = _CommandNavigateToSelectedLocator };
+        static Func<BindableBase, ValueContainer<CommandModel<ReactiveCommand, String>>> _CommandNavigateToSelectedLocator = RegisterContainerLocator<CommandModel<ReactiveCommand, String>>("CommandNavigateToSelected", model => model.Initialize("CommandNavigateToSelected", ref model._CommandNavigateToSelected, ref _CommandNavigateToSelectedLocator, _CommandNavigateToSelectedDefaultValueFactory));
+        static Func<BindableBase, CommandModel<ReactiveCommand, String>> _CommandNavigateToSelectedDefaultValueFactory =
+            model =>
+            {
+                var resource = "NavigateToSelected";           // Command resource  
+                var commandId = "NavigateToSelected";
+                var cmd = new ReactiveCommand(canExecute: true) { ViewModel = model }; //New Command Core
+                cmd
+                    .Subscribe(async _ =>
+                        {
+                            var vm = CastToCurrentType(model);
+                        var vms = await vm
+                            .StageManager
+                            .DefaultStage
+                            .ShowAndGetViewModel<ArticleDetailPage_Model>();
+                            vms.ViewModel.Title = vm.SelectedItem.Title;
+                        await vms.Closing;
+                    })
+                    .DisposeWith(model);
+
+                var cmdmdl = cmd.CreateCommandModel(resource);
+                return cmdmdl;
+            };
+        #endregion
+
 
         public CommandModel<ReactiveCommand, String> CommandNavigateToAbout
         {
