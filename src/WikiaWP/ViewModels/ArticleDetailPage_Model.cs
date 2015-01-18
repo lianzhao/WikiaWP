@@ -129,7 +129,7 @@ namespace WikiaWP.ViewModels
                                 using (var api = new ApiClient())
                                 {
                                     var comments =
-                                        await api.WikiaApi.Mercury.GetArticleCommentsAsync(vm.Title);
+                                        await api.Wikia.Mercury.GetArticleCommentsAsync(vm.Title);
                                     var commentModels =
                                         comments.payload.comments.OrderByDescending(c => c.CreatedUtc)
                                             .Select(c => c.ToArticleComment_Model(comments));
@@ -175,7 +175,7 @@ namespace WikiaWP.ViewModels
                                 var id = 0;
                                 if (vm.TryGetIdFromTitle(out id))
                                 {
-                                    var pages = await api.WikiaApi.RelatedPages.GetRelatedPagesAsync(id);
+                                    var pages = await api.Wikia.RelatedPages.GetRelatedPagesAsync(id);
                                     if (pages == null)
                                     {
                                         return;
@@ -194,7 +194,7 @@ namespace WikiaWP.ViewModels
                                 }
                                 else
                                 {
-                                    var article = await api.WikiaApi.Mercury.GetArticleAsync(vm.Title);
+                                    var article = await api.Wikia.Mercury.GetArticleAsync(vm.Title);
                                     if (article == null)
                                     {
                                         return;

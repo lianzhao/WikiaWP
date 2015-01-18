@@ -340,9 +340,9 @@ namespace WikiaWP.ViewModels
 
         private async Task<IEnumerable<ListItem_Model>> GetCuratedContentAsync(ApiClient api)
         {
-            var content = await api.WikiaApi.CuratedContent.GetCuratedContentAsync();
+            var content = await api.Wikia.CuratedContent.GetCuratedContentAsync();
             var articles =
-                await api.WikiaApi.Articles.GetArticlesAsync(content.tags.Select(tag => tag.id));
+                await api.Wikia.Articles.GetArticlesAsync(content.tags.Select(tag => tag.id));
             return content.tags.Join(
                 articles,
                 tag => tag.id,
@@ -358,7 +358,7 @@ namespace WikiaWP.ViewModels
 
         private async Task<IEnumerable<ListItem_Model>> GetTopArticlesAsync(ApiClient api, string category, int count)
         {
-            var articles = await api.WikiaApi.Articles.GetTopArticlesAsync(category, count);
+            var articles = await api.Wikia.Articles.GetTopArticlesAsync(category, count);
             var group = string.Format("最受欢迎{0}", category);
             return
                 articles.Select(

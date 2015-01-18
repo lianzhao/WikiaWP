@@ -149,7 +149,7 @@ namespace WikiaWP.ViewModels
                                 }
                                 var article =
                                     await
-                                    api.WikiaApi.Articles.GetArticleAsync(
+                                    api.Wikia.Articles.GetArticleAsync(
                                         searchText,
                                         @abstract: 500,
                                         width: 400,
@@ -230,7 +230,7 @@ namespace WikiaWP.ViewModels
             {
                 var result =
                     await
-                    api.WikiaApi.Search.Search(
+                    api.Wikia.Search.Search(
                         vm.SearchText,
                         vm.PagingInfo.CurrentPage + 1,
                         vm.PagingInfo.PageSize > 0 ? vm.PagingInfo.PageSize : 0);
@@ -244,7 +244,7 @@ namespace WikiaWP.ViewModels
                                     };
                 vm.PagingInfo.LoadNextPageOffset = vm.PagingInfo.PageSize / 5;
                 var ids = result.items.Select(item => item.id).ToArray();
-                var articles = await api.WikiaApi.Articles.GetArticlesAsync(ids, @abstract: 500);
+                var articles = await api.Wikia.Articles.GetArticlesAsync(ids, @abstract: 500);
                 foreach (var item in result.items)
                 {
                     var id = item.id;

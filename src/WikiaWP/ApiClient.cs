@@ -43,7 +43,7 @@ namespace WikiaWP
                 new Lazy<Wikia.Asoiaf.Zh.ApiClient>(() => new Wikia.Asoiaf.Zh.ApiClient(_httpClient, isOwner: false));
         }
 
-        public Wikia.ApiClient WikiaApi
+        public Wikia.ApiClient Wikia
         {
             get
             {
