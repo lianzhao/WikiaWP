@@ -196,7 +196,9 @@ namespace WikiaWP.ViewModels
                                                     Title = p.title,
                                                     Content = p.text,
                                                     ImageSource =
-                                                        p.imgUrl ?? AppResources.PlaceholderImageSource
+                                                        p.imgUrl == null
+                                                            ? AppResources.PlaceholderImageSource
+                                                            : p.FixImgUrl()
                                                 });
                                     vm.RelatedPages = new ObservableCollection<ListItem_Model>(list);
                                 }
