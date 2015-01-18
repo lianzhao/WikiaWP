@@ -23,6 +23,7 @@ using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 
 using WikiaWP;
+using WikiaWP.Models;
 using WikiaWP.ViewModels;
 
 
@@ -152,6 +153,26 @@ namespace WikiaWP
                 return;
             }
             appbar.Opacity = e.IsMenuVisible ? 1 : 0.25;
+        }
+
+        private void RelatedPagesLongListSelector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var control = sender as LongListSelector;
+            var vm = LayoutRoot.DataContext as ArticleDetailPage_Model;
+            if (vm == null || control == null || control.SelectedItem == null)
+            {
+                return;
+            }
+            var item = control.SelectedItem as ListItem_Model;
+            if (item == null)
+            {
+                return;
+            }
+            Pivot.SelectedIndex = 0;
+            Histories.Push(vm.Title);
+            NavigateToWikiPage(item.Title);
+            vm.ClearData();
+            vm.Title = item.Title;
         }
     }
 }

@@ -84,6 +84,17 @@ namespace WikiaWP.ViewModels
         static Func<ObservableCollection<ListItem_Model>> _RelatedPagesDefaultValueFactory = () => { return default(ObservableCollection<ListItem_Model>); };
         #endregion
 
+        public ListItem_Model SelectedRelatedPage
+        {
+            get { return _SelectedRelatedPageLocator(this).Value; }
+            set { _SelectedRelatedPageLocator(this).SetValueAndTryNotify(value); }
+        }
+        #region Property ListItem_Model SelectedRelatedPage Setup
+        protected Property<ListItem_Model> _SelectedRelatedPage = new Property<ListItem_Model> { LocatorFunc = _SelectedRelatedPageLocator };
+        static Func<BindableBase, ValueContainer<ListItem_Model>> _SelectedRelatedPageLocator = RegisterContainerLocator<ListItem_Model>("SelectedRelatedPage", model => model.Initialize("SelectedRelatedPage", ref model._SelectedRelatedPage, ref _SelectedRelatedPageLocator, _SelectedRelatedPageDefaultValueFactory));
+        static Func<ListItem_Model> _SelectedRelatedPageDefaultValueFactory = () => { return default(ListItem_Model); };
+        #endregion
+
         public string CommentsHeaderText
         {
             get { return _CommentsHeaderTextLocator(this).Value; }
@@ -220,6 +231,7 @@ namespace WikiaWP.ViewModels
             Title = null;
             Comments = null;
             RelatedPages = null;
+            SelectedRelatedPage = null;
             CommentsHeaderText = null;
         }
 
