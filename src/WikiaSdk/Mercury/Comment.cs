@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using LianZhao;
 using LianZhao.Patterns.Composite;
 
-namespace Wikia.Articles
+namespace Wikia.Mercury
 {
     public class Comment : IComposite<Comment>
     {

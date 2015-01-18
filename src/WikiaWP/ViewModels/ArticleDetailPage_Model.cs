@@ -129,7 +129,7 @@ namespace WikiaWP.ViewModels
                                 using (var api = new ApiClient())
                                 {
                                     var comments =
-                                        await api.WikiaApi.Articles.GetArticleCommentsAsync(vm.Title);
+                                        await api.WikiaApi.Mercury.GetArticleCommentsAsync(vm.Title);
                                     var commentModels =
                                         comments.payload.comments.OrderByDescending(c => c.CreatedUtc)
                                             .Select(c => c.ToArticleComment_Model(comments));

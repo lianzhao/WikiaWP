@@ -2,11 +2,13 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 
+using Wikia.Mercury;
+
 namespace WikiaWP.Models
 {
     public static class ModelExtensions
     {
-        public static ArticleComment_Model ToArticleComment_Model(this Wikia.Articles.Comment c, Wikia.Articles.GetArticleCommentsResultSet comments)
+        public static ArticleComment_Model ToArticleComment_Model(this Comment c, GetArticleCommentsResultSet comments)
         {
             var user = comments.payload.users[c.userName];
             var userName = user.url.StartsWith(

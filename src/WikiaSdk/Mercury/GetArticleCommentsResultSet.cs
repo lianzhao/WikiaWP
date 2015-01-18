@@ -1,4 +1,4 @@
-﻿namespace Wikia.Articles
+﻿namespace Wikia.Mercury
 {
     public class GetArticleCommentsResultSet
     {

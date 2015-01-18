@@ -2,7 +2,7 @@
 
 using LianZhao.Patterns.Composite;
 
-namespace Wikia.Articles
+namespace Wikia.Mercury
 {
     public class Payload : IComposite<Comment>
     {

@@ -150,24 +150,5 @@ namespace Wikia.Articles
                 throw;
             }
         }
-
-        public async Task<GetArticleCommentsResultSet> GetArticleCommentsAsync(string pageTitle)
-        {
-            var uri = string.Format("{0}/wikia.php?controller=MercuryApi&method=getArticleComments&title={1}", _site, pageTitle);
-            try
-            {
-                var json = await _httpClient.GetStringAsync(uri);
-                json = json.Replace("\"users\":[]", "\"users\":{}");//hack
-                return JsonConvert.DeserializeObject<GetArticleCommentsResultSet>(json);
-            }
-            catch (Exception ex)
-            {
-                if (Debugger.IsAttached)
-                {
-                    Debugger.Break();
-                }
-                throw;
-            }
-        }
     }
 }
