@@ -142,7 +142,16 @@ namespace WikiaWP
         private void ApplicationBarMenuItem_OnClick(object sender, EventArgs e)
         {
             // todo
-            NavigationService.GoBack();
+            while (NavigationService.CanGoBack)
+            {
+                NavigationService.GoBack();
+            }
+            //var vm = LayoutRoot.DataContext as ArticleDetailPage_Model;
+            //if (vm == null)
+            //{
+            //    return;
+            //}
+            //vm.CommandNavigateToMainPage.Execute(null);
         }
 
         private void ApplicationBar_OnStateChanged(object sender, ApplicationBarStateChangedEventArgs e)

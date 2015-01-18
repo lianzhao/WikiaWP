@@ -226,6 +226,37 @@ namespace WikiaWP.ViewModels
             };
         #endregion
 
+        public CommandModel<ReactiveCommand, String> CommandNavigateToMainPage
+        {
+            get { return _CommandNavigateToMainPageLocator(this).Value; }
+            set { _CommandNavigateToMainPageLocator(this).SetValueAndTryNotify(value); }
+        }
+        #region Property CommandModel<ReactiveCommand, String> CommandNavigateToMainPage Setup
+        protected Property<CommandModel<ReactiveCommand, String>> _CommandNavigateToMainPage = new Property<CommandModel<ReactiveCommand, String>> { LocatorFunc = _CommandNavigateToMainPageLocator };
+        static Func<BindableBase, ValueContainer<CommandModel<ReactiveCommand, String>>> _CommandNavigateToMainPageLocator = RegisterContainerLocator<CommandModel<ReactiveCommand, String>>("CommandNavigateToMainPage", model => model.Initialize("CommandNavigateToMainPage", ref model._CommandNavigateToMainPage, ref _CommandNavigateToMainPageLocator, _CommandNavigateToMainPageDefaultValueFactory));
+        static Func<BindableBase, CommandModel<ReactiveCommand, String>> _CommandNavigateToMainPageDefaultValueFactory =
+            model =>
+            {
+                var resource = "NavigateToMainPage";           // Command resource  
+                var commandId = "NavigateToMainPage";
+                var cmd = new ReactiveCommand(canExecute: true) { ViewModel = model }; //New Command Core
+                cmd
+                    .Subscribe(async _ =>
+                    {
+                        var vms = await
+                            CastToCurrentType(model)
+                            .StageManager
+                            .DefaultStage
+                            .ShowAndGetViewModel<MainPage_Model>();
+                        await vms.Closing;
+                    })
+                    .DisposeWith(model);
+
+                var cmdmdl = cmd.CreateCommandModel(resource);
+                return cmdmdl;
+            };
+        #endregion
+
         public void ClearData()
         {
             Title = null;
