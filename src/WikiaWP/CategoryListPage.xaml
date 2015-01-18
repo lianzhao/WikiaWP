@@ -6,13 +6,52 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"    
     xmlns:vm="clr-namespace:WikiaWP.ViewModels" 
-    xmlns:mvvm="clr-namespace:MVVMSidekick.Views;assembly=MVVMSidekick_Wp8">
+    xmlns:mvvm="clr-namespace:MVVMSidekick.Views;assembly=MVVMSidekick_Wp8"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone">
     <FrameworkElement.Resources>
         <vm:CategoryListPage_Model x:Key="DesignVM" />
     </FrameworkElement.Resources>
+    
+    <phone:PhoneApplicationPage.ApplicationBar>
+    <shell:ApplicationBar Mode="Minimized" Opacity="0.25" StateChanged="ApplicationBar_OnStateChanged">
+        <shell:ApplicationBar.MenuItems>
+            <shell:ApplicationBarMenuItem Text="回到首页" Click="ApplicationBarMenuItem_OnClick"/>
+        </shell:ApplicationBar.MenuItems>
+    </shell:ApplicationBar>
+        
+    </phone:PhoneApplicationPage.ApplicationBar>
 
-    <Grid x:Name="LayoutRoot" Background="White" DataContext="{StaticResource DesignVM}" >
-     
+    <Grid x:Name="LayoutRoot" DataContext="{StaticResource DesignVM}" >
+
+        <phone:Pivot x:Name="Pivot" Title="{Binding Title}">
+            <phone:PivotItem x:Name="CommentsPivotItem" Header="分类">
+                <phone:LongListSelector ItemsSource="{Binding Categories}"
+                                        LayoutMode="Grid" GridCellSize="200,200">
+                    <phone:LongListSelector.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="4">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Image Grid.Row="0" Grid.RowSpan="2" Source="{Binding ImageSource}"/>
+                                <Rectangle Grid.Row="1" Fill="Gray" Opacity="0.5"></Rectangle>
+                                <TextBlock Grid.Row="1" Text="{Binding Title}" VerticalAlignment="Bottom"
+                                           TextWrapping="Wrap" Style="{StaticResource PhoneTextLargeStyle}"
+                                           FontSize="{StaticResource PhoneFontSizeMediumLarge}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </phone:LongListSelector.ItemTemplate>
+                    <phone:LongListSelector.ListFooterTemplate>
+                        <DataTemplate>
+                            <!--Placeholder-->
+                            <Grid Height="100"></Grid>
+                        </DataTemplate>
+                    </phone:LongListSelector.ListFooterTemplate>
+                </phone:LongListSelector>
+            </phone:PivotItem>
+        </phone:Pivot>
     </Grid>
 
 </mvvm:MVVMPage>

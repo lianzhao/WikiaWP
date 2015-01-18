@@ -17,6 +17,9 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Windows.Navigation;
+
+using Microsoft.Phone.Shell;
+
 using WikiaWP;
 using WikiaWP.ViewModels;
 
@@ -39,8 +42,30 @@ namespace WikiaWP
             this.InitializeComponent();
         }
 
+        private void ApplicationBarMenuItem_OnClick(object sender, EventArgs e)
+        {
+            // todo
+            while (NavigationService.CanGoBack)
+            {
+                NavigationService.GoBack();
+            }
+            //var vm = LayoutRoot.DataContext as ArticleDetailPage_Model;
+            //if (vm == null)
+            //{
+            //    return;
+            //}
+            //vm.CommandNavigateToMainPage.Execute(null);
+        }
 
-
+        private void ApplicationBar_OnStateChanged(object sender, ApplicationBarStateChangedEventArgs e)
+        {
+            var appbar = sender as ApplicationBar;
+            if (appbar == null)
+            {
+                return;
+            }
+            appbar.Opacity = e.IsMenuVisible ? 1 : 0.25;
+        }
     }
 }
 

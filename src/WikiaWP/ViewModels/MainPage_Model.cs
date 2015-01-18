@@ -198,18 +198,14 @@ namespace WikiaWP.ViewModels
                 var resource = "NavigateToSelected";           // Command resource  
                 var commandId = "NavigateToSelected";
                 var cmd = new ReactiveCommand(canExecute: true) { ViewModel = model }; //New Command Core
-                cmd
-                    .Subscribe(async _ =>
+                cmd.Subscribe(
+                    async _ =>
                         {
                             var vm = CastToCurrentType(model);
-                        var vms = await vm
-                            .StageManager
-                            .DefaultStage
-                            .ShowAndGetViewModel<ArticleDetailPage_Model>();
+                            var vms = await vm.StageManager.DefaultStage.ShowAndGetViewModel<ArticleDetailPage_Model>();
                             vms.ViewModel.Title = vm.SelectedItem.Title;
-                        await vms.Closing;
-                    })
-                    .DisposeWith(model);
+                            await vms.Closing;
+                        }).DisposeWith(model);
 
                 var cmdmdl = cmd.CreateCommandModel(resource);
                 return cmdmdl;
@@ -413,7 +409,13 @@ namespace WikiaWP.ViewModels
                             Content = art.@abstract,
                             ImageSource = art.ThumbnailFixYOffset ?? AppResources.PlaceholderImageSource,
                             Group = group
-                        }).Concat(CreateLoadMoreListItem(group));
+                        }).Concat(new ListItem_Model
+                        {
+                            Title = "更多...",
+                            Content = string.Format("Category:{0}", category),
+                            ImageSource = AppResources.PlaceholderImageSource,
+                            Group = group
+                        });
         }
 
         private async Task<IEnumerable<ListItem_Model>> GetList3Group(Task<IEnumerable<PageItem>> task, string group)
@@ -430,16 +432,6 @@ namespace WikiaWP.ViewModels
                             Content = item.title,
                             Group = group
                         });
-        }
-
-        private static ListItem_Model CreateLoadMoreListItem(string group)
-        {
-            return new ListItem_Model
-                       {
-                           Title = "更多...",
-                           ImageSource = AppResources.PlaceholderImageSource,
-                           Group = group
-                       };
         }
     }
 
