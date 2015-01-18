@@ -35,7 +35,7 @@ namespace Wikia.Asoiaf.Zh.Categories
             {
                 using (var api = new MediaWiki.ApiClient(ApiClient.Site, _httpClient, isOwner: false))
                 {
-                    var json = await api.Parse.ParseAsync("App/TopCategories", "wikitext");
+                    var json = await api.Parse.ParseAsync("MediaWiki:App/TopCategories", "wikitext");
                     return JsonConvert.DeserializeObject<string[]>(json);
                 }
             }

@@ -31,12 +31,12 @@ namespace Wikia.Asoiaf.Zh.Pages
 
         public async Task<IEnumerable<PageItem>> GetWikiNews()
         {
-            return await GetPageItemsAsync("App/WikiNews");
+            return await GetPageItemsAsync("MediaWiki:App/WikiNews");
         }
 
         public async Task<IEnumerable<PageItem>> GetRecommendationsAsync()
         {
-            return await GetPageItemsAsync("App/Recommendations");
+            return await GetPageItemsAsync("MediaWiki:App/Recommendations");
         }
 
         public async Task<IEnumerable<PageItem>> GetPageItemsAsync(string pageTitle)
