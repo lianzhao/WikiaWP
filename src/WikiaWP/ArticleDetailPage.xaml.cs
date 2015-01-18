@@ -124,9 +124,17 @@ namespace WikiaWP
         private void Pivot_OnLoadingPivotItem(object sender, PivotItemEventArgs e)
         {
             var vm = LayoutRoot.DataContext as ArticleDetailPage_Model;
+            if (vm == null)
+            {
+                return;
+            }
             if (e.Item == CommentsPivotItem)
             {
                 vm.CommandLoadComments.Execute(null);
+            }
+            else if (e.Item == RelatedPagesPivotItem)
+            {
+                vm.CommandLoadRelatedPages.Execute(null);
             }
         }
 

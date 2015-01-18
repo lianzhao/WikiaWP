@@ -11,12 +11,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.Serialization;
 
 using LianZhao.Patterns.Composite;
 
 using WikiaWP.Models;
+using WikiaWP.Resources;
 
 namespace WikiaWP.ViewModels
 {
@@ -48,6 +50,7 @@ namespace WikiaWP.ViewModels
             }
         }
 
+
         public string Title
         {
             get { return _TitleLocator(this).Value; }
@@ -68,6 +71,17 @@ namespace WikiaWP.ViewModels
         protected Property<ObservableCollection<ArticleComment_Model>> _Comments = new Property<ObservableCollection<ArticleComment_Model>> { LocatorFunc = _CommentsLocator };
         static Func<BindableBase, ValueContainer<ObservableCollection<ArticleComment_Model>>> _CommentsLocator = RegisterContainerLocator<ObservableCollection<ArticleComment_Model>>("Comments", model => model.Initialize("Comments", ref model._Comments, ref _CommentsLocator, _CommentsDefaultValueFactory));
         static Func<ObservableCollection<ArticleComment_Model>> _CommentsDefaultValueFactory = () => { return default(ObservableCollection<ArticleComment_Model>); };
+        #endregion
+
+        public ObservableCollection<ListItem_Model> RelatedPages
+        {
+            get { return _RelatedPagesLocator(this).Value; }
+            set { _RelatedPagesLocator(this).SetValueAndTryNotify(value); }
+        }
+        #region Property ObservableCollection<ListItem_Model> RelatedPages Setup
+        protected Property<ObservableCollection<ListItem_Model>> _RelatedPages = new Property<ObservableCollection<ListItem_Model>> { LocatorFunc = _RelatedPagesLocator };
+        static Func<BindableBase, ValueContainer<ObservableCollection<ListItem_Model>>> _RelatedPagesLocator = RegisterContainerLocator<ObservableCollection<ListItem_Model>>("RelatedPages", model => model.Initialize("RelatedPages", ref model._RelatedPages, ref _RelatedPagesLocator, _RelatedPagesDefaultValueFactory));
+        static Func<ObservableCollection<ListItem_Model>> _RelatedPagesDefaultValueFactory = () => { return default(ObservableCollection<ListItem_Model>); };
         #endregion
 
         public string CommentsHeaderText
@@ -125,11 +139,93 @@ namespace WikiaWP.ViewModels
             };
         #endregion
 
+        public CommandModel<ReactiveCommand, String> CommandLoadRelatedPages
+        {
+            get { return _CommandLoadRelatedPagesLocator(this).Value; }
+            set { _CommandLoadRelatedPagesLocator(this).SetValueAndTryNotify(value); }
+        }
+        #region Property CommandModel<ReactiveCommand, String> CommandLoadRelatedPages Setup
+        protected Property<CommandModel<ReactiveCommand, String>> _CommandLoadRelatedPages = new Property<CommandModel<ReactiveCommand, String>> { LocatorFunc = _CommandLoadRelatedPagesLocator };
+        static Func<BindableBase, ValueContainer<CommandModel<ReactiveCommand, String>>> _CommandLoadRelatedPagesLocator = RegisterContainerLocator<CommandModel<ReactiveCommand, String>>("CommandLoadRelatedPages", model => model.Initialize("CommandLoadRelatedPages", ref model._CommandLoadRelatedPages, ref _CommandLoadRelatedPagesLocator, _CommandLoadRelatedPagesDefaultValueFactory));
+        static Func<BindableBase, CommandModel<ReactiveCommand, String>> _CommandLoadRelatedPagesDefaultValueFactory =
+            model =>
+            {
+                var resource = "LoadRelatedPages";           // Command resource  
+                var commandId = "LoadRelatedPages";
+                var vm = CastToCurrentType(model);
+                var cmd = new ReactiveCommand(canExecute: true) { ViewModel = model }; //New Command Core
+                cmd
+                    .DoExecuteUIBusyTask(
+                        vm,
+                        async e =>
+                        {
+                            using (var api = new ApiClient())
+                            {
+                                var id = 0;
+                                if (vm.TryGetIdFromTitle(out id))
+                                {
+                                    var pages = await api.WikiaApi.RelatedPages.GetRelatedPagesAsync(id);
+                                    if (pages == null)
+                                    {
+                                        return;
+                                    }
+                                    var list =
+                                        pages.Select(
+                                            p =>
+                                            new ListItem_Model
+                                                {
+                                                    Title = p.title,
+                                                    Content = p.text,
+                                                    ImageSource =
+                                                        p.imgUrl ?? AppResources.PlaceholderImageSource
+                                                });
+                                    vm.RelatedPages = new ObservableCollection<ListItem_Model>(list);
+                                }
+                                else
+                                {
+                                    var article = await api.WikiaApi.Mercury.GetArticleAsync(vm.Title);
+                                    if (article == null)
+                                    {
+                                        return;
+                                    }
+                                    var list =
+                                        article.data.relatedPages.Select(
+                                            p =>
+                                            new ListItem_Model
+                                                {
+                                                    Title = p.title,
+                                                    Content = p.text,
+                                                    ImageSource =
+                                                        p.imgUrl ?? AppResources.PlaceholderImageSource
+                                                });
+                                    vm.RelatedPages = new ObservableCollection<ListItem_Model>(list);
+                                }
+                            }
+                        }
+                    )
+                    .DoNotifyDefaultEventRouter(vm, commandId)
+                    .Subscribe()
+                    .DisposeWith(vm);
+
+                var cmdmdl = cmd.CreateCommandModel(resource);
+                cmdmdl.ListenToIsUIBusy(model: vm, canExecuteWhenBusy: false);
+                return cmdmdl;
+            };
+        #endregion
+
         public void ClearData()
         {
             Title = null;
             Comments = null;
+            RelatedPages = null;
             CommentsHeaderText = null;
+        }
+
+        private bool TryGetIdFromTitle(out int id)
+        {
+            // todo get from cached title/id dict
+            id = 0;
+            return false;
         }
 
         #region Life Time Event Handling

@@ -20,7 +20,7 @@ namespace WikiaWP.Models
 
         //Use propvm + tab +tab  to create a new property of bindable here:
 
-
+        
         public string Title
         {
             get { return _TitleLocator(this).Value; }

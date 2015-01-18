@@ -281,12 +281,8 @@ namespace WikiaWP.ViewModels
                     .Subscribe(async _ =>
                         {
                             var vm = CastToCurrentType(model);
-                            var navigateTo = vm.MatchItem == null
-                                                 ? (vm.SelectedSearchResult == null
-                                                        ? null
-                                                        : vm.SelectedSearchResult.Title)
-                                                 : vm.MatchItem.Title;
-                            if (string.IsNullOrEmpty(navigateTo))
+                            var navigateTo = vm.MatchItem ?? vm.SelectedSearchResult;
+                            if (navigateTo == null)
                             {
                                 return;
                             }
@@ -295,7 +291,7 @@ namespace WikiaWP.ViewModels
                                 .StageManager
                                 .DefaultStage
                                 .ShowAndGetViewModel<ArticleDetailPage_Model>();
-                            vms.ViewModel.Title = navigateTo;
+                            vms.ViewModel.Title = navigateTo.Title;
                             await vms.Closing;
                         })
                     .DisposeWith(model);

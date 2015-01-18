@@ -70,6 +70,31 @@
                     </phone:LongListSelector.ItemTemplate>
                 </phone:LongListSelector>
             </phone:PivotItem>
+            <phone:PivotItem x:Name="RelatedPagesPivotItem" Header="相关页面">
+                <phone:LongListSelector ItemsSource="{Binding RelatedPages}">
+                    <phone:LongListSelector.ListHeader>
+                        <TextBlock Text="" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                    </phone:LongListSelector.ListHeader>
+                    <phone:LongListSelector.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="25"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="2.5*"/>
+                                </Grid.ColumnDefinitions>
+                                <Image Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" Source="{Binding ImageSource}"
+                                       Margin="0,2"/>
+                                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Title}" TextWrapping="NoWrap" Style="{StaticResource PhoneTextLargeStyle}"/>
+                                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Content}" TextWrapping="Wrap" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </phone:LongListSelector.ItemTemplate>
+                </phone:LongListSelector>
+            </phone:PivotItem>
         </phone:Pivot>
         <ProgressBar x:Name="ProgressBar" IsIndeterminate="True"/>
     </Grid>

@@ -1,8 +1,10 @@
+using System.Collections.Generic;
+
 namespace Wikia.RelatedPages
 {
     public class RelatedPagesResultSet
     {
-        public Items items { get; set; }
+        public IDictionary<int, RelatedPage[]> items { get; set; }
         public string basepath { get; set; }
     }
 }
