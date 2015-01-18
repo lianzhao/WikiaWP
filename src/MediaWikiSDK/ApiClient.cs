@@ -4,6 +4,7 @@ using System.Net.Http;
 using LianZhao;
 
 using MediaWiki.Parse;
+using MediaWiki.Query;
 
 namespace MediaWiki
 {
@@ -14,6 +15,8 @@ namespace MediaWiki
         private readonly HttpClient _httpClient;
 
         private readonly Lazy<ParseApiClient> _parseLazy;
+
+        private readonly Lazy<QueryApiClient> _queryLazy;
 
         public ApiClient(string site)
             : this(site, new HttpClient(), isOwner: true)
@@ -34,6 +37,7 @@ namespace MediaWiki
             _site = site;
             _httpClient = httpClient;
             _parseLazy = new Lazy<ParseApiClient>(() => new ParseApiClient(_site, _httpClient, isOwner: false));
+            _queryLazy = new Lazy<QueryApiClient>(() => new QueryApiClient(_site, _httpClient, isOwner: false));
         }
 
         public ParseApiClient Parse
@@ -41,6 +45,14 @@ namespace MediaWiki
             get
             {
                 return _parseLazy.Value;
+            }
+        }
+
+        public QueryApiClient Query
+        {
+            get
+            {
+                return _queryLazy.Value;
             }
         }
     }
