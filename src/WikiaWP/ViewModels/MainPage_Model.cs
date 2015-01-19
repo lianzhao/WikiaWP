@@ -196,16 +196,16 @@ namespace WikiaWP.ViewModels
                     async _ =>
                         {
                             var vm = CastToCurrentType(model);
-                            if (vm.SelectedItem.Content.StartsWith("Category:"))
+                            if (vm.SelectedItem.Link.StartsWith("Category:"))
                             {
                                 var vms = await vm.StageManager.DefaultStage.ShowAndGetViewModel<CategoryListPage_Model>();
-                                vms.ViewModel.Title = vm.SelectedItem.Content;
+                                vms.ViewModel.Title = vm.SelectedItem.Link;
                                 await vms.Closing;
                             }
                             else
                             {
                                 var vms = await vm.StageManager.DefaultStage.ShowAndGetViewModel<ArticleDetailPage_Model>();
-                                vms.ViewModel.Title = vm.SelectedItem.Title;
+                                vms.ViewModel.Title = vm.SelectedItem.Link;
                                 await vms.Closing;
                             }
                         }).DisposeWith(model);
@@ -411,11 +411,12 @@ namespace WikiaWP.ViewModels
                             Title = art.title,
                             Content = art.@abstract,
                             ImageSource = art.ThumbnailFixYOffset ?? AppResources.PlaceholderImageSource,
+                            Link = art.title,
                             Group = group
                         }).Concat(new ListItem_Model
                         {
                             Title = "更多...",
-                            Content = string.Format("Category:{0}", category),
+                            Link = string.Format("Category:{0}", category),
                             ImageSource = AppResources.PlaceholderImageSource,
                             Group = group
                         });
@@ -433,6 +434,7 @@ namespace WikiaWP.ViewModels
                             SubTitle = item.@abstract,
                             ImageSource = item.thumbnail,
                             Content = item.title,
+                            Link = item.page,
                             Group = group
                         });
         }

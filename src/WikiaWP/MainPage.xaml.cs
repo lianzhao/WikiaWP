@@ -19,6 +19,7 @@ using System.Windows.Shapes;
 
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
+using Microsoft.Phone.Tasks;
 
 using WikiaWP.Models;
 using WikiaWP.ViewModels;
@@ -104,7 +105,7 @@ namespace WikiaWP
             vm.CommandLoadList3.Execute(null);
         }
 
-        private void List1ListSelector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ListListSelector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var control = sender as LongListSelector;
             var vm = LayoutRoot.DataContext as MainPage_Model;
@@ -119,7 +120,16 @@ namespace WikiaWP
             }
             vm.SelectedItem = item;
             control.SelectedItem = null;
-            vm.CommandNavigateToSelected.Execute(null);
+            if (item.Link.StartsWith("http"))
+            {
+                var task = new WebBrowserTask();
+                task.Uri = new Uri(item.Link, UriKind.Absolute);
+                task.Show();
+            }
+            else
+            {
+                vm.CommandNavigateToSelected.Execute(null);
+            }
         }
     }
 }

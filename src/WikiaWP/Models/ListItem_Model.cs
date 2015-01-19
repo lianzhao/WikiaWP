@@ -65,6 +65,17 @@ namespace WikiaWP.Models
         static Func<string> _ImageSourceDefaultValueFactory = () => { return default(string); };
         #endregion
 
+        public string Link
+        {
+            get { return _LinkLocator(this).Value; }
+            set { _LinkLocator(this).SetValueAndTryNotify(value); }
+        }
+        #region Property string Link Setup
+        protected Property<string> _Link = new Property<string> { LocatorFunc = _LinkLocator };
+        static Func<BindableBase, ValueContainer<string>> _LinkLocator = RegisterContainerLocator<string>("Link", model => model.Initialize("Link", ref model._Link, ref _LinkLocator, _LinkDefaultValueFactory));
+        static Func<string> _LinkDefaultValueFactory = () => { return default(string); };
+        #endregion
+
         public string Group
         {
             get { return _GroupLocator(this).Value; }
