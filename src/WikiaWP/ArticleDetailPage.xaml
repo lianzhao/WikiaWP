@@ -8,7 +8,8 @@
     xmlns:vm="clr-namespace:WikiaWP.ViewModels" 
     xmlns:mvvm="clr-namespace:MVVMSidekick.Views;assembly=MVVMSidekick_Wp8"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
-    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone">
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit">
     <FrameworkElement.Resources>
         <vm:ArticleDetailPage_Model x:Key="DesignVM" />
     </FrameworkElement.Resources>
@@ -20,14 +21,18 @@
             </shell:ApplicationBar.MenuItems>
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
-    
+
     <Grid x:Name="LayoutRoot" DataContext="{StaticResource DesignVM}" >
         <phone:Pivot x:Name="Pivot" Title="{Binding Title}" LoadingPivotItem="Pivot_OnLoadingPivotItem">
             <phone:PivotItem x:Name="OverviewPivotItem" Header="概览">
                 <phone:WebBrowser x:Name="WebBrowser"
                           Loaded="WebBrowser_OnLoaded"
                           Navigating="WebBrowser_OnNavigating"
-                          LoadCompleted="WebBrowser_OnLoadCompleted"/>
+                          LoadCompleted="WebBrowser_OnLoadCompleted">
+                    <toolkit:GestureService.GestureListener>
+                        <toolkit:GestureListener Flick="GestureListener_Flick" />
+                    </toolkit:GestureService.GestureListener>
+                </phone:WebBrowser>
             </phone:PivotItem>
             <phone:PivotItem x:Name="CommentsPivotItem" Header="评论">
                 <phone:LongListSelector ItemsSource="{Binding Comments}">

@@ -25,6 +25,7 @@ using WikiaWP;
 using WikiaWP.Models;
 using WikiaWP.ViewModels;
 
+using GestureEventArgs = System.Windows.Input.GestureEventArgs;
 
 namespace WikiaWP
 {

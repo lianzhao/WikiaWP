@@ -183,6 +183,15 @@ namespace WikiaWP
             vm.ClearData();
             vm.Title = item.Title;
         }
+
+        private void GestureListener_Flick(object sender, FlickGestureEventArgs e)
+        {
+            if (e.Direction == System.Windows.Controls.Orientation.Horizontal)
+            {
+                Pivot.SelectedIndex = e.HorizontalVelocity > 0 ? 2 : 1;
+            }
+
+        }
     }
 }
 
