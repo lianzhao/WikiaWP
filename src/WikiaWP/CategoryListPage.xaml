@@ -8,11 +8,19 @@
     xmlns:vm="clr-namespace:WikiaWP.ViewModels" 
     xmlns:mvvm="clr-namespace:MVVMSidekick.Views;assembly=MVVMSidekick_Wp8"
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
-    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone">
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    shell:SystemTray.IsVisible="True">
     <FrameworkElement.Resources>
         <vm:CategoryListPage_Model x:Key="DesignVM" />
+        <shell:ProgressIndicator x:Key="idk" Text="正在检索..."
+                                 IsVisible="{Binding DataContext.IsUIBusy, ElementName=LayoutRoot}"
+                                 IsIndeterminate="True"/>
     </FrameworkElement.Resources>
 
+    <shell:SystemTray.ProgressIndicator>
+        <Binding Source="{StaticResource idk}"/>
+    </shell:SystemTray.ProgressIndicator>
+    
     <phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar Mode="Minimized" Opacity="0.25" StateChanged="ApplicationBar_OnStateChanged">
             <shell:ApplicationBar.MenuItems>

@@ -118,6 +118,7 @@ namespace WikiaWP
                 return;
             }
             vm.SelectedItem = item;
+            control.SelectedItem = null;
             vm.CommandNavigateToSelected.Execute(null);
         }
     }

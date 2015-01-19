@@ -131,7 +131,7 @@ namespace WikiaWP.ViewModels
                                     api.MediaWiki.Query.CategoryMembers.GetCategoryMembersAsync(
                                         vm.Title,
                                         new[] { CatergoryMemberType.page },
-                                        500);
+                                        25);
                                 var articles =
                                     await
                                     api.Wikia.Articles.GetArticlesAsync(
@@ -188,7 +188,7 @@ namespace WikiaWP.ViewModels
                                     api.MediaWiki.Query.CategoryMembers.GetCategoryMembersAsync(
                                         vm.Title,
                                         new[] { CatergoryMemberType.subcat },
-                                        500);
+                                        25);
                                 var articles =
                                     await
                                     api.Wikia.Articles.GetArticlesAsync(
