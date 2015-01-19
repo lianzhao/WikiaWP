@@ -1,7 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml.Linq;
 
 using LianZhao;
+using LianZhao.Linq;
+
+using Newtonsoft.Json;
 
 namespace MediaWiki.Query.CategoryMembers
 {
@@ -29,6 +38,36 @@ namespace MediaWiki.Query.CategoryMembers
             }
             _site = site;
             _httpClient = httpClient;
+        }
+
+        public async Task<CategoryMemberResultSet> GetCategoryMembersAsync(string title, IEnumerable<CatergoryMemberType> types = null, int count = 0)
+        {
+            var builder =
+                new StringBuilder(_site).Append("/api.php?action=query&list=categorymembers&format=json&cmtitle=")
+                    .Append(title);
+            if (types != null)
+            {
+                builder.Append("&cmtype=").Append(types.JoinToString("|"));
+            }
+            if (count > 0)
+            {
+                builder.Append("&cmlimit=").Append(count);
+            }
+
+            var uri = builder.ToString();
+            try
+            {
+                var json = await _httpClient.GetStringAsync(uri);
+                return JsonConvert.DeserializeObject<CategoryMemberResultSet>(json);
+            }
+            catch (Exception ex)
+            {
+                if (Debugger.IsAttached)
+                {
+                    Debugger.Break();
+                }
+                throw;
+            }
         }
     }
 }
