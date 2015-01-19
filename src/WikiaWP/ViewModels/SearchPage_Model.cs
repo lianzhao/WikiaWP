@@ -165,7 +165,7 @@ namespace WikiaWP.ViewModels
                                                        Title = article.title,
                                                        Content = article.@abstract,
                                                        ImageSource =
-                                                           article.thumbnail ?? AppResources.PlaceholderImageSource
+                                                           article.ThumbnailFixYOffset ?? AppResources.PlaceholderImageSource
                                                    };
                                 vm.MatchItemPanelVisibility = Visibility.Visible;
                                 vm.SearchResultPanelVisibility = Visibility.Collapsed;
