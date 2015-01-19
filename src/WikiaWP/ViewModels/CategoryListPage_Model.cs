@@ -104,19 +104,19 @@ namespace WikiaWP.ViewModels
             };
         #endregion
 
-        public CommandModel<ReactiveCommand, String> CommandLoadPages
+        public CommandModel<ReactiveCommand, String> CommandLoadArticles
         {
-            get { return _CommandLoadPagesLocator(this).Value; }
-            set { _CommandLoadPagesLocator(this).SetValueAndTryNotify(value); }
+            get { return _CommandLoadArticlesLocator(this).Value; }
+            set { _CommandLoadArticlesLocator(this).SetValueAndTryNotify(value); }
         }
-        #region Property CommandModel<ReactiveCommand, String> CommandLoadPages Setup
-        protected Property<CommandModel<ReactiveCommand, String>> _CommandLoadPages = new Property<CommandModel<ReactiveCommand, String>> { LocatorFunc = _CommandLoadPagesLocator };
-        static Func<BindableBase, ValueContainer<CommandModel<ReactiveCommand, String>>> _CommandLoadPagesLocator = RegisterContainerLocator<CommandModel<ReactiveCommand, String>>("CommandLoadPages", model => model.Initialize("CommandLoadPages", ref model._CommandLoadPages, ref _CommandLoadPagesLocator, _CommandLoadPagesDefaultValueFactory));
-        static Func<BindableBase, CommandModel<ReactiveCommand, String>> _CommandLoadPagesDefaultValueFactory =
+        #region Property CommandModel<ReactiveCommand, String> CommandLoadArticles Setup
+        protected Property<CommandModel<ReactiveCommand, String>> _CommandLoadArticles = new Property<CommandModel<ReactiveCommand, String>> { LocatorFunc = _CommandLoadArticlesLocator };
+        static Func<BindableBase, ValueContainer<CommandModel<ReactiveCommand, String>>> _CommandLoadArticlesLocator = RegisterContainerLocator<CommandModel<ReactiveCommand, String>>("CommandLoadArticles", model => model.Initialize("CommandLoadArticles", ref model._CommandLoadArticles, ref _CommandLoadArticlesLocator, _CommandLoadArticlesDefaultValueFactory));
+        static Func<BindableBase, CommandModel<ReactiveCommand, String>> _CommandLoadArticlesDefaultValueFactory =
             model =>
             {
-                var resource = "LoadPages";           // Command resource  
-                var commandId = "LoadPages";
+                var resource = "LoadArticles";           // Command resource  
+                var commandId = "LoadArticles";
                 var vm = CastToCurrentType(model);
                 var cmd = new ReactiveCommand(canExecute: true) { ViewModel = model }; //New Command Core
                 cmd
@@ -132,15 +132,21 @@ namespace WikiaWP.ViewModels
                                         vm.Title,
                                         new[] { CatergoryMemberType.page },
                                         500);
+                                var articles =
+                                    await
+                                    api.Wikia.Articles.GetArticlesAsync(
+                                        result.query.categorymembers.Select(cm => cm.pageid));
                                 var pages =
-                                    result.query.categorymembers.Select(
-                                        cm =>
+                                    articles.Select(
+                                        art =>
                                         new ListItem_Model
-                                        {
-                                            Title = cm.title,
-                                            ImageSource = AppResources.PlaceholderImageSource
-                                        })
-                                        .ToList();
+                                            {
+                                                Title = art.title,
+                                                ImageSource =
+                                                    art.thumbnail == null
+                                                        ? AppResources.PlaceholderImageSource
+                                                        : art.ThumbnailFixYOffset
+                                            }).ToList();
                                 vm.Articles = new ObservableCollection<ListItem_Model>(pages);
                             }
                         }
@@ -183,15 +189,21 @@ namespace WikiaWP.ViewModels
                                         vm.Title,
                                         new[] { CatergoryMemberType.subcat },
                                         500);
+                                var articles =
+                                    await
+                                    api.Wikia.Articles.GetArticlesAsync(
+                                        result.query.categorymembers.Select(cm => cm.pageid));
                                 var subcats =
-                                    result.query.categorymembers.Select(
-                                        cm =>
+                                    articles.Select(
+                                        art =>
                                         new ListItem_Model
                                         {
-                                            Title = cm.title,
-                                            ImageSource = AppResources.PlaceholderImageSource
-                                        })
-                                        .ToList();
+                                            Title = art.title,
+                                            ImageSource =
+                                                art.thumbnail == null
+                                                    ? AppResources.PlaceholderImageSource
+                                                    : art.ThumbnailFixYOffset
+                                        }).ToList();
                                 vm.Categories = new ObservableCollection<ListItem_Model>(subcats);
                             }
                         }

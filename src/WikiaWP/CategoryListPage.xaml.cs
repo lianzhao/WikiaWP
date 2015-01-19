@@ -75,7 +75,7 @@ namespace WikiaWP
                 return;
             }
 
-            vm.CommandLoadPages.Execute(null);
+            vm.CommandLoadArticles.Execute(null);
         }
 
         private void CategoriesPivotItem_OnLoaded(object sender, RoutedEventArgs e)
