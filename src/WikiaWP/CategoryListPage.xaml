@@ -12,7 +12,7 @@
     shell:SystemTray.IsVisible="True">
     <FrameworkElement.Resources>
         <vm:CategoryListPage_Model x:Key="DesignVM" />
-        <shell:ProgressIndicator x:Key="idk" Text="正在检索..."
+        <shell:ProgressIndicator x:Key="idk" Text="正在加载..."
                                  IsVisible="{Binding DataContext.IsUIBusy, ElementName=LayoutRoot}"
                                  IsIndeterminate="True"/>
     </FrameworkElement.Resources>
