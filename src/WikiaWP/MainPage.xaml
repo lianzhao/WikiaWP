@@ -75,7 +75,7 @@
                 </phone:PanoramaItem.HeaderTemplate>
                 <phone:LongListSelector x:Name="List2ListSelector" ItemsSource="{Binding List2}"
                                         LayoutMode="Grid" GridCellSize="200,200"
-                                        IsGroupingEnabled="True">
+                                        IsGroupingEnabled="True" SelectionChanged="ListListSelector_OnSelectionChanged">
                     <phone:LongListSelector.GroupHeaderTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Key}" Style="{StaticResource PhoneTextNormalStyle}"

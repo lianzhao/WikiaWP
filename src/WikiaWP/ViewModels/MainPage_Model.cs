@@ -199,7 +199,15 @@ namespace WikiaWP.ViewModels
                             if (vm.SelectedItem.Link.StartsWith("Category:"))
                             {
                                 var vms = await vm.StageManager.DefaultStage.ShowAndGetViewModel<CategoryListPage_Model>();
-                                vms.ViewModel.Title = vm.SelectedItem.Link;
+                                vms.ViewModel.Title = vm.SelectedItem.Content;
+                                vms.ViewModel.IsCuratedContent = false;
+                                await vms.Closing;
+                            }
+                            else if (vm.SelectedItem.Link.StartsWith("CuratedContent:"))
+                            {
+                                var vms = await vm.StageManager.DefaultStage.ShowAndGetViewModel<CategoryListPage_Model>();
+                                vms.ViewModel.Title = vm.SelectedItem.Title;
+                                vms.ViewModel.IsCuratedContent = true;
                                 await vms.Closing;
                             }
                             else
@@ -395,6 +403,7 @@ namespace WikiaWP.ViewModels
                     {
                         Title = tag.title,
                         ImageSource = article.thumbnail ?? AppResources.PlaceholderImageSource,
+                        Link = string.Format("CuratedContent:{0}", tag.title),
                         Group = "精选"
                     });
         }
@@ -416,6 +425,7 @@ namespace WikiaWP.ViewModels
                         }).Concat(new ListItem_Model
                         {
                             Title = "更多...",
+                            Content = category,
                             Link = string.Format("Category:{0}", category),
                             ImageSource = AppResources.PlaceholderImageSource,
                             Group = group

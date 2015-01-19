@@ -27,6 +27,7 @@ namespace WikiaWP.ViewModels
         // If you have install the code sniplets, use "propvm + [tab] +[tab]" create a property。
         // 如果您已经安装了 MVVMSidekick 代码片段，请用 propvm +tab +tab 输入属性
 
+        public bool IsCuratedContent { get; set; }
 
         public string Title
         {
@@ -71,39 +72,7 @@ namespace WikiaWP.ViewModels
         static Func<BindableBase, ValueContainer<ListItem_Model>> _SelectedItemLocator = RegisterContainerLocator<ListItem_Model>("SelectedItem", model => model.Initialize("SelectedItem", ref model._SelectedItem, ref _SelectedItemLocator, _SelectedItemDefaultValueFactory));
         static Func<ListItem_Model> _SelectedItemDefaultValueFactory = () => { return default(ListItem_Model); };
         #endregion
-
-        public CommandModel<ReactiveCommand, String> CommandLoadCategoryMembers
-        {
-            get { return _CommandLoadCategoryMembersLocator(this).Value; }
-            set { _CommandLoadCategoryMembersLocator(this).SetValueAndTryNotify(value); }
-        }
-        #region Property CommandModel<ReactiveCommand, String> CommandLoadCategoryMembers Setup
-        protected Property<CommandModel<ReactiveCommand, String>> _CommandLoadCategoryMembers = new Property<CommandModel<ReactiveCommand, String>> { LocatorFunc = _CommandLoadCategoryMembersLocator };
-        static Func<BindableBase, ValueContainer<CommandModel<ReactiveCommand, String>>> _CommandLoadCategoryMembersLocator = RegisterContainerLocator<CommandModel<ReactiveCommand, String>>("CommandLoadCategoryMembers", model => model.Initialize("CommandLoadCategoryMembers", ref model._CommandLoadCategoryMembers, ref _CommandLoadCategoryMembersLocator, _CommandLoadCategoryMembersDefaultValueFactory));
-        static Func<BindableBase, CommandModel<ReactiveCommand, String>> _CommandLoadCategoryMembersDefaultValueFactory =
-            model =>
-            {
-                var resource = "LoadCategoryMembers";           // Command resource  
-                var commandId = "LoadCategoryMembers";
-                var vm = CastToCurrentType(model);
-                var cmd = new ReactiveCommand(canExecute: true) { ViewModel = model }; //New Command Core
-                cmd
-                    .DoExecuteUIBusyTask(
-                        vm,
-                        async e =>
-                        {
-                        }
-                    )
-                    .DoNotifyDefaultEventRouter(vm, commandId)
-                    .Subscribe()
-                    .DisposeWith(vm);
-
-                var cmdmdl = cmd.CreateCommandModel(resource);
-                cmdmdl.ListenToIsUIBusy(model: vm, canExecuteWhenBusy: false);
-                return cmdmdl;
-            };
-        #endregion
-
+        
         public CommandModel<ReactiveCommand, String> CommandLoadArticles
         {
             get { return _CommandLoadArticlesLocator(this).Value; }
@@ -124,12 +93,16 @@ namespace WikiaWP.ViewModels
                         vm,
                         async e =>
                         {
+                            if (vm.IsCuratedContent)
+                            {
+                                return;
+                            }
                             using (var api = new ApiClient())
                             {
                                 var result =
                                     await
                                     api.MediaWiki.Query.CategoryMembers.GetCategoryMembersAsync(
-                                        vm.Title,
+                                        string.Format("Category:{0}", vm.Title),
                                         new[] { CatergoryMemberType.page },
                                         25);
                                 var articles =
@@ -183,28 +156,56 @@ namespace WikiaWP.ViewModels
                         {
                             using (var api = new ApiClient())
                             {
-                                var result =
-                                    await
-                                    api.MediaWiki.Query.CategoryMembers.GetCategoryMembersAsync(
-                                        vm.Title,
-                                        new[] { CatergoryMemberType.subcat },
-                                        25);
-                                var articles =
-                                    await
-                                    api.Wikia.Articles.GetArticlesAsync(
-                                        result.query.categorymembers.Select(cm => cm.pageid));
-                                var subcats =
-                                    articles.Select(
-                                        art =>
-                                        new ListItem_Model
-                                        {
-                                            Title = art.title,
-                                            ImageSource =
-                                                art.thumbnail == null
-                                                    ? AppResources.PlaceholderImageSource
-                                                    : art.ThumbnailFixYOffset
-                                        }).ToList();
-                                vm.Categories = new ObservableCollection<ListItem_Model>(subcats);
+                                if (vm.IsCuratedContent)
+                                {
+                                    var result = await api.Wikia.CuratedContent.GetCuratedContentSectionAsync(vm.Title);
+                                    //var cats = result.items.Select(item => new ListItem_Model
+                                    //                                           {
+                                    //                                               Title = item.title
+                                    //                                           })
+                                    var articles =
+                                        await api.Wikia.Articles.GetArticlesAsync(result.items.Select(item => item.id));
+                                    var subcats =
+                                        result.items.Join(
+                                            articles,
+                                            item => item.id,
+                                            art => art.id,
+                                            (item, art) =>
+                                            new ListItem_Model
+                                                {
+                                                    Title = item.title,
+                                                    ImageSource =
+                                                        art.thumbnail == null
+                                                            ? AppResources.PlaceholderImageSource
+                                                            : art.ThumbnailFixYOffset
+                                                }).ToList();
+                                    vm.Categories = new ObservableCollection<ListItem_Model>(subcats);
+                                }
+                                else
+                                {
+                                    var result =
+                                        await
+                                        api.MediaWiki.Query.CategoryMembers.GetCategoryMembersAsync(
+                                            string.Format("Category:{0}", vm.Title),
+                                            new[] { CatergoryMemberType.subcat },
+                                            25);
+                                    var articles =
+                                        await
+                                        api.Wikia.Articles.GetArticlesAsync(
+                                            result.query.categorymembers.Select(cm => cm.pageid));
+                                    var subcats =
+                                        articles.Select(
+                                            art =>
+                                            new ListItem_Model
+                                            {
+                                                Title = art.title,
+                                                ImageSource =
+                                                    art.thumbnail == null
+                                                        ? AppResources.PlaceholderImageSource
+                                                        : art.ThumbnailFixYOffset
+                                            }).ToList();
+                                    vm.Categories = new ObservableCollection<ListItem_Model>(subcats);
+                                }
                             }
                         }
                     )

@@ -60,7 +60,7 @@ namespace Wikia.CuratedContent
 
         public async Task<CuratedContentSection> GetCuratedContentSectionAsync(string tag)
         {
-            var uri = string.Format("{0}/wikia.php?controller=GameGuides&method=getList&tags={1}", _site, tag);
+            var uri = string.Format("{0}/wikia.php?controller=GameGuides&method=getList&tag={1}", _site, tag);
             try
             {
                 var json = await _httpClient.GetStringAsync(uri);
