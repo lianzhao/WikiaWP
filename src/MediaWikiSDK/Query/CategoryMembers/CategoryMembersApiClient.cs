@@ -41,7 +41,7 @@ namespace MediaWiki.Query.CategoryMembers
         public async Task<CategoryMemberResultSet> GetCategoryMembersAsync(string title, IEnumerable<CatergoryMemberType> types = null, int count = 0)
         {
             var builder =
-                new StringBuilder(_site).Append("/api.php?action=query&list=categorymembers&format=json&cmtitle=")
+                new StringBuilder(_site).Append("/api.php?action=query&list=categorymembers&cmprop=ids|title|type&format=json&cmtitle=")
                     .Append(title);
             if (types != null)
             {

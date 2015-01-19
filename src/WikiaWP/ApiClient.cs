@@ -21,6 +21,8 @@ namespace WikiaWP
 
         private readonly Lazy<Wikia.Asoiaf.Zh.ApiClient> _zhAsoiafWikiLazy;
 
+        private readonly Lazy<MediaWiki.ApiClient> _mediaWikiLazy;
+
         public static IDictionary<string, string> MainDictionary { get; private set; }
 
         public static IDictionary<string,string> RedirectDictionary { get; private set; }
@@ -41,6 +43,7 @@ namespace WikiaWP
             _wikiaLazy = new Lazy<Wikia.ApiClient>(() => new Wikia.ApiClient(Site, _httpClient, isOwner: false));
             _zhAsoiafWikiLazy =
                 new Lazy<Wikia.Asoiaf.Zh.ApiClient>(() => new Wikia.Asoiaf.Zh.ApiClient(_httpClient, isOwner: false));
+            _mediaWikiLazy = new Lazy<MediaWiki.ApiClient>(() => new MediaWiki.ApiClient(Site, _httpClient, isOwner: false));
         }
 
         public Wikia.ApiClient Wikia
@@ -56,6 +59,14 @@ namespace WikiaWP
             get
             {
                 return _zhAsoiafWikiLazy.Value;
+            }
+        }
+
+        public MediaWiki.ApiClient MediaWiki
+        {
+            get
+            {
+                return _mediaWikiLazy.Value;
             }
         }
 

@@ -112,21 +112,15 @@ namespace WikiaWP.ViewModels
         //    return base.OnUnbindedFromView(view, newValue);
         //}
 
-        /// <summary>
-        /// This will be invoked by view when the view fires Load event and this viewmodel instance is already in view's ViewModel property
-        /// </summary>
-        /// <param name="view">View that firing Load event</param>
-        /// <returns>Task awaiter</returns>
-        protected override async Task OnBindedViewLoad(MVVMSidekick.Views.IView view)
-        {
-            await base.OnBindedViewLoad(view);
-
-            await ExecuteTask(
-                async () =>
-                {
-                    // todo load cache
-                });
-        }
+        ///// <summary>
+        ///// This will be invoked by view when the view fires Load event and this viewmodel instance is already in view's ViewModel property
+        ///// </summary>
+        ///// <param name="view">View that firing Load event</param>
+        ///// <returns>Task awaiter</returns>
+        //protected override async Task OnBindedViewLoad(MVVMSidekick.Views.IView view)
+        //{
+        //    return base.OnBindedViewLoad(view);
+        //}
 
         ///// <summary>
         ///// This will be invoked by view when the view fires Unload event and this viewmodel instance is still in view's  ViewModel property
@@ -202,9 +196,18 @@ namespace WikiaWP.ViewModels
                     async _ =>
                         {
                             var vm = CastToCurrentType(model);
-                            var vms = await vm.StageManager.DefaultStage.ShowAndGetViewModel<ArticleDetailPage_Model>();
-                            vms.ViewModel.Title = vm.SelectedItem.Title;
-                            await vms.Closing;
+                            if (vm.SelectedItem.Content.StartsWith("Category:"))
+                            {
+                                var vms = await vm.StageManager.DefaultStage.ShowAndGetViewModel<CategoryListPage_Model>();
+                                vms.ViewModel.Title = vm.SelectedItem.Content;
+                                await vms.Closing;
+                            }
+                            else
+                            {
+                                var vms = await vm.StageManager.DefaultStage.ShowAndGetViewModel<ArticleDetailPage_Model>();
+                                vms.ViewModel.Title = vm.SelectedItem.Title;
+                                await vms.Closing;
+                            }
                         }).DisposeWith(model);
 
                 var cmdmdl = cmd.CreateCommandModel(resource);

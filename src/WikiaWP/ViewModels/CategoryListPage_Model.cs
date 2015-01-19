@@ -13,7 +13,10 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 
+using MediaWiki.Query.CategoryMembers;
+
 using WikiaWP.Models;
+using WikiaWP.Resources;
 
 namespace WikiaWP.ViewModels
 {
@@ -67,6 +70,140 @@ namespace WikiaWP.ViewModels
         protected Property<ListItem_Model> _SelectedItem = new Property<ListItem_Model> { LocatorFunc = _SelectedItemLocator };
         static Func<BindableBase, ValueContainer<ListItem_Model>> _SelectedItemLocator = RegisterContainerLocator<ListItem_Model>("SelectedItem", model => model.Initialize("SelectedItem", ref model._SelectedItem, ref _SelectedItemLocator, _SelectedItemDefaultValueFactory));
         static Func<ListItem_Model> _SelectedItemDefaultValueFactory = () => { return default(ListItem_Model); };
+        #endregion
+
+        public CommandModel<ReactiveCommand, String> CommandLoadCategoryMembers
+        {
+            get { return _CommandLoadCategoryMembersLocator(this).Value; }
+            set { _CommandLoadCategoryMembersLocator(this).SetValueAndTryNotify(value); }
+        }
+        #region Property CommandModel<ReactiveCommand, String> CommandLoadCategoryMembers Setup
+        protected Property<CommandModel<ReactiveCommand, String>> _CommandLoadCategoryMembers = new Property<CommandModel<ReactiveCommand, String>> { LocatorFunc = _CommandLoadCategoryMembersLocator };
+        static Func<BindableBase, ValueContainer<CommandModel<ReactiveCommand, String>>> _CommandLoadCategoryMembersLocator = RegisterContainerLocator<CommandModel<ReactiveCommand, String>>("CommandLoadCategoryMembers", model => model.Initialize("CommandLoadCategoryMembers", ref model._CommandLoadCategoryMembers, ref _CommandLoadCategoryMembersLocator, _CommandLoadCategoryMembersDefaultValueFactory));
+        static Func<BindableBase, CommandModel<ReactiveCommand, String>> _CommandLoadCategoryMembersDefaultValueFactory =
+            model =>
+            {
+                var resource = "LoadCategoryMembers";           // Command resource  
+                var commandId = "LoadCategoryMembers";
+                var vm = CastToCurrentType(model);
+                var cmd = new ReactiveCommand(canExecute: true) { ViewModel = model }; //New Command Core
+                cmd
+                    .DoExecuteUIBusyTask(
+                        vm,
+                        async e =>
+                        {
+                        }
+                    )
+                    .DoNotifyDefaultEventRouter(vm, commandId)
+                    .Subscribe()
+                    .DisposeWith(vm);
+
+                var cmdmdl = cmd.CreateCommandModel(resource);
+                cmdmdl.ListenToIsUIBusy(model: vm, canExecuteWhenBusy: false);
+                return cmdmdl;
+            };
+        #endregion
+
+        public CommandModel<ReactiveCommand, String> CommandLoadPages
+        {
+            get { return _CommandLoadPagesLocator(this).Value; }
+            set { _CommandLoadPagesLocator(this).SetValueAndTryNotify(value); }
+        }
+        #region Property CommandModel<ReactiveCommand, String> CommandLoadPages Setup
+        protected Property<CommandModel<ReactiveCommand, String>> _CommandLoadPages = new Property<CommandModel<ReactiveCommand, String>> { LocatorFunc = _CommandLoadPagesLocator };
+        static Func<BindableBase, ValueContainer<CommandModel<ReactiveCommand, String>>> _CommandLoadPagesLocator = RegisterContainerLocator<CommandModel<ReactiveCommand, String>>("CommandLoadPages", model => model.Initialize("CommandLoadPages", ref model._CommandLoadPages, ref _CommandLoadPagesLocator, _CommandLoadPagesDefaultValueFactory));
+        static Func<BindableBase, CommandModel<ReactiveCommand, String>> _CommandLoadPagesDefaultValueFactory =
+            model =>
+            {
+                var resource = "LoadPages";           // Command resource  
+                var commandId = "LoadPages";
+                var vm = CastToCurrentType(model);
+                var cmd = new ReactiveCommand(canExecute: true) { ViewModel = model }; //New Command Core
+                cmd
+                    .DoExecuteUIBusyTask(
+                        vm,
+                        async e =>
+                        {
+                            using (var api = new ApiClient())
+                            {
+                                var result =
+                                    await
+                                    api.MediaWiki.Query.CategoryMembers.GetCategoryMembersAsync(
+                                        vm.Title,
+                                        new[] { CatergoryMemberType.page },
+                                        500);
+                                var pages =
+                                    result.query.categorymembers.Select(
+                                        cm =>
+                                        new ListItem_Model
+                                        {
+                                            Title = cm.title,
+                                            ImageSource = AppResources.PlaceholderImageSource
+                                        })
+                                        .ToList();
+                                vm.Articles = new ObservableCollection<ListItem_Model>(pages);
+                            }
+                        }
+                    )
+                    .DoNotifyDefaultEventRouter(vm, commandId)
+                    .Subscribe()
+                    .DisposeWith(vm);
+
+                var cmdmdl = cmd.CreateCommandModel(resource);
+                cmdmdl.ListenToIsUIBusy(model: vm, canExecuteWhenBusy: false);
+                return cmdmdl;
+            };
+        #endregion
+
+        public CommandModel<ReactiveCommand, String> CommandLoadCategories
+        {
+            get { return _CommandLoadCategoriesLocator(this).Value; }
+            set { _CommandLoadCategoriesLocator(this).SetValueAndTryNotify(value); }
+        }
+        #region Property CommandModel<ReactiveCommand, String> CommandLoadCategories Setup
+        protected Property<CommandModel<ReactiveCommand, String>> _CommandLoadCategories = new Property<CommandModel<ReactiveCommand, String>> { LocatorFunc = _CommandLoadCategoriesLocator };
+        static Func<BindableBase, ValueContainer<CommandModel<ReactiveCommand, String>>> _CommandLoadCategoriesLocator = RegisterContainerLocator<CommandModel<ReactiveCommand, String>>("CommandLoadCategories", model => model.Initialize("CommandLoadCategories", ref model._CommandLoadCategories, ref _CommandLoadCategoriesLocator, _CommandLoadCategoriesDefaultValueFactory));
+        static Func<BindableBase, CommandModel<ReactiveCommand, String>> _CommandLoadCategoriesDefaultValueFactory =
+            model =>
+            {
+                var resource = "LoadCategories";           // Command resource  
+                var commandId = "LoadCategories";
+                var vm = CastToCurrentType(model);
+                var cmd = new ReactiveCommand(canExecute: true) { ViewModel = model }; //New Command Core
+                cmd
+                    .DoExecuteUIBusyTask(
+                        vm,
+                        async e =>
+                        {
+                            using (var api = new ApiClient())
+                            {
+                                var result =
+                                    await
+                                    api.MediaWiki.Query.CategoryMembers.GetCategoryMembersAsync(
+                                        vm.Title,
+                                        new[] { CatergoryMemberType.subcat },
+                                        500);
+                                var subcats =
+                                    result.query.categorymembers.Select(
+                                        cm =>
+                                        new ListItem_Model
+                                        {
+                                            Title = cm.title,
+                                            ImageSource = AppResources.PlaceholderImageSource
+                                        })
+                                        .ToList();
+                                vm.Categories = new ObservableCollection<ListItem_Model>(subcats);
+                            }
+                        }
+                    )
+                    .DoNotifyDefaultEventRouter(vm, commandId)
+                    .Subscribe()
+                    .DisposeWith(vm);
+
+                var cmdmdl = cmd.CreateCommandModel(resource);
+                cmdmdl.ListenToIsUIBusy(model: vm, canExecuteWhenBusy: false);
+                return cmdmdl;
+            };
         #endregion
 
 

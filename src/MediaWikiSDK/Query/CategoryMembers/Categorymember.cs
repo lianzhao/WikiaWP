@@ -5,5 +5,6 @@ namespace MediaWiki.Query.CategoryMembers
         public int pageid { get; set; }
         public int ns { get; set; }
         public string title { get; set; }
+        public CatergoryMemberType type { get; set; }
     }
 }

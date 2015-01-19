@@ -66,6 +66,28 @@ namespace WikiaWP
             }
             appbar.Opacity = e.IsMenuVisible ? 1 : 0.25;
         }
+
+        private void ArticlesPivotItem_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            var vm = LayoutRoot.DataContext as CategoryListPage_Model;
+            if (vm == null)
+            {
+                return;
+            }
+
+            vm.CommandLoadPages.Execute(null);
+        }
+
+        private void CategoriesPivotItem_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            var vm = LayoutRoot.DataContext as CategoryListPage_Model;
+            if (vm == null)
+            {
+                return;
+            }
+
+            vm.CommandLoadCategories.Execute(null);
+        }
     }
 }
 

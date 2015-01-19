@@ -334,6 +334,10 @@
       <Project>{397EB213-EAAE-46EE-9385-ADE458C4EA59}</Project>
       <Name>LianZhao.NetFx</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MediaWikiSDK\MediaWikiSDK.csproj">
+      <Project>{374873A0-41A9-4318-9A3F-9E838BE7F30F}</Project>
+      <Name>MediaWikiSDK</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WikiaSdk\WikiaSdk.csproj">
       <Project>{E605BF40-0AE6-4E92-AF2C-DEDE63FA6064}</Project>
       <Name>WikiaSdk</Name>
