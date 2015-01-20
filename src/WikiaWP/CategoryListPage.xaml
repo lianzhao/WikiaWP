@@ -31,12 +31,15 @@
 
     <Grid x:Name="LayoutRoot" DataContext="{StaticResource DesignVM}" >
 
-        <phone:Pivot x:Name="Pivot" Title="{Binding Title}">
+        <phone:Pivot x:Name="Pivot" Title="{Binding Title}" SelectedIndex="{Binding PivotSelectedIndex, Mode=TwoWay}">
             <phone:PivotItem x:Name="CategoriesPivotItem" Header="子分类"
                              Loaded="CategoriesPivotItem_OnLoaded">
                 <phone:LongListSelector ItemsSource="{Binding Categories}"
                                         LayoutMode="Grid" GridCellSize="200,200"
                                         SelectionChanged="LongListSelector_OnSelectionChanged">
+                    <phone:LongListSelector.ListHeader>
+                        <TextBlock Text="{Binding CategoriesHeaderText}" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                    </phone:LongListSelector.ListHeader>
                     <phone:LongListSelector.ItemTemplate>
                         <DataTemplate>
                             <Grid Margin="4">
@@ -65,6 +68,9 @@
                 <phone:LongListSelector ItemsSource="{Binding Articles}"
                                         LayoutMode="Grid" GridCellSize="200,200"
                                         SelectionChanged="LongListSelector_OnSelectionChanged">
+                    <phone:LongListSelector.ListHeader>
+                        <TextBlock Text="{Binding ArticlesHeaderText}" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                    </phone:LongListSelector.ListHeader>
                     <phone:LongListSelector.ItemTemplate>
                         <DataTemplate>
                             <Grid Margin="4">

@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Runtime.Serialization;
 
 using MediaWiki.Query.CategoryMembers;
@@ -72,7 +73,40 @@ namespace WikiaWP.ViewModels
         static Func<BindableBase, ValueContainer<ListItem_Model>> _SelectedItemLocator = RegisterContainerLocator<ListItem_Model>("SelectedItem", model => model.Initialize("SelectedItem", ref model._SelectedItem, ref _SelectedItemLocator, _SelectedItemDefaultValueFactory));
         static Func<ListItem_Model> _SelectedItemDefaultValueFactory = () => { return default(ListItem_Model); };
         #endregion
-        
+
+        public string ArticlesHeaderText
+        {
+            get { return _ArticlesHeaderTextLocator(this).Value; }
+            set { _ArticlesHeaderTextLocator(this).SetValueAndTryNotify(value); }
+        }
+        #region Property string ArticlesHeaderText Setup
+        protected Property<string> _ArticlesHeaderText = new Property<string> { LocatorFunc = _ArticlesHeaderTextLocator };
+        static Func<BindableBase, ValueContainer<string>> _ArticlesHeaderTextLocator = RegisterContainerLocator<string>("ArticlesHeaderText", model => model.Initialize("ArticlesHeaderText", ref model._ArticlesHeaderText, ref _ArticlesHeaderTextLocator, _ArticlesHeaderTextDefaultValueFactory));
+        static Func<string> _ArticlesHeaderTextDefaultValueFactory = () => { return default(string); };
+        #endregion
+
+        public string CategoriesHeaderText
+        {
+            get { return _CategoriesHeaderTextLocator(this).Value; }
+            set { _CategoriesHeaderTextLocator(this).SetValueAndTryNotify(value); }
+        }
+        #region Property string CategoriesHeaderText Setup
+        protected Property<string> _CategoriesHeaderText = new Property<string> { LocatorFunc = _CategoriesHeaderTextLocator };
+        static Func<BindableBase, ValueContainer<string>> _CategoriesHeaderTextLocator = RegisterContainerLocator<string>("CategoriesHeaderText", model => model.Initialize("CategoriesHeaderText", ref model._CategoriesHeaderText, ref _CategoriesHeaderTextLocator, _CategoriesHeaderTextDefaultValueFactory));
+        static Func<string> _CategoriesHeaderTextDefaultValueFactory = () => { return default(string); };
+        #endregion
+
+        public int PivotSelectedIndex
+        {
+            get { return _PivotSelectedIndexLocator(this).Value; }
+            set { _PivotSelectedIndexLocator(this).SetValueAndTryNotify(value); }
+        }
+        #region Property int PivotSelectedIndex Setup
+        protected Property<int> _PivotSelectedIndex = new Property<int> { LocatorFunc = _PivotSelectedIndexLocator };
+        static Func<BindableBase, ValueContainer<int>> _PivotSelectedIndexLocator = RegisterContainerLocator<int>("PivotSelectedIndex", model => model.Initialize("PivotSelectedIndex", ref model._PivotSelectedIndex, ref _PivotSelectedIndexLocator, _PivotSelectedIndexDefaultValueFactory));
+        static Func<int> _PivotSelectedIndexDefaultValueFactory = () => { return default(int); };
+        #endregion
+
         public CommandModel<ReactiveCommand, String> CommandLoadArticles
         {
             get { return _CommandLoadArticlesLocator(this).Value; }
@@ -95,6 +129,9 @@ namespace WikiaWP.ViewModels
                         {
                             if (vm.IsCuratedContent)
                             {
+                                await Task.Yield();
+                                vm.ArticlesHeaderText = "找到0个页面";
+                                vm.UpdatePivotSelectedIndex();
                                 return;
                             }
                             using (var api = new ApiClient())
@@ -123,6 +160,10 @@ namespace WikiaWP.ViewModels
                                                         : art.ThumbnailFixYOffset
                                             }).ToList();
                                 vm.Articles = new ObservableCollection<ListItem_Model>(pages);
+                                vm.ArticlesHeaderText = string.Format(
+                                    "找到{0}个页面",
+                                    vm.Articles.Count.ToString(CultureInfo.InvariantCulture));
+                                vm.UpdatePivotSelectedIndex();
                             }
                         }
                     )
@@ -212,6 +253,10 @@ namespace WikiaWP.ViewModels
                                             }).ToList();
                                     vm.Categories = new ObservableCollection<ListItem_Model>(subcats);
                                 }
+                                vm.CategoriesHeaderText = string.Format(
+                                    "找到{0}个分类",
+                                    vm.Categories.Count.ToString(CultureInfo.InvariantCulture));
+                                vm.UpdatePivotSelectedIndex();
                             }
                         }
                     )
@@ -322,7 +367,10 @@ namespace WikiaWP.ViewModels
 
         #endregion
 
-
+        private void UpdatePivotSelectedIndex()
+        {
+            PivotSelectedIndex = Articles != null && Articles.Count > 0 ? 1 : 0;
+        }
 
     }
 
