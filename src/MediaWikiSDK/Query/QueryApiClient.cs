@@ -3,6 +3,7 @@ using System.Net.Http;
 
 using LianZhao;
 
+using MediaWiki.Query.AllCategories;
 using MediaWiki.Query.CategoryMembers;
 
 namespace MediaWiki.Query
@@ -14,6 +15,8 @@ namespace MediaWiki.Query
         private readonly HttpClient _httpClient;
 
         private readonly Lazy<CategoryMembersApiClient> _cmLazy;
+
+        private readonly Lazy<AllCategoriesApiClient> _acLazy;
 
         public QueryApiClient(string site)
             : this(site, new HttpClient(), isOwner: true)
@@ -34,6 +37,7 @@ namespace MediaWiki.Query
             _site = site;
             _httpClient = httpClient;
             _cmLazy = new Lazy<CategoryMembersApiClient>(() => new CategoryMembersApiClient(_site, _httpClient, isOwner: false));
+            _acLazy = new Lazy<AllCategoriesApiClient>(() => new AllCategoriesApiClient(_site, _httpClient, isOwner: false));
         }
 
         public CategoryMembersApiClient CategoryMembers
@@ -41,6 +45,14 @@ namespace MediaWiki.Query
             get
             {
                 return _cmLazy.Value;
+            }
+        }
+
+        public AllCategoriesApiClient AllCategories
+        {
+            get
+            {
+                return _acLazy.Value;
             }
         }
     }
