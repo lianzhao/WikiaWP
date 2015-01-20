@@ -115,6 +115,8 @@ namespace WikiaWP.ViewModels
                                         new ListItem_Model
                                             {
                                                 Title = art.title,
+                                                Link =  art.title,
+                                                Content = art.@abstract,
                                                 ImageSource =
                                                     art.thumbnail == null
                                                         ? AppResources.PlaceholderImageSource
@@ -174,6 +176,8 @@ namespace WikiaWP.ViewModels
                                             new ListItem_Model
                                                 {
                                                     Title = item.title,
+                                                    Link = string.Format("Category:{0}", item.title),
+                                                    Content = item.title,
                                                     ImageSource =
                                                         art.thumbnail == null
                                                             ? AppResources.PlaceholderImageSource
@@ -199,6 +203,8 @@ namespace WikiaWP.ViewModels
                                             new ListItem_Model
                                             {
                                                 Title = art.title,
+                                                Link = string.Format("Category:{0}", art.title),
+                                                Content = art.title,
                                                 ImageSource =
                                                     art.thumbnail == null
                                                         ? AppResources.PlaceholderImageSource
@@ -215,6 +221,44 @@ namespace WikiaWP.ViewModels
 
                 var cmdmdl = cmd.CreateCommandModel(resource);
                 cmdmdl.ListenToIsUIBusy(model: vm, canExecuteWhenBusy: false);
+                return cmdmdl;
+            };
+        #endregion
+
+        public CommandModel<ReactiveCommand, String> CommandNavigateToSelected
+        {
+            get { return _CommandNavigateToSelectedLocator(this).Value; }
+            set { _CommandNavigateToSelectedLocator(this).SetValueAndTryNotify(value); }
+        }
+        #region Property CommandModel<ReactiveCommand, String> CommandNavigateToSelected Setup
+        protected Property<CommandModel<ReactiveCommand, String>> _CommandNavigateToSelected = new Property<CommandModel<ReactiveCommand, String>> { LocatorFunc = _CommandNavigateToSelectedLocator };
+        static Func<BindableBase, ValueContainer<CommandModel<ReactiveCommand, String>>> _CommandNavigateToSelectedLocator = RegisterContainerLocator<CommandModel<ReactiveCommand, String>>("CommandNavigateToSelected", model => model.Initialize("CommandNavigateToSelected", ref model._CommandNavigateToSelected, ref _CommandNavigateToSelectedLocator, _CommandNavigateToSelectedDefaultValueFactory));
+        static Func<BindableBase, CommandModel<ReactiveCommand, String>> _CommandNavigateToSelectedDefaultValueFactory =
+            model =>
+            {
+                var resource = "NavigateToSelected";           // Command resource  
+                var commandId = "NavigateToSelected";
+                var cmd = new ReactiveCommand(canExecute: true) { ViewModel = model }; //New Command Core
+                cmd.Subscribe(
+                    async _ =>
+                    {
+                        var vm = CastToCurrentType(model);
+                        if (vm.SelectedItem.Link.StartsWith("Category:"))
+                        {
+                            var vms = await vm.StageManager.DefaultStage.ShowAndGetViewModel<CategoryListPage_Model>();
+                            vms.ViewModel.Title = vm.SelectedItem.Content;
+                            vms.ViewModel.IsCuratedContent = false;
+                            await vms.Closing;
+                        }
+                        else
+                        {
+                            var vms = await vm.StageManager.DefaultStage.ShowAndGetViewModel<ArticleDetailPage_Model>();
+                            vms.ViewModel.Title = vm.SelectedItem.Link;
+                            await vms.Closing;
+                        }
+                    }).DisposeWith(model);
+
+                var cmdmdl = cmd.CreateCommandModel(resource);
                 return cmdmdl;
             };
         #endregion

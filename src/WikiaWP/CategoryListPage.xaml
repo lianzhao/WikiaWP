@@ -35,7 +35,8 @@
             <phone:PivotItem x:Name="CategoriesPivotItem" Header="子分类"
                              Loaded="CategoriesPivotItem_OnLoaded">
                 <phone:LongListSelector ItemsSource="{Binding Categories}"
-                                        LayoutMode="Grid" GridCellSize="200,200">
+                                        LayoutMode="Grid" GridCellSize="200,200"
+                                        SelectionChanged="LongListSelector_OnSelectionChanged">
                     <phone:LongListSelector.ItemTemplate>
                         <DataTemplate>
                             <Grid Margin="4">
@@ -62,7 +63,8 @@
             <phone:PivotItem x:Name="ArticlesPivotItem" Header="页面"
                              Loaded="ArticlesPivotItem_OnLoaded">
                 <phone:LongListSelector ItemsSource="{Binding Articles}"
-                                        LayoutMode="Grid" GridCellSize="200,200">
+                                        LayoutMode="Grid" GridCellSize="200,200"
+                                        SelectionChanged="LongListSelector_OnSelectionChanged">
                     <phone:LongListSelector.ItemTemplate>
                         <DataTemplate>
                             <Grid Margin="4">

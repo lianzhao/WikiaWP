@@ -18,9 +18,11 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Windows.Navigation;
 
+using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 
 using WikiaWP;
+using WikiaWP.Models;
 using WikiaWP.ViewModels;
 
 
@@ -87,6 +89,26 @@ namespace WikiaWP
             }
 
             vm.CommandLoadCategories.Execute(null);
+        }
+
+        private void LongListSelector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var vm = LayoutRoot.DataContext as CategoryListPage_Model;
+            var control = sender as LongListSelector;
+            if (vm == null || control == null || control.SelectedItem == null)
+            {
+                return;
+            }
+
+            var item = control.SelectedItem as ListItem_Model;
+            if (item == null)
+            {
+                return;
+            }
+
+            vm.SelectedItem = item;
+            control.SelectedItem = null;
+            vm.CommandNavigateToSelected.Execute(null);
         }
     }
 }
