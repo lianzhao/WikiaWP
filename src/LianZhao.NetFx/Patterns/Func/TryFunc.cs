@@ -2,14 +2,14 @@
 
 namespace LianZhao.Patterns.Func
 {
-    public static class MappingFunc
+    public static class TryFunc
     {
-        public static IFunc<T, T> ToFunc<T>(this IMappingFunc<T, T> mappingFunc)
+        public static IFunc<T, T> ToFunc<T>(this ITryFunc<T, T> mappingFunc)
         {
             return new DelegateFunc<T, T>(mappingFunc.ToDelegate());
         }
 
-        public static Func<T, T> ToDelegate<T>(this IMappingFunc<T, T> mappingFunc)
+        public static Func<T, T> ToDelegate<T>(this ITryFunc<T, T> mappingFunc)
         {
             return from =>
                 {

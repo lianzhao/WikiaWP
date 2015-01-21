@@ -6,11 +6,11 @@ using LianZhao.Patterns.Func;
 
 namespace WikiaWP
 {
-    public class WikiDictMappingFunc : IMappingFunc<string, string>
+    public class WikiDictTryFunc : ITryFunc<string, string>
     {
         private readonly IDictionary<string, string> _dict;
 
-        public WikiDictMappingFunc(IDictionary<string, string> dict)
+        public WikiDictTryFunc(IDictionary<string, string> dict)
         {
             _dict = dict;
         }

@@ -4,18 +4,18 @@ using LianZhao.Patterns.Composite;
 
 namespace LianZhao.Patterns.Func
 {
-    public class CompositeMappingFunc<T> : CompositeObject<IMappingFunc<T, T>>, IMappingFunc<T, T>
+    public class CompositeTryFunc<T> : CompositeObject<ITryFunc<T, T>>, ITryFunc<T, T>
     {
-        public CompositeMappingFunc()
+        public CompositeTryFunc()
         {
         }
 
-        public CompositeMappingFunc(IEnumerable<IMappingFunc<T, T>> items)
+        public CompositeTryFunc(IEnumerable<ITryFunc<T, T>> items)
             : base(items)
         {
         }
 
-        public CompositeMappingFunc(params IMappingFunc<T, T>[] items)
+        public CompositeTryFunc(params ITryFunc<T, T>[] items)
             : base(items)
         {
         }

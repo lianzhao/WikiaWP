@@ -29,9 +29,9 @@ namespace MVVMSidekick.Startups
                                        {
                                            // todo introduce ioc?
                                            // create new instance per invoking
-                                           var dictFun1 = new WikiDictMappingFunc(ApiClient.MainDictionary);
-                                           var dictFun2 = new WikiDictMappingFunc(ApiClient.RedirectDictionary);
-                                           var func = new CompositeMappingFunc<string>(dictFun1, dictFun2);
+                                           var dictFun1 = new WikiDictTryFunc(ApiClient.MainDictionary);
+                                           var dictFun2 = new WikiDictTryFunc(ApiClient.RedirectDictionary);
+                                           var func = new CompositeTryFunc<string>(dictFun1, dictFun2);
                                            return func.ToDelegate().Invoke(from);
                                        }
                                }).GetViewMapper().MapToDefault<SearchPage>();

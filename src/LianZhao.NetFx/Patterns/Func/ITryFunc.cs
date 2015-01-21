@@ -1,6 +1,6 @@
 ﻿namespace LianZhao.Patterns.Func
 {
-    public interface IMappingFunc<TFrom, TTo>
+    public interface ITryFunc<TFrom, TTo>
     {
         bool TryInvoke(TFrom from, out TTo to);
     }
