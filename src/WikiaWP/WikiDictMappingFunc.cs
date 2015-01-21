@@ -6,7 +6,7 @@ using LianZhao.Patterns.Func;
 
 namespace WikiaWP
 {
-    public class WikiDictMappingFunc : IMappingFunc<string>
+    public class WikiDictMappingFunc : IMappingFunc<string, string>
     {
         private readonly IDictionary<string, string> _dict;
 
