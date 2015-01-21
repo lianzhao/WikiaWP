@@ -44,9 +44,10 @@
     <Compile Include="Query\AllCategories\Allcategories.cs" />
     <Compile Include="Query\AllCategories\AllCategoriesApiClient.cs" />
     <Compile Include="Query\AllCategories\AllCategoriesResultSet.cs" />
-    <Compile Include="Query\AllCategories\Allcategory.cs" />
+    <Compile Include="Query\AllCategories\Category.cs" />
     <Compile Include="Query\AllCategories\Query.cs" />
     <Compile Include="Query\AllCategories\QueryContinue.cs" />
+    <Compile Include="Query\AllCategories\SortDirection.cs" />
     <Compile Include="Query\CategoryMembers\Categorymember.cs" />
     <Compile Include="Query\CategoryMembers\CategoryMemberResultSet.cs" />
     <Compile Include="Query\CategoryMembers\Categorymembers.cs" />

@@ -13,10 +13,14 @@ using MediaWiki.Query.CategoryMembers;
 
 using Newtonsoft.Json;
 
+using Enumerable = System.Linq.Enumerable;
+
 namespace MediaWiki.Query.AllCategories
 {
     public class AllCategoriesApiClient : DisposableObjectOwner
     {
+        private const int MaxCount = 500;
+
         private readonly string _site;
 
         private readonly HttpClient _httpClient;
@@ -41,11 +45,75 @@ namespace MediaWiki.Query.AllCategories
             _httpClient = httpClient;
         }
 
-        public async Task<AllCategoriesResultSet> GetCategories(int count = 0)
+        public async Task<IEnumerable<Category>> GetAllCategoriesAsync(
+            string titlePrefix = null,
+            SortDirection? sortDirection = null,
+            int minCategoryMemberCount = 0,
+            int maxCategoryMemberCount = 0)
+        {
+            string from = null;
+            var rv = Enumerable.Empty<Category>();
+            while (true)
+            {
+                var result =
+                    await
+                    GetCategoriesAsync(
+                        from,
+                        null,
+                        titlePrefix,
+                        sortDirection,
+                        minCategoryMemberCount,
+                        maxCategoryMemberCount,
+                        count: MaxCount);
+                rv = rv.Concat(result.query.allcategories);
+                from = result.querycontinue == null || result.querycontinue.allcategories == null
+                           ? null
+                           : result.querycontinue.allcategories.acfrom;
+                if (string.IsNullOrEmpty(from))
+                {
+                    break;
+                }
+            }
+
+            return rv;
+        }
+
+        public async Task<AllCategoriesResultSet> GetCategoriesAsync(
+            string from = null,
+            string to = null,
+            string titlePrefix = null,
+            SortDirection? sortDirection = null,
+            int minCategoryMemberCount = 0,
+            int maxCategoryMemberCount = 0,
+            int count = 0)
         {
             var builder =
                 new StringBuilder(_site).Append(
                     "/api.php?action=query&list=allcategories&acprop=size|hidden&format=json");
+            if (!string.IsNullOrEmpty(from))
+            {
+                builder.Append("&acfrom=").Append(from);
+            }
+            if (!string.IsNullOrEmpty(to))
+            {
+                builder.Append("&acto=").Append(to);
+            }
+            if (!string.IsNullOrEmpty(titlePrefix))
+            {
+                builder.Append("&acprefix=").Append(titlePrefix);
+            }
+            if (sortDirection != null)
+            {
+                builder.Append("&acdir=").Append(sortDirection.Value.ToString());
+            }
+            if (minCategoryMemberCount > 0)
+            {
+                builder.Append("&acmin=").Append(minCategoryMemberCount);
+            }
+            if (maxCategoryMemberCount > 0)
+            {
+                builder.Append("&acmax=").Append(maxCategoryMemberCount);
+            }
             if (count > 0)
             {
                 builder.Append("&aclimit=").Append(count);
@@ -67,7 +135,7 @@ namespace MediaWiki.Query.AllCategories
             }
         }
 
-        public async Task<Allcategory> GetCategoryAsyc(string title)
+        public async Task<Category> GetCategoryAsyc(string title)
         {
             var uri =
                 string.Format(
@@ -78,7 +146,7 @@ namespace MediaWiki.Query.AllCategories
             {
                 var json = await _httpClient.GetStringAsync(uri);
                 var result = JsonConvert.DeserializeObject<AllCategoriesResultSet>(json);
-                return result.query.allcategories.FirstOrDefault(c => c._ == title);
+                return result.query.allcategories.FirstOrDefault(c => c.title == title);
             }
             catch (Exception ex)
             {

@@ -2,10 +2,14 @@
 using System.Collections.Generic;
 using System.IO;
 using System.IO.IsolatedStorage;
+using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Threading.Tasks;
 
 using LianZhao;
+
+using MediaWiki.Query.AllCategories;
 
 using Newtonsoft.Json;
 
@@ -26,6 +30,8 @@ namespace WikiaWP
         public static IDictionary<string, string> MainDictionary { get; private set; }
 
         public static IDictionary<string,string> RedirectDictionary { get; private set; }
+
+        public static Category[] Categories { get; private set; }
 
         public ApiClient()
             : this(new HttpClient(), true)
@@ -74,14 +80,14 @@ namespace WikiaWP
         {
             using (var api = new ApiClient())
             {
-                var tasks = new[]
-                            {
-                                api.ZhAsoiafWiki.Dictionaries.GetMainDictAsync(),
-                                api.ZhAsoiafWiki.Dictionaries.GetRedirectDictAsync()
-                            };
-                var dicts = await Task.WhenAll(tasks);
-                MainDictionary = dicts[0];
-                RedirectDictionary = dicts[1];
+                var task1 = api.ZhAsoiafWiki.Dictionaries.GetMainDictAsync();
+                var task2 = api.ZhAsoiafWiki.Dictionaries.GetRedirectDictAsync();
+                var task3 = api.MediaWiki.Query.AllCategories.GetAllCategoriesAsync(minCategoryMemberCount: 1);
+                var tasks = new[] { task1 as Task, task2, task3 };
+                await Task.WhenAll(tasks);
+                MainDictionary = task1.Result;
+                RedirectDictionary = task2.Result;
+                Categories = task3.Result.ToArray();
             }
             //await AppCache.SaveToCachedDictionaryAsync(MainDictionary, @"cache\mainDict.json");
             //await AppCache.SaveToCachedDictionaryAsync(RedirectDictionary, @"cache\redirectDict.json");
