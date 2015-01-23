@@ -40,10 +40,11 @@
   <ItemGroup>
     <Compile Include="ApiClient.cs" />
     <Compile Include="Articles\ArticlesApiClient.cs" />
+    <Compile Include="Articles\ListExpandedArticleResultSet.cs" />
     <Compile Include="Mercury\Comment.cs" />
     <Compile Include="Articles\ExpandedArticle.cs" />
     <Compile Include="Articles\ExpandedArticleResultSet.cs" />
-    <Compile Include="Articles\ExpandedArticleResultSet_ArrayItems.cs" />
+    <Compile Include="Articles\TopExpandedArticleResultSet.cs" />
     <Compile Include="Mercury\GetArticleCommentsResultSet.cs" />
     <Compile Include="Articles\Original_Dimensions.cs" />
     <Compile Include="Mercury\Payload.cs" />

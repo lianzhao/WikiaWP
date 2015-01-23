@@ -138,8 +138,43 @@ namespace Wikia.Articles
             try
             {
                 var json = await _httpClient.GetStringAsync(uri);
-                var result = JsonConvert.DeserializeObject<ExpandedArticleResultSet_ArrayItems>(json);
+                var result = JsonConvert.DeserializeObject<TopExpandedArticleResultSet>(json);
                 return result.items;
+            }
+            catch (Exception ex)
+            {
+                if (Debugger.IsAttached)
+                {
+                    Debugger.Break();
+                }
+                throw;
+            }
+        }
+
+        public async Task<ListExpandedArticleResultSet> GetListArticlesAsync(
+            string category = null,
+            int count = 0,
+            string offset = null)
+        {
+            var builder = new StringBuilder(_site).Append("/api/v1/Articles/List?expand=1");
+            if (!string.IsNullOrEmpty(category))
+            {
+                builder.Append("&category=").Append(category);
+            }
+            if (count > 0)
+            {
+                builder.Append("&limit=").Append(count);
+            }
+            if (!string.IsNullOrEmpty(offset))
+            {
+                builder.Append("&offset=").Append(offset);
+            }
+
+            var uri = builder.ToString();
+            try
+            {
+                var json = await _httpClient.GetStringAsync(uri);
+                return JsonConvert.DeserializeObject<ListExpandedArticleResultSet>(json);
             }
             catch (Exception ex)
             {

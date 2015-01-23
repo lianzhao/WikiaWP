@@ -1,6 +1,6 @@
 namespace Wikia.Articles
 {
-    public class ExpandedArticleResultSet_ArrayItems
+    public class TopExpandedArticleResultSet
     {
         public string basepath { get; set; }
         public ExpandedArticle[] items { get; set; }
