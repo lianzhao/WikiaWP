@@ -67,17 +67,8 @@
                                         ItemRealized="LongListSelector_OnItemRealized">
                     <phone:LongListSelector.ListHeaderTemplate>
                         <DataTemplate>
-                            <Grid Margin="12,0,0,38">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-                                <StackPanel Grid.Row="0" Orientation="Horizontal">
-                                    <TextBlock Text="共" Style="{StaticResource PanoramaItemHeaderTextStyle}"/>
-                                    <TextBlock Text="{Binding DataContext.PagingInfo.TotalCount, ElementName=LayoutRoot}" Style="{StaticResource PanoramaItemHeaderTextStyle}"/>
-                                    <TextBlock Text="条结果" Style="{StaticResource PanoramaItemHeaderTextStyle}"/>
-                                </StackPanel>
-                            </Grid>
+                            <TextBlock Text="{Binding DataContext.PagingInfo.TotalCount, StringFormat=共\{0\}条结果, ElementName=LayoutRoot}" Style="{StaticResource PhoneTextSubtleStyle}"
+                                       Margin="12,12"/>
                         </DataTemplate>
                     </phone:LongListSelector.ListHeaderTemplate>
                     <phone:LongListSelector.ItemTemplate>

@@ -157,6 +157,8 @@ namespace WikiaWP.ViewModels
                                 if (article == null)
                                 {
                                     vm.ClearMatchItemAndSearchResult();
+                                    vm.MatchItemPanelVisibility = Visibility.Collapsed;
+                                    vm.SearchResultPanelVisibility = Visibility.Visible;
                                     await LoadMoreAsyncImpl(vm);
                                     return;
                                 }
@@ -203,6 +205,8 @@ namespace WikiaWP.ViewModels
                         vm,
                         async e =>
                         {
+                            vm.MatchItemPanelVisibility = Visibility.Collapsed;
+                            vm.SearchResultPanelVisibility = Visibility.Visible;
                             await LoadMoreAsyncImpl(vm);
                         }
                     )
@@ -218,8 +222,6 @@ namespace WikiaWP.ViewModels
 
         private static async Task LoadMoreAsyncImpl(SearchPage_Model vm)
         {
-            vm.MatchItemPanelVisibility = Visibility.Collapsed;
-            vm.SearchResultPanelVisibility = Visibility.Collapsed;
             if (string.IsNullOrWhiteSpace(vm.SearchText))
             {
                 return;
@@ -258,8 +260,6 @@ namespace WikiaWP.ViewModels
                     vm.SearchResults.Add(listItem);
                 }
             }
-            vm.MatchItemPanelVisibility = Visibility.Collapsed;
-            vm.SearchResultPanelVisibility = Visibility.Visible;
         }
 
 
