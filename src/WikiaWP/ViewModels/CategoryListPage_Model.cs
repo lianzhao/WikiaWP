@@ -401,6 +401,7 @@ namespace WikiaWP.ViewModels
                     await
                     api.Wikia.Articles.GetListArticlesAsync(
                         Title,
+                        namespaces: new[] { 0 },
                         offset: ArticlesContinue,
                         count: ArticlesPageSize);
                 ArticlesContinue = result.offset;
