@@ -1,20 +1,14 @@
-﻿using System.Reactive;
-using System.Reactive.Linq;
-using MVVMSidekick.ViewModels;
-using MVVMSidekick.Views;
-using MVVMSidekick.Reactive;
-using MVVMSidekick.Services;
-using MVVMSidekick.Commands;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
-using System.Runtime.Serialization;
+using System.Linq;
+using System.Threading.Tasks;
 
 using MediaWiki.Query.CategoryMembers;
+
+using MVVMSidekick.Reactive;
+using MVVMSidekick.ViewModels;
+using MVVMSidekick.Views;
 
 using WikiaWP.Models;
 using WikiaWP.Resources;
@@ -106,7 +100,7 @@ namespace WikiaWP.ViewModels
         static Func<BindableBase, ValueContainer<int>> _PivotSelectedIndexLocator = RegisterContainerLocator<int>("PivotSelectedIndex", model => model.Initialize("PivotSelectedIndex", ref model._PivotSelectedIndex, ref _PivotSelectedIndexLocator, _PivotSelectedIndexDefaultValueFactory));
         static Func<int> _PivotSelectedIndexDefaultValueFactory = () => { return default(int); };
         #endregion
-
+        
         public CommandModel<ReactiveCommand, String> CommandLoadArticles
         {
             get { return _CommandLoadArticlesLocator(this).Value; }
@@ -129,7 +123,6 @@ namespace WikiaWP.ViewModels
                         {
                             if (vm.IsCuratedContent)
                             {
-                                await Task.Yield();
                                 vm.ArticlesHeaderText = "找到0个页面";
                                 vm.UpdatePivotSelectedIndex();
                                 return;
@@ -160,9 +153,6 @@ namespace WikiaWP.ViewModels
                                                         : art.ThumbnailFixYOffset
                                             }).ToList();
                                 vm.Articles = new ObservableCollection<ListItem_Model>(pages);
-                                vm.ArticlesHeaderText = string.Format(
-                                    "找到{0}个页面",
-                                    vm.Articles.Count.ToString(CultureInfo.InvariantCulture));
                                 vm.UpdatePivotSelectedIndex();
                             }
                         }
@@ -225,6 +215,9 @@ namespace WikiaWP.ViewModels
                                                             : art.ThumbnailFixYOffset
                                                 }).ToList();
                                     vm.Categories = new ObservableCollection<ListItem_Model>(subcats);
+                                    vm.CategoriesHeaderText = string.Format(
+                                        "找到{0}个分类",
+                                        vm.Categories.Count.ToString(CultureInfo.InvariantCulture));
                                 }
                                 else
                                 {
@@ -253,9 +246,6 @@ namespace WikiaWP.ViewModels
                                             }).ToList();
                                     vm.Categories = new ObservableCollection<ListItem_Model>(subcats);
                                 }
-                                vm.CategoriesHeaderText = string.Format(
-                                    "找到{0}个分类",
-                                    vm.Categories.Count.ToString(CultureInfo.InvariantCulture));
                                 vm.UpdatePivotSelectedIndex();
                             }
                         }
@@ -333,15 +323,30 @@ namespace WikiaWP.ViewModels
         //    return base.OnUnbindedFromView(view, newValue);
         //}
 
-        ///// <summary>
-        ///// This will be invoked by view when the view fires Load event and this viewmodel instance is already in view's ViewModel property
-        ///// </summary>
-        ///// <param name="view">View that firing Load event</param>
-        ///// <returns>Task awaiter</returns>
-        //protected override Task OnBindedViewLoad(MVVMSidekick.Views.IView view)
-        //{
-        //    return base.OnBindedViewLoad(view);
-        //}
+        /// <summary>
+        /// This will be invoked by view when the view fires Load event and this viewmodel instance is already in view's ViewModel property
+        /// </summary>
+        /// <param name="view">View that firing Load event</param>
+        /// <returns>Task awaiter</returns>
+        protected override async Task OnBindedViewLoad(IView view)
+        {
+            await base.OnBindedViewLoad(view);
+
+            if (IsCuratedContent || string.IsNullOrEmpty(Title))
+            {
+                return;
+            }
+            using (var api = new ApiClient())
+            {
+                var category = await api.MediaWiki.Query.AllCategories.GetCategoryAsyc(Title);
+                ArticlesHeaderText = string.Format(
+                    "找到{0}个页面",
+                    category.pages.ToString(CultureInfo.InvariantCulture));
+                CategoriesHeaderText = string.Format(
+                    "找到{0}个子分类",
+                    category.subcats.ToString(CultureInfo.InvariantCulture));
+            }
+        }
 
         ///// <summary>
         ///// This will be invoked by view when the view fires Unload event and this viewmodel instance is still in view's  ViewModel property

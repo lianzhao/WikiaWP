@@ -139,7 +139,7 @@ namespace MediaWiki.Query.AllCategories
         {
             var uri =
                 string.Format(
-                    "{0}/api.php?action=query&list=allcategories&acprop=size|hidden&format=json&acfrom={1}&acto={1}",
+                    "{0}/api.php?action=query&list=allcategories&acprop=size|hidden&format=json&acfrom={1}&aclimit=1",
                     _site,
                     title);
             try
