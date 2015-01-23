@@ -4,6 +4,10 @@
 
 >License: The [author](https://github.com/waynebaby) of the project declared that [the project](https://github.com/waynebaby/MVVM-Sidekick) is licensed under MS-PL orally 
 
+* The Windows Phone Toolkit
+
+>License: http://phone.codeplex.com/license
+
 Provided for Informational Purposes Only
 Ms-PL License
 
