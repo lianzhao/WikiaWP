@@ -125,20 +125,20 @@ namespace WikiaWP.ViewModels
                     .DoExecuteUIBusyTask(
                         vm,
                         async e =>
+                        {
+                            using (var api = new ApiClient())
                             {
-                                using (var api = new ApiClient())
-                                {
-                                    var comments =
-                                        await api.Wikia.Mercury.GetArticleCommentsAsync(vm.Title);
-                                    var commentModels =
-                                        comments.payload.comments.OrderByDescending(c => c.CreatedUtc)
-                                            .Select(c => c.ToArticleComment_Model(comments));
-                                    vm.CommentsHeaderText = string.Format(
-                                        "共{0}条评论",
-                                        comments.payload.GetAllDescendants().Count().ToString(CultureInfo.InvariantCulture));
-                                    vm.Comments = new ObservableCollection<ArticleComment_Model>(commentModels);
-                                }
+                                var comments =
+                                    await api.Wikia.Mercury.GetArticleCommentsAsync(vm.Title);
+                                var commentModels =
+                                    comments.payload.comments.OrderByDescending(c => c.CreatedUtc)
+                                        .Select(c => c.ToArticleComment_Model(comments));
+                                vm.CommentsHeaderText = string.Format(
+                                    "共{0}条评论",
+                                    comments.payload.GetAllDescendants().Count().ToString(CultureInfo.InvariantCulture));
+                                vm.Comments = new ObservableCollection<ArticleComment_Model>(commentModels);
                             }
+                        }
                     )
                     .DoNotifyDefaultEventRouter(vm, commandId)
                     .Subscribe()
@@ -242,14 +242,10 @@ namespace WikiaWP.ViewModels
                 var cmd = new ReactiveCommand(canExecute: true) { ViewModel = model }; //New Command Core
                 cmd
                     .Subscribe(async _ =>
-                    {
-                        var vms = await
-                            CastToCurrentType(model)
-                            .StageManager
-                            .DefaultStage
-                            .ShowAndGetViewModel<MainPage_Model>();
-                        await vms.Closing;
-                    })
+                        {
+                            var newVm = ViewModelLocator<MainPage_Model>.Instance.Resolve();
+                            await CastToCurrentType(model).StageManager.DefaultStage.Show(newVm);
+                        })
                     .DisposeWith(model);
 
                 var cmdmdl = cmd.CreateCommandModel(resource);

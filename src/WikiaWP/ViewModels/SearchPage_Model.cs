@@ -286,13 +286,9 @@ namespace WikiaWP.ViewModels
                             {
                                 return;
                             }
-                            var vms = await
-                                CastToCurrentType(model)
-                                .StageManager
-                                .DefaultStage
-                                .ShowAndGetViewModel<ArticleDetailPage_Model>();
-                            vms.ViewModel.Title = navigateTo.Title;
-                            await vms.Closing;
+                            var newVm = ViewModelLocator<ArticleDetailPage_Model>.Instance.Resolve();
+                            newVm.Title = navigateTo.Title;
+                            await CastToCurrentType(model).StageManager.DefaultStage.Show(newVm);
                         })
                     .DisposeWith(model);
 

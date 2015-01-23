@@ -164,12 +164,8 @@ namespace WikiaWP.ViewModels
                 cmd
                     .Subscribe(async _ =>
                     {
-                        var vms = await
-                            CastToCurrentType(model)
-                            .StageManager
-                            .DefaultStage
-                            .ShowAndGetViewModel<SearchPage_Model>();
-                        await vms.Closing;
+                        var newVm = ViewModelLocator<SearchPage_Model>.Instance.Resolve();
+                        await CastToCurrentType(model).StageManager.DefaultStage.Show(newVm);
                     })
                     .DisposeWith(model);
 
@@ -198,23 +194,23 @@ namespace WikiaWP.ViewModels
                             var vm = CastToCurrentType(model);
                             if (vm.SelectedItem.Link.StartsWith("Category:"))
                             {
-                                var vms = await vm.StageManager.DefaultStage.ShowAndGetViewModel<CategoryListPage_Model>();
-                                vms.ViewModel.Title = vm.SelectedItem.Content;
-                                vms.ViewModel.IsCuratedContent = false;
-                                await vms.Closing;
+                                var newVm = ViewModelLocator<CategoryListPage_Model>.Instance.Resolve();
+                                newVm.Title = vm.SelectedItem.Content;
+                                newVm.IsCuratedContent = false;
+                                await CastToCurrentType(model).StageManager.DefaultStage.Show(newVm);
                             }
                             else if (vm.SelectedItem.Link.StartsWith("CuratedContent:"))
                             {
-                                var vms = await vm.StageManager.DefaultStage.ShowAndGetViewModel<CategoryListPage_Model>();
-                                vms.ViewModel.Title = vm.SelectedItem.Title;
-                                vms.ViewModel.IsCuratedContent = true;
-                                await vms.Closing;
+                                var newVm = ViewModelLocator<CategoryListPage_Model>.Instance.Resolve();
+                                newVm.Title = vm.SelectedItem.Title;
+                                newVm.IsCuratedContent = true;
+                                await CastToCurrentType(model).StageManager.DefaultStage.Show(newVm);
                             }
                             else
                             {
-                                var vms = await vm.StageManager.DefaultStage.ShowAndGetViewModel<ArticleDetailPage_Model>();
-                                vms.ViewModel.Title = vm.SelectedItem.Link;
-                                await vms.Closing;
+                                var newVm = ViewModelLocator<ArticleDetailPage_Model>.Instance.Resolve();
+                                newVm.Title = vm.SelectedItem.Link;
+                                await CastToCurrentType(model).StageManager.DefaultStage.Show(newVm);
                             }
                         }).DisposeWith(model);
 
@@ -241,13 +237,9 @@ namespace WikiaWP.ViewModels
                 cmd
                     .Subscribe(async _ =>
                     {
-                        var vms = await
-                            CastToCurrentType(model)
-                            .StageManager
-                            .DefaultStage
-                            .ShowAndGetViewModel<AboutPage_Model>();
-                        vms.ViewModel.Init();
-                        await vms.Closing;
+                        var newVm = ViewModelLocator<AboutPage_Model>.Instance.Resolve();
+                        newVm.Init();
+                        await CastToCurrentType(model).StageManager.DefaultStage.Show(newVm);
                     })
                     .DisposeWith(model);
 

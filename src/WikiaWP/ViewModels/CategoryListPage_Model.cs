@@ -290,16 +290,16 @@ namespace WikiaWP.ViewModels
                         var vm = CastToCurrentType(model);
                         if (vm.SelectedItem.Link.StartsWith("Category:"))
                         {
-                            var vms = await vm.StageManager.DefaultStage.ShowAndGetViewModel<CategoryListPage_Model>();
-                            vms.ViewModel.Title = vm.SelectedItem.Content;
-                            vms.ViewModel.IsCuratedContent = false;
-                            await vms.Closing;
+                            var newVm = ViewModelLocator<CategoryListPage_Model>.Instance.Resolve();
+                            newVm.Title = vm.SelectedItem.Content;
+                            newVm.IsCuratedContent = false;
+                            await vm.StageManager.DefaultStage.Show(newVm);
                         }
                         else
                         {
-                            var vms = await vm.StageManager.DefaultStage.ShowAndGetViewModel<ArticleDetailPage_Model>();
-                            vms.ViewModel.Title = vm.SelectedItem.Link;
-                            await vms.Closing;
+                            var newVm = ViewModelLocator<ArticleDetailPage_Model>.Instance.Resolve();
+                            newVm.Title = vm.SelectedItem.Link;
+                            await vm.StageManager.DefaultStage.Show(newVm);
                         }
                     }).DisposeWith(model);
 
