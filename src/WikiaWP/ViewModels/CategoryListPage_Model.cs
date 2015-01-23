@@ -149,21 +149,16 @@ namespace WikiaWP.ViewModels
                             {
                                 var result =
                                     await
-                                    api.MediaWiki.Query.CategoryMembers.GetCategoryMembersAsync(
-                                        string.Format("Category:{0}", vm.Title),
-                                        new[] { CatergoryMemberType.page },
-                                        vm.ArticlesContinue,
-                                        ArticlesPageSize);
-                                if (result.querycontinue != null)
+                                    api.Wikia.Articles.GetListArticlesAsync(
+                                        vm.Title,
+                                        offset: vm.ArticlesContinue,
+                                        count: ArticlesPageSize);
+                                if (!string.IsNullOrEmpty(result.offset))
                                 {
-                                    vm.ArticlesContinue = result.querycontinue.categorymembers.cmcontinue;
+                                    vm.ArticlesContinue = result.offset;
                                 }
-                                var articles =
-                                    await
-                                    api.Wikia.Articles.GetArticlesAsync(
-                                        result.query.categorymembers.Select(cm => cm.pageid));
                                 var pages =
-                                    articles.Select(
+                                    result.items.Select(
                                         art =>
                                         new ListItem_Model
                                             {
@@ -225,15 +220,15 @@ namespace WikiaWP.ViewModels
                                             art => art.id,
                                             (item, art) =>
                                             new ListItem_Model
-                                                {
-                                                    Title = item.title,
-                                                    Link = string.Format("Category:{0}", item.title),
-                                                    Content = item.title,
-                                                    ImageSource =
-                                                        art.thumbnail == null
-                                                            ? AppResources.PlaceholderImageSource
-                                                            : art.ThumbnailFixYOffset
-                                                }).ToList();
+                                            {
+                                                Title = item.title,
+                                                Link = string.Format("Category:{0}", item.title),
+                                                Content = item.title,
+                                                ImageSource =
+                                                    art.thumbnail == null
+                                                        ? AppResources.PlaceholderImageSource
+                                                        : art.ThumbnailFixYOffset
+                                            }).ToList();
                                     vm.Categories = new ObservableCollection<ListItem_Model>(subcats);
                                     vm.CategoriesHeaderText = string.Format(
                                         "找到{0}个分类",
@@ -243,32 +238,27 @@ namespace WikiaWP.ViewModels
                                 {
                                     var result =
                                         await
-                                        api.MediaWiki.Query.CategoryMembers.GetCategoryMembersAsync(
-                                            string.Format("Category:{0}", vm.Title),
-                                            new[] { CatergoryMemberType.subcat },
-                                            vm.CategoriesContinue,
-                                            CategoriesPageSize);
-                                    if (result.querycontinue != null)
+                                        api.Wikia.Articles.GetListArticlesAsync(
+                                            vm.Title,
+                                            namespaces: new[] { 14 },
+                                            offset: vm.CategoriesContinue,
+                                            count: CategoriesPageSize);
+                                    if (!string.IsNullOrEmpty(result.offset))
                                     {
-                                        vm.CategoriesContinue = result.querycontinue.categorymembers.cmcontinue;
+                                        vm.CategoriesContinue = result.offset;
                                     }
-                                    var articles =
-                                        await
-                                        api.Wikia.Articles.GetArticlesAsync(
-                                            result.query.categorymembers.Select(cm => cm.pageid));
                                     var subcats =
-                                        articles.Select(
-                                            art =>
+                                        result.items.Select(art => 
                                             new ListItem_Model
-                                            {
-                                                Title = art.title,
-                                                Link = string.Format("Category:{0}", art.title),
-                                                Content = art.title,
-                                                ImageSource =
-                                                    art.thumbnail == null
-                                                        ? AppResources.PlaceholderImageSource
-                                                        : art.ThumbnailFixYOffset
-                                            }).ToList();
+                                                {
+                                                    Title = art.title,
+                                                    Link = string.Format("Category:{0}", art.title),
+                                                    Content = art.@abstract,
+                                                    ImageSource =
+                                                        art.thumbnail == null
+                                                            ? AppResources.PlaceholderImageSource
+                                                            : art.ThumbnailFixYOffset
+                                                }).ToList();
                                     vm.Categories.AddRange(subcats);
                                 }
                                 vm.UpdatePivotSelectedIndex();
