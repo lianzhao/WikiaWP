@@ -4,6 +4,8 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
+using LianZhao.Collections.Generic;
+
 using MediaWiki.Query.CategoryMembers;
 
 using MVVMSidekick.Reactive;
@@ -19,10 +21,26 @@ namespace WikiaWP.ViewModels
     //[DataContract]
     public class CategoryListPage_Model : ViewModelBase<CategoryListPage_Model>
     {
+        public const int ArticlesPageSize = 24;
+
+        public const int ArticlesLoadNextPageOffset = 6;
+
+        public const int CategoriesPageSize = 500;
+
+        public CategoryListPage_Model()
+        {
+            Articles = new ObservableCollection<ListItem_Model>();
+            Categories = new ObservableCollection<ListItem_Model>();
+        }
+
         // If you have install the code sniplets, use "propvm + [tab] +[tab]" create a property。
         // 如果您已经安装了 MVVMSidekick 代码片段，请用 propvm +tab +tab 输入属性
 
         public bool IsCuratedContent { get; set; }
+
+        public string ArticlesContinue { get; set; }
+
+        public string CategoriesContinue { get; set; }
 
         public string Title
         {
@@ -89,7 +107,7 @@ namespace WikiaWP.ViewModels
         static Func<BindableBase, ValueContainer<string>> _CategoriesHeaderTextLocator = RegisterContainerLocator<string>("CategoriesHeaderText", model => model.Initialize("CategoriesHeaderText", ref model._CategoriesHeaderText, ref _CategoriesHeaderTextLocator, _CategoriesHeaderTextDefaultValueFactory));
         static Func<string> _CategoriesHeaderTextDefaultValueFactory = () => { return default(string); };
         #endregion
-
+        
         public int PivotSelectedIndex
         {
             get { return _PivotSelectedIndexLocator(this).Value; }
@@ -134,7 +152,12 @@ namespace WikiaWP.ViewModels
                                     api.MediaWiki.Query.CategoryMembers.GetCategoryMembersAsync(
                                         string.Format("Category:{0}", vm.Title),
                                         new[] { CatergoryMemberType.page },
-                                        25);
+                                        vm.ArticlesContinue,
+                                        ArticlesPageSize);
+                                if (result.querycontinue != null)
+                                {
+                                    vm.ArticlesContinue = result.querycontinue.categorymembers.cmcontinue;
+                                }
                                 var articles =
                                     await
                                     api.Wikia.Articles.GetArticlesAsync(
@@ -152,7 +175,8 @@ namespace WikiaWP.ViewModels
                                                         ? AppResources.PlaceholderImageSource
                                                         : art.ThumbnailFixYOffset
                                             }).ToList();
-                                vm.Articles = new ObservableCollection<ListItem_Model>(pages);
+
+                                vm.Articles.AddRange(pages);
                                 vm.UpdatePivotSelectedIndex();
                             }
                         }
@@ -192,10 +216,6 @@ namespace WikiaWP.ViewModels
                                 if (vm.IsCuratedContent)
                                 {
                                     var result = await api.Wikia.CuratedContent.GetCuratedContentSectionAsync(vm.Title);
-                                    //var cats = result.items.Select(item => new ListItem_Model
-                                    //                                           {
-                                    //                                               Title = item.title
-                                    //                                           })
                                     var articles =
                                         await api.Wikia.Articles.GetArticlesAsync(result.items.Select(item => item.id));
                                     var subcats =
@@ -226,7 +246,12 @@ namespace WikiaWP.ViewModels
                                         api.MediaWiki.Query.CategoryMembers.GetCategoryMembersAsync(
                                             string.Format("Category:{0}", vm.Title),
                                             new[] { CatergoryMemberType.subcat },
-                                            25);
+                                            vm.CategoriesContinue,
+                                            CategoriesPageSize);
+                                    if (result.querycontinue != null)
+                                    {
+                                        vm.CategoriesContinue = result.querycontinue.categorymembers.cmcontinue;
+                                    }
                                     var articles =
                                         await
                                         api.Wikia.Articles.GetArticlesAsync(
@@ -244,7 +269,7 @@ namespace WikiaWP.ViewModels
                                                         ? AppResources.PlaceholderImageSource
                                                         : art.ThumbnailFixYOffset
                                             }).ToList();
-                                    vm.Categories = new ObservableCollection<ListItem_Model>(subcats);
+                                    vm.Categories.AddRange(subcats);
                                 }
                                 vm.UpdatePivotSelectedIndex();
                             }

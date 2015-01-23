@@ -65,9 +65,10 @@
             </phone:PivotItem>
             <phone:PivotItem x:Name="ArticlesPivotItem" Header="页面"
                              Loaded="ArticlesPivotItem_OnLoaded">
-                <phone:LongListSelector ItemsSource="{Binding Articles}"
+                <phone:LongListSelector x:Name="ArticlesLongListSelector" ItemsSource="{Binding Articles}"
                                         LayoutMode="Grid" GridCellSize="200,200"
-                                        SelectionChanged="LongListSelector_OnSelectionChanged">
+                                        SelectionChanged="LongListSelector_OnSelectionChanged"
+                                        ItemRealized="ArticlesLongListSelector_OnItemRealized">
                     <phone:LongListSelector.ListHeader>
                         <TextBlock Text="{Binding ArticlesHeaderText}" Style="{StaticResource PhoneTextSubtleStyle}"/>
                     </phone:LongListSelector.ListHeader>

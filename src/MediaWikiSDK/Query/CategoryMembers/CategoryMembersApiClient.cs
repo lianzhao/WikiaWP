@@ -38,14 +38,23 @@ namespace MediaWiki.Query.CategoryMembers
             _httpClient = httpClient;
         }
 
-        public async Task<CategoryMemberResultSet> GetCategoryMembersAsync(string title, IEnumerable<CatergoryMemberType> types = null, int count = 0)
+        public async Task<CategoryMemberResultSet> GetCategoryMembersAsync(
+            string title,
+            IEnumerable<CatergoryMemberType> types = null,
+            string cmcontinue = null,
+            int count = 0)
         {
             var builder =
-                new StringBuilder(_site).Append("/api.php?action=query&list=categorymembers&cmprop=ids|title|type&format=json&cmtitle=")
+                new StringBuilder(_site).Append(
+                    "/api.php?action=query&list=categorymembers&cmprop=ids|title|type&format=json&cmtitle=")
                     .Append(title);
             if (types != null)
             {
                 builder.Append("&cmtype=").Append(types.JoinToString("|"));
+            }
+            if (!string.IsNullOrEmpty(cmcontinue))
+            {
+                builder.Append("&cmcontinue=").Append(cmcontinue);
             }
             if (count > 0)
             {

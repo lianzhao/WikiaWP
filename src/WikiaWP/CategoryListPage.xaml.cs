@@ -110,6 +110,32 @@ namespace WikiaWP
             control.SelectedItem = null;
             vm.CommandNavigateToSelected.Execute(null);
         }
+
+        private void ArticlesLongListSelector_OnItemRealized(object sender, ItemRealizationEventArgs e)
+        {
+            if (LayoutRoot == null)
+            {
+                return;
+            }
+
+            var vm = LayoutRoot.DataContext as CategoryListPage_Model;
+            var control = sender as LongListSelector;
+            if (vm == null || control == null)
+            {
+                return;
+            }
+
+            if (!vm.IsUIBusy && control.ItemsSource != null && e.ItemKind == LongListSelectorItemKind.Item
+                && control.ItemsSource.Count > CategoryListPage_Model.ArticlesLoadNextPageOffset)
+            {
+                if (e.Container.Content
+                    == control.ItemsSource[control.ItemsSource.Count - CategoryListPage_Model.ArticlesLoadNextPageOffset
+                           ])
+                {
+                    vm.CommandLoadArticles.Execute(null);
+                }
+            }
+        }
     }
 }
 
