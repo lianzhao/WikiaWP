@@ -38,7 +38,7 @@
                                         LayoutMode="Grid" GridCellSize="200,200"
                                         SelectionChanged="LongListSelector_OnSelectionChanged">
                     <phone:LongListSelector.ListHeader>
-                        <TextBlock Text="{Binding CategoriesHeaderText}" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                        <TextBlock Text="{Binding CategoryCount, StringFormat=共\{0\}个子分类}" Style="{StaticResource PhoneTextSubtleStyle}"/>
                     </phone:LongListSelector.ListHeader>
                     <phone:LongListSelector.ItemTemplate>
                         <DataTemplate>
@@ -70,7 +70,7 @@
                                         SelectionChanged="LongListSelector_OnSelectionChanged"
                                         ItemRealized="ArticlesLongListSelector_OnItemRealized">
                     <phone:LongListSelector.ListHeader>
-                        <TextBlock Text="{Binding ArticlesHeaderText}" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                        <TextBlock Text="{Binding ArticleCount, StringFormat=共\{0\}个页面}" Style="{StaticResource PhoneTextSubtleStyle}"/>
                     </phone:LongListSelector.ListHeader>
                     <phone:LongListSelector.ItemTemplate>
                         <DataTemplate>

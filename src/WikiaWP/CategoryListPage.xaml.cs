@@ -132,7 +132,7 @@ namespace WikiaWP
                     == control.ItemsSource[control.ItemsSource.Count - CategoryListPage_Model.ArticlesLoadNextPageOffset
                            ])
                 {
-                    vm.CommandLoadArticles.Execute(null);
+                    vm.CommandLoadMoreArticles.Execute(null);
                 }
             }
         }

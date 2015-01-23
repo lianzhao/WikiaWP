@@ -86,27 +86,28 @@ namespace WikiaWP.ViewModels
         static Func<ListItem_Model> _SelectedItemDefaultValueFactory = () => { return default(ListItem_Model); };
         #endregion
 
-        public string ArticlesHeaderText
+        public int ArticleCount
         {
-            get { return _ArticlesHeaderTextLocator(this).Value; }
-            set { _ArticlesHeaderTextLocator(this).SetValueAndTryNotify(value); }
+            get { return _ArticleCountLocator(this).Value; }
+            set { _ArticleCountLocator(this).SetValueAndTryNotify(value); }
         }
-        #region Property string ArticlesHeaderText Setup
-        protected Property<string> _ArticlesHeaderText = new Property<string> { LocatorFunc = _ArticlesHeaderTextLocator };
-        static Func<BindableBase, ValueContainer<string>> _ArticlesHeaderTextLocator = RegisterContainerLocator<string>("ArticlesHeaderText", model => model.Initialize("ArticlesHeaderText", ref model._ArticlesHeaderText, ref _ArticlesHeaderTextLocator, _ArticlesHeaderTextDefaultValueFactory));
-        static Func<string> _ArticlesHeaderTextDefaultValueFactory = () => { return default(string); };
+        #region Property int ArticleCount Setup
+        protected Property<int> _ArticleCount = new Property<int> { LocatorFunc = _ArticleCountLocator };
+        static Func<BindableBase, ValueContainer<int>> _ArticleCountLocator = RegisterContainerLocator<int>("ArticleCount", model => model.Initialize("ArticleCount", ref model._ArticleCount, ref _ArticleCountLocator, _ArticleCountDefaultValueFactory));
+        static Func<int> _ArticleCountDefaultValueFactory = () => { return default(int); };
         #endregion
 
-        public string CategoriesHeaderText
+        public int CategoryCount
         {
-            get { return _CategoriesHeaderTextLocator(this).Value; }
-            set { _CategoriesHeaderTextLocator(this).SetValueAndTryNotify(value); }
+            get { return _CategoryCountLocator(this).Value; }
+            set { _CategoryCountLocator(this).SetValueAndTryNotify(value); }
         }
-        #region Property string CategoriesHeaderText Setup
-        protected Property<string> _CategoriesHeaderText = new Property<string> { LocatorFunc = _CategoriesHeaderTextLocator };
-        static Func<BindableBase, ValueContainer<string>> _CategoriesHeaderTextLocator = RegisterContainerLocator<string>("CategoriesHeaderText", model => model.Initialize("CategoriesHeaderText", ref model._CategoriesHeaderText, ref _CategoriesHeaderTextLocator, _CategoriesHeaderTextDefaultValueFactory));
-        static Func<string> _CategoriesHeaderTextDefaultValueFactory = () => { return default(string); };
+        #region Property int CategoryCount Setup
+        protected Property<int> _CategoryCount = new Property<int> { LocatorFunc = _CategoryCountLocator };
+        static Func<BindableBase, ValueContainer<int>> _CategoryCountLocator = RegisterContainerLocator<int>("CategoryCount", model => model.Initialize("CategoryCount", ref model._CategoryCount, ref _CategoryCountLocator, _CategoryCountDefaultValueFactory));
+        static Func<int> _CategoryCountDefaultValueFactory = () => { return default(int); };
         #endregion
+
         
         public int PivotSelectedIndex
         {
@@ -141,39 +142,48 @@ namespace WikiaWP.ViewModels
                         {
                             if (vm.IsCuratedContent)
                             {
-                                vm.ArticlesHeaderText = "找到0个页面";
+                                vm.ArticleCount = 0;
                                 vm.UpdatePivotSelectedIndex();
                                 return;
                             }
-                            using (var api = new ApiClient())
-                            {
-                                var result =
-                                    await
-                                    api.Wikia.Articles.GetListArticlesAsync(
-                                        vm.Title,
-                                        offset: vm.ArticlesContinue,
-                                        count: ArticlesPageSize);
-                                if (!string.IsNullOrEmpty(result.offset))
-                                {
-                                    vm.ArticlesContinue = result.offset;
-                                }
-                                var pages =
-                                    result.items.Select(
-                                        art =>
-                                        new ListItem_Model
-                                            {
-                                                Title = art.title,
-                                                Link =  art.title,
-                                                Content = art.@abstract,
-                                                ImageSource =
-                                                    art.thumbnail == null
-                                                        ? AppResources.PlaceholderImageSource
-                                                        : art.ThumbnailFixYOffset
-                                            }).ToList();
+                            await vm.LoadArticlesAsync();
+                        }
+                    )
+                    .DoNotifyDefaultEventRouter(vm, commandId)
+                    .Subscribe()
+                    .DisposeWith(vm);
 
-                                vm.Articles.AddRange(pages);
-                                vm.UpdatePivotSelectedIndex();
+                var cmdmdl = cmd.CreateCommandModel(resource);
+                cmdmdl.ListenToIsUIBusy(model: vm, canExecuteWhenBusy: false);
+                return cmdmdl;
+            };
+        #endregion
+
+        public CommandModel<ReactiveCommand, String> CommandLoadMoreArticles
+        {
+            get { return _CommandLoadMoreArticlesLocator(this).Value; }
+            set { _CommandLoadMoreArticlesLocator(this).SetValueAndTryNotify(value); }
+        }
+        #region Property CommandModel<ReactiveCommand, String> CommandLoadMoreArticles Setup
+        protected Property<CommandModel<ReactiveCommand, String>> _CommandLoadMoreArticles = new Property<CommandModel<ReactiveCommand, String>> { LocatorFunc = _CommandLoadMoreArticlesLocator };
+        static Func<BindableBase, ValueContainer<CommandModel<ReactiveCommand, String>>> _CommandLoadMoreArticlesLocator = RegisterContainerLocator<CommandModel<ReactiveCommand, String>>("CommandLoadMoreArticles", model => model.Initialize("CommandLoadMoreArticles", ref model._CommandLoadMoreArticles, ref _CommandLoadMoreArticlesLocator, _CommandLoadMoreArticlesDefaultValueFactory));
+        static Func<BindableBase, CommandModel<ReactiveCommand, String>> _CommandLoadMoreArticlesDefaultValueFactory =
+            model =>
+            {
+                var resource = "LoadMoreArticles";           // Command resource  
+                var commandId = "LoadMoreArticles";
+                var vm = CastToCurrentType(model);
+                var cmd = new ReactiveCommand(canExecute: true) { ViewModel = model }; //New Command Core
+                cmd
+                    .DoExecuteUIBusyTask(
+                        vm,
+                        async e =>
+                        {
+                            if (string.IsNullOrEmpty(vm.ArticlesContinue))
+                            {
+                                return;
                             }
+                            await vm.LoadArticlesAsync();
                         }
                     )
                     .DoNotifyDefaultEventRouter(vm, commandId)
@@ -230,9 +240,7 @@ namespace WikiaWP.ViewModels
                                                         : art.ThumbnailFixYOffset
                                             }).ToList();
                                     vm.Categories = new ObservableCollection<ListItem_Model>(subcats);
-                                    vm.CategoriesHeaderText = string.Format(
-                                        "找到{0}个分类",
-                                        vm.Categories.Count.ToString(CultureInfo.InvariantCulture));
+                                    vm.CategoryCount = vm.Categories.Count;
                                 }
                                 else
                                 {
@@ -243,10 +251,7 @@ namespace WikiaWP.ViewModels
                                             namespaces: new[] { 14 },
                                             offset: vm.CategoriesContinue,
                                             count: CategoriesPageSize);
-                                    if (!string.IsNullOrEmpty(result.offset))
-                                    {
-                                        vm.CategoriesContinue = result.offset;
-                                    }
+                                    vm.CategoriesContinue = result.offset;
                                     var subcats =
                                         result.items.Select(art => 
                                             new ListItem_Model
@@ -354,12 +359,8 @@ namespace WikiaWP.ViewModels
             using (var api = new ApiClient())
             {
                 var category = await api.MediaWiki.Query.AllCategories.GetCategoryAsyc(Title);
-                ArticlesHeaderText = string.Format(
-                    "找到{0}个页面",
-                    category.pages.ToString(CultureInfo.InvariantCulture));
-                CategoriesHeaderText = string.Format(
-                    "找到{0}个子分类",
-                    category.subcats.ToString(CultureInfo.InvariantCulture));
+                ArticleCount = category.pages;
+                CategoryCount = category.subcats;
             }
         }
 
@@ -390,6 +391,36 @@ namespace WikiaWP.ViewModels
         private void UpdatePivotSelectedIndex()
         {
             PivotSelectedIndex = Articles != null && Articles.Count > 0 ? 1 : 0;
+        }
+
+        private async Task LoadArticlesAsync()
+        {
+            using (var api = new ApiClient())
+            {
+                var result =
+                    await
+                    api.Wikia.Articles.GetListArticlesAsync(
+                        Title,
+                        offset: ArticlesContinue,
+                        count: ArticlesPageSize);
+                ArticlesContinue = result.offset;
+                var pages =
+                    result.items.Select(
+                        art =>
+                        new ListItem_Model
+                        {
+                            Title = art.title,
+                            Link = art.title,
+                            Content = art.@abstract,
+                            ImageSource =
+                                art.thumbnail == null
+                                    ? AppResources.PlaceholderImageSource
+                                    : art.ThumbnailFixYOffset
+                        }).ToList();
+
+                Articles.AddRange(pages);
+                UpdatePivotSelectedIndex();
+            }
         }
 
     }
