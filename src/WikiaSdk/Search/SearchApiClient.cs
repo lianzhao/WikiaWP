@@ -46,11 +46,11 @@ namespace Wikia.Search
             var sb = new StringBuilder(_site).Append("/api/v1/Search/List?query=").Append(query);
             if (page > 0)
             {
-                sb.Append("batch=").Append(page);
+                sb.Append("&batch=").Append(page);
             }
             if (pageSize > 0)
             {
-                sb.Append("limit=").Append(pageSize);
+                sb.Append("&limit=").Append(pageSize);
             }
             var uri = sb.ToString();
             try
