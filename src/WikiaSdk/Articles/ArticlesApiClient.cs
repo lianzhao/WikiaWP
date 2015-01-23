@@ -153,6 +153,7 @@ namespace Wikia.Articles
 
         public async Task<ListExpandedArticleResultSet> GetListArticlesAsync(
             string category = null,
+            IEnumerable<int> namespaces = null,
             int count = 0,
             string offset = null)
         {
@@ -160,6 +161,10 @@ namespace Wikia.Articles
             if (!string.IsNullOrEmpty(category))
             {
                 builder.Append("&category=").Append(category);
+            }
+            if (namespaces != null)
+            {
+                builder.Append("&namespaces=").Append(namespaces.JoinToString(","));
             }
             if (count > 0)
             {
