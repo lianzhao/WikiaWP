@@ -25,7 +25,7 @@ namespace WikiaWP.ViewModels
 
         public const int ArticlesLoadNextPageOffset = 6;
 
-        public const int CategoriesPageSize = 500;
+        public const int CategoriesPageSize = CategoryMembersApiClient.MaxCount;
 
         public CategoryListPage_Model()
         {

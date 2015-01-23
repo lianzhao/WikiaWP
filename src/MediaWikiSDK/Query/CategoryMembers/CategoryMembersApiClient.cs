@@ -14,6 +14,8 @@ namespace MediaWiki.Query.CategoryMembers
 {
     public class CategoryMembersApiClient : DisposableObjectOwner
     {
+        public const int MaxCount = 500;
+
         private readonly string _site;
 
         private readonly HttpClient _httpClient;
