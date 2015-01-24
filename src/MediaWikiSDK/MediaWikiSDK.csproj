@@ -39,6 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiClient.cs" />
+    <Compile Include="OpenSearch\OpenSearchApiClient.cs" />
     <Compile Include="Parse\ParseApiClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\AllCategories\Allcategories.cs" />
