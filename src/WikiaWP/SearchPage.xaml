@@ -9,6 +9,7 @@
     xmlns:mvvm="clr-namespace:MVVMSidekick.Views;assembly=MVVMSidekick_Wp8"
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     Loaded="SearchPage_OnLoaded"
     shell:SystemTray.IsVisible="True">
     <mvvm:MVVMPage.Resources>
@@ -31,9 +32,8 @@
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel Grid.Row="0" Margin="12,17,0,28">
             <TextBlock Text="维基搜索" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBox x:Name="SearchTextBox" Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=Explicit}"
-                     AcceptsReturn="False" InputScope="Search"
-                     KeyDown="SearchTextBox_OnKeyDown"></TextBox>
+            <toolkit:AutoCompleteBox x:Name="SearchTextBox" InputScope="Search" ItemsSource="{Binding Suggestions}"
+                                     TextChanged="SearchTextBox_OnTextChanged" KeyUp="SearchTextBox_OnKeyUp"/>
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->

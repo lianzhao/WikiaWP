@@ -46,14 +46,16 @@ namespace WikiaWP
             this.InitializeComponent();
         }
 
-        private void SearchTextBox_OnKeyDown(object sender, KeyEventArgs e)
+        private void SearchTextBox_OnKeyUp(object sender, KeyEventArgs e)
         {
+            var vm = LayoutRoot.DataContext as SearchPage_Model;
+            if (vm == null)
+            {
+                return;
+            }
             if (e.Key == Key.Enter)
             {
-                Focus();// hide keyboard
-                var vm = LayoutRoot.DataContext as SearchPage_Model;
-                var binding = SearchTextBox.GetBindingExpression(TextBox.TextProperty);
-                binding.UpdateSource();
+                Focus(); // hide keyboard
                 vm.CommandSearch.Execute(null);
             }
         }
@@ -114,6 +116,22 @@ namespace WikiaWP
                     vm.CommandLoadMore.Execute(null);
                 }
             }
+        }
+
+        private void SearchTextBox_OnTextChanged(object sender, RoutedEventArgs e)
+        {
+            if (LayoutRoot == null)
+            {
+                return;
+            }
+
+            var vm = LayoutRoot.DataContext as SearchPage_Model;
+            if (vm == null)
+            {
+                return;
+            }
+
+            vm.SearchText = SearchTextBox.Text;
         }
     }
 }

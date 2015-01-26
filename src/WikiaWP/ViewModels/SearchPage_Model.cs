@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Runtime.Serialization;
 using System.Windows;
 
@@ -79,7 +80,7 @@ namespace WikiaWP.ViewModels
         static Func<BindableBase, ValueContainer<ListItem_Model>> _SelectedSearchResultLocator = RegisterContainerLocator<ListItem_Model>("SelectedSearchResult", model => model.Initialize("SelectedSearchResult", ref model._SelectedSearchResult, ref _SelectedSearchResultLocator, _SelectedSearchResultDefaultValueFactory));
         static Func<ListItem_Model> _SelectedSearchResultDefaultValueFactory = () => { return default(ListItem_Model); };
         #endregion
-        
+
         public PagingInfo_Model PagingInfo
         {
             get { return _PagingInfoLocator(this).Value; }
@@ -89,6 +90,17 @@ namespace WikiaWP.ViewModels
         protected Property<PagingInfo_Model> _PagingInfo = new Property<PagingInfo_Model> { LocatorFunc = _PagingInfoLocator };
         static Func<BindableBase, ValueContainer<PagingInfo_Model>> _PagingInfoLocator = RegisterContainerLocator<PagingInfo_Model>("PagingInfo", model => model.Initialize("PagingInfo", ref model._PagingInfo, ref _PagingInfoLocator, _PagingInfoDefaultValueFactory));
         static Func<PagingInfo_Model> _PagingInfoDefaultValueFactory = () => { return default(PagingInfo_Model); };
+        #endregion
+
+        public ObservableCollection<string> Suggestions
+        {
+            get { return _SuggestionsLocator(this).Value; }
+            set { _SuggestionsLocator(this).SetValueAndTryNotify(value); }
+        }
+        #region Property ObservableCollection<string> Suggestions Setup
+        protected Property<ObservableCollection<string>> _Suggestions = new Property<ObservableCollection<string>> { LocatorFunc = _SuggestionsLocator };
+        static Func<BindableBase, ValueContainer<ObservableCollection<string>>> _SuggestionsLocator = RegisterContainerLocator<ObservableCollection<string>>("Suggestions", model => model.Initialize("Suggestions", ref model._Suggestions, ref _SuggestionsLocator, _SuggestionsDefaultValueFactory));
+        static Func<ObservableCollection<string>> _SuggestionsDefaultValueFactory = () => { return default(ObservableCollection<string>); };
         #endregion
 
         public Visibility MatchItemPanelVisibility
@@ -300,6 +312,7 @@ namespace WikiaWP.ViewModels
         public SearchPage_Model()
         {
             SearchResults = new ObservableCollection<ListItem_Model>();
+            Suggestions = new ObservableCollection<string>();
             MatchItemPanelVisibility = Visibility.Collapsed;
             SearchResultPanelVisibility = Visibility.Collapsed;
             if (IsInDesignMode)
@@ -358,15 +371,32 @@ namespace WikiaWP.ViewModels
         //    return base.OnUnbindedFromView(view, newValue);
         //}
 
-        ///// <summary>
-        ///// This will be invoked by view when the view fires Load event and this viewmodel instance is already in view's ViewModel property
-        ///// </summary>
-        ///// <param name="view">View that firing Load event</param>
-        ///// <returns>Task awaiter</returns>
-        //protected override Task OnBindedViewLoad(MVVMSidekick.Views.IView view)
-        //{
-        //    return base.OnBindedViewLoad(view);
-        //}
+        /// <summary>
+        /// This will be invoked by view when the view fires Load event and this viewmodel instance is already in view's ViewModel property
+        /// </summary>
+        /// <param name="view">View that firing Load event</param>
+        /// <returns>Task awaiter</returns>
+        protected override async Task OnBindedViewLoad(MVVMSidekick.Views.IView view)
+        {
+            await base.OnBindedViewLoad(view);
+
+            GetValueContainer(m => m.SearchText).GetNewValueObservable().Subscribe(
+                async e =>
+                {
+                    var prefix = e.EventArgs;
+                    if (string.IsNullOrEmpty(prefix) || prefix.Length < 4)
+                    {
+                        return;
+                    }
+                    using (var api = new ApiClient())
+                    {
+                        var result
+                            = await api.MediaWiki.OpenSearch.GetSearchSuggestionAsync(prefix);
+                        Suggestions.Clear();
+                        Suggestions.AddRange(result);
+                    }
+                }).DisposeWith(this);
+        }
 
         ///// <summary>
         ///// This will be invoked by view when the view fires Unload event and this viewmodel instance is still in view's  ViewModel property
@@ -396,6 +426,7 @@ namespace WikiaWP.ViewModels
         {
             MatchItem = null;
             SearchResults.Clear();
+            Suggestions.Clear();
             SelectedSearchResult = null;
             PagingInfo = null;
         }
