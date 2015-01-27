@@ -9,6 +9,7 @@ using Wikia.Mercury;
 using Wikia.Pages;
 using Wikia.RelatedPages;
 using Wikia.Search;
+using Wikia.SearchSuggestions;
 
 namespace Wikia
 {
@@ -29,6 +30,8 @@ namespace Wikia
         private readonly Lazy<RelatedPagesApiClient> _relatedPagesLazy;
 
         private readonly Lazy<MercuryApiClient> _mercuryLazy;
+
+        private readonly Lazy<SearchSuggestionsApiClient> _searchSuggestionsLazy;
 
         public ApiClient(string site)
             : this(site, new HttpClient(), isOwner: true)
@@ -54,6 +57,7 @@ namespace Wikia
             _curatedContentLazy = new Lazy<CuratedContentApiClient>(() => new CuratedContentApiClient(_site, _httpClient, isOwner: false));
             _relatedPagesLazy = new Lazy<RelatedPagesApiClient>(() => new RelatedPagesApiClient(_site, _httpClient, isOwner: false));
             _mercuryLazy = new Lazy<MercuryApiClient>(() => new MercuryApiClient(_site, _httpClient, isOwner: false));
+            _searchSuggestionsLazy = new Lazy<SearchSuggestionsApiClient>(() => new SearchSuggestionsApiClient(_site, _httpClient, isOwner: false));
         }
 
         public ArticlesApiClient Articles
@@ -101,6 +105,14 @@ namespace Wikia
             get
             {
                 return _mercuryLazy.Value;
+            }
+        }
+
+        public SearchSuggestionsApiClient SearchSuggestions
+        {
+            get
+            {
+                return _searchSuggestionsLazy.Value;
             }
         }
     }
