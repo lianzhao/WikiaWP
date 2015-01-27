@@ -78,6 +78,9 @@
     <Compile Include="RelatedPages\RelatedPage.cs" />
     <Compile Include="RelatedPages\RelatedPagesApiClient.cs" />
     <Compile Include="RelatedPages\RelatedPagesResultSet.cs" />
+    <Compile Include="SearchSuggestions\Item.cs" />
+    <Compile Include="SearchSuggestions\SearchSuggestionsApiClient.cs" />
+    <Compile Include="SearchSuggestions\SearchSuggestionsResultSet.cs" />
     <Compile Include="Search\Item.cs" />
     <Compile Include="Search\SearchApiClient.cs" />
     <Compile Include="Search\SearchResultSet.cs" />
