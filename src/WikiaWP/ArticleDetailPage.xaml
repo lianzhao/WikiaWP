@@ -97,19 +97,17 @@
                     </phone:LongListSelector.ListHeader>
                     <phone:LongListSelector.ItemTemplate>
                         <DataTemplate>
-                            <Grid Margin="0,2">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
+                            <Grid Margin="12,2,0,4" Height="115" Width="432">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="2.5*"/>
                                 </Grid.ColumnDefinitions>
-                                <Image Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" Source="{Binding ImageSource}"
-                                       Stretch="Uniform" Margin="0,2"/>
-                                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Title}" TextWrapping="NoWrap" Style="{StaticResource PhoneTextLargeStyle}"/>
-                                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Content}" TextWrapping="Wrap" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                                <!--Replace rectangle with image-->
+                                <Image Grid.Column="0" Source="{Binding ImageSource}"></Image>
+                                <StackPanel Grid.Column="1" Width="311" Margin="8,-7,0,0">
+                                    <TextBlock Text="{Binding Title}" TextWrapping="Wrap" Margin="10,0" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeLarge}" />
+                                    <TextBlock Text="{Binding Content}" TextWrapping="Wrap" Margin="10,-2,10,0" Style="{StaticResource PhoneTextSubtleStyle}" />
+                                </StackPanel>
                             </Grid>
                         </DataTemplate>
                     </phone:LongListSelector.ItemTemplate>
