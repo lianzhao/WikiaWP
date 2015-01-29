@@ -82,14 +82,17 @@ namespace WikiaWP
             if (uri.StartsWith(NormalUriPrefix, StringComparison.OrdinalIgnoreCase))
             {
                 e.Cancel = true;
-                WebBrowser.Opacity = 0;
-                ProgressBar.Visibility = Visibility.Visible;
-                ProgressBar.IsIndeterminate = true;
-                Histories.Push(vm.Title);
-                var newTitle = uri.Substring(NormalUriPrefix.Length);
-                NavigateToWikiPage(newTitle);
-                vm.ClearData();
-                vm.Title = WebUtility.UrlDecode(newTitle);
+                var newTitle = WebUtility.UrlDecode(uri.Substring(NormalUriPrefix.Length));
+                if (newTitle != vm.Title)
+                {
+                    WebBrowser.Opacity = 0;
+                    ProgressBar.Visibility = Visibility.Visible;
+                    ProgressBar.IsIndeterminate = true;
+                    Histories.Push(vm.Title);
+                    NavigateToWikiPage(newTitle);
+                    vm.ClearData();
+                    vm.Title = newTitle;
+                }
             }
             else if (uri.StartsWith(ApiUriPrefix, StringComparison.OrdinalIgnoreCase))
             {
