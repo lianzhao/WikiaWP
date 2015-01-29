@@ -301,7 +301,7 @@ namespace WikiaWP.ViewModels
                         if (vm.SelectedItem.Link.StartsWith("Category:"))
                         {
                             var newVm = ViewModelLocator<CategoryListPage_Model>.Instance.Resolve();
-                            newVm.Title = vm.SelectedItem.Content;
+                            newVm.Title = vm.SelectedItem.Title;
                             newVm.IsCuratedContent = false;
                             await vm.StageManager.DefaultStage.Show(newVm);
                         }
