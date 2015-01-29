@@ -1,36 +1,31 @@
-﻿using System.Reactive;
-using System.Reactive.Linq;
-using MVVMSidekick.ViewModels;
-using MVVMSidekick.Views;
-using MVVMSidekick.Reactive;
-using MVVMSidekick.Services;
-using MVVMSidekick.Commands;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Net;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
 using System.Windows.Navigation;
+
+using LianZhao;
 
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
+using Microsoft.Phone.Tasks;
 
-using WikiaWP;
+using MVVMSidekick.Views;
+
 using WikiaWP.Models;
 using WikiaWP.ViewModels;
-
 
 namespace WikiaWP
 {
     public partial class ArticleDetailPage : MVVMPage
     {
+        private const string NormalUriPrefix = "http://zh.asoiaf.wikia.com/wiki/";
+
+        private const string ApiUriPrefix =
+            "http://zh.asoiaf.wikia.com/wikia.php?controller=GameGuides&method=renderFullPage&page=";
+
         private readonly Stack<string> Histories = new Stack<string>();
 
         public ArticleDetailPage()
@@ -73,7 +68,6 @@ namespace WikiaWP
 
         private void WebBrowser_OnNavigating(object sender, NavigatingEventArgs e)
         {
-            const string NormalUriPrefix = "http://zh.asoiaf.wikia.com/wiki/";
             var vm = LayoutRoot.DataContext as ArticleDetailPage_Model;
             if (vm == null)
             {
@@ -81,18 +75,33 @@ namespace WikiaWP
             }
 
             var uri = e.Uri.AbsoluteUri;
+            if (uri.Contains("action=edit", StringComparison.OrdinalIgnoreCase))
+            {
+                e.Cancel = true;
+            }
             if (uri.StartsWith(NormalUriPrefix, StringComparison.OrdinalIgnoreCase))
             {
                 e.Cancel = true;
+                WebBrowser.Opacity = 0;
+                ProgressBar.Visibility = Visibility.Visible;
+                ProgressBar.IsIndeterminate = true;
                 Histories.Push(vm.Title);
                 var newTitle = uri.Substring(NormalUriPrefix.Length);
                 NavigateToWikiPage(newTitle);
                 vm.ClearData();
                 vm.Title = WebUtility.UrlDecode(newTitle);
             }
-            WebBrowser.Opacity = 0;
-            ProgressBar.Visibility = Visibility.Visible;
-            ProgressBar.IsIndeterminate = true;
+            else if (uri.StartsWith(ApiUriPrefix, StringComparison.OrdinalIgnoreCase))
+            {
+                // do nothing, let it go
+            }
+            else
+            {
+                e.Cancel = true;
+                var task = new WebBrowserTask();
+                task.Uri = new Uri(uri, UriKind.Absolute);
+                task.Show();
+            }
         }
 
         private void WebBrowser_OnLoadCompleted(object sender, NavigationEventArgs e)
@@ -111,6 +120,12 @@ namespace WikiaWP
                     string.Format(
                         "http://zh.asoiaf.wikia.com/wikia.php?controller=GameGuides&method=renderFullPage&page={0}",
                         title)));
+
+            //var uri = "http://zh.asoiaf.wikia.com/wiki/%E5%87%AF%E7%89%B9%E7%90%B3%C2%B7%E5%BE%92%E5%88%A9";
+
+            //var task = new WebBrowserTask();
+            //task.Uri = new Uri(uri, UriKind.Absolute);
+            //task.Show();
 
             //WebBrowser.Navigate(
             //    new Uri(

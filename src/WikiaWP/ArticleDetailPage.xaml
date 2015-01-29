@@ -33,7 +33,7 @@
     <Grid x:Name="LayoutRoot" DataContext="{StaticResource DesignVM}" >
         <phone:Pivot x:Name="Pivot" Title="{Binding Title}" LoadingPivotItem="Pivot_OnLoadingPivotItem">
             <phone:PivotItem x:Name="OverviewPivotItem" Header="概览">
-                <phone:WebBrowser x:Name="WebBrowser"
+                <phone:WebBrowser x:Name="WebBrowser" Opacity="0"
                           Loaded="WebBrowser_OnLoaded"
                           Navigating="WebBrowser_OnNavigating"
                           LoadCompleted="WebBrowser_OnLoadCompleted">
