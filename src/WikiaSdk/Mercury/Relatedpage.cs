@@ -9,7 +9,7 @@ namespace Wikia.Mercury
 
         public const string WindowHeightReplacePattern = @"window-height/(\w+)";
 
-        public const string YOffsetReplacePattern = @"y-offset/-(\w+)";
+        public const string YOffsetReplacePattern = @"y-offset/(\w+)";
 
         public const string WindowWidthReplaceFormat = @"window-width/{0}";
 
