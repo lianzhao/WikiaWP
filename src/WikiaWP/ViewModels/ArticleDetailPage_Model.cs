@@ -253,6 +253,47 @@ namespace WikiaWP.ViewModels
             };
         #endregion
 
+        public CommandModel<ReactiveCommand, String> CommandNavigateToCategoryPage
+        {
+            get { return _CommandNavigateToCategoryPageLocator(this).Value; }
+            set { _CommandNavigateToCategoryPageLocator(this).SetValueAndTryNotify(value); }
+        }
+        #region Property CommandModel<ReactiveCommand, String> CommandNavigateToCategoryPage Setup
+        protected Property<CommandModel<ReactiveCommand, String>> _CommandNavigateToCategoryPage = new Property<CommandModel<ReactiveCommand, String>> { LocatorFunc = _CommandNavigateToCategoryPageLocator };
+        static Func<BindableBase, ValueContainer<CommandModel<ReactiveCommand, String>>> _CommandNavigateToCategoryPageLocator = RegisterContainerLocator<CommandModel<ReactiveCommand, String>>("CommandNavigateToCategoryPage", model => model.Initialize("CommandNavigateToCategoryPage", ref model._CommandNavigateToCategoryPage, ref _CommandNavigateToCategoryPageLocator, _CommandNavigateToCategoryPageDefaultValueFactory));
+        static Func<BindableBase, CommandModel<ReactiveCommand, String>> _CommandNavigateToCategoryPageDefaultValueFactory =
+            model =>
+            {
+                var resource = "NavigateToCategoryPage";           // Command resource  
+                var commandId = "NavigateToCategoryPage";
+                var vm = CastToCurrentType(model);
+                var cmd = new ReactiveCommand(canExecute: true) { ViewModel = model }; //New Command Core
+                cmd
+                    .DoExecuteUIBusyTask(
+                        vm,
+                        async e =>
+                            {
+                                var caregory = e.EventArgs.Parameter as string;
+                                if (string.IsNullOrEmpty(caregory))
+                                {
+                                    return;
+                                }
+                                var newVm = ViewModelLocator<CategoryListPage_Model>.Instance.Resolve();
+                                newVm.Title = caregory;
+                                newVm.IsCuratedContent = false;
+                                await vm.StageManager.DefaultStage.Show(newVm);
+                        }
+                    )
+                    .DoNotifyDefaultEventRouter(vm, commandId)
+                    .Subscribe()
+                    .DisposeWith(vm);
+
+                var cmdmdl = cmd.CreateCommandModel(resource);
+                cmdmdl.ListenToIsUIBusy(model: vm, canExecuteWhenBusy: false);
+                return cmdmdl;
+            };
+        #endregion
+
         public void ClearData()
         {
             Title = null;

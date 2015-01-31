@@ -85,6 +85,40 @@ namespace WikiaWP
                 var newTitle = WebUtility.UrlDecode(uri.Substring(NormalUriPrefix.Length));
                 if (newTitle != vm.Title)
                 {
+                    if (newTitle.Contains(":"))
+                    {
+                        var splited = newTitle.Split(':');
+                        var ns = splited[0];
+                        if (ns.Equals("TV", StringComparison.OrdinalIgnoreCase))
+                        {
+                            // do nothing
+                        }
+                        else if (ns.Equals("File", StringComparison.OrdinalIgnoreCase))
+                        {
+                            // do nothing
+                            // todo navigate to file page
+                        }
+                        else if (ns.Equals("Category", StringComparison.OrdinalIgnoreCase))
+                        {
+                            // todo
+                            var result = MessageBox.Show("想要前往该分类吗？", "您正要查看一个分类页面", MessageBoxButton.OKCancel);
+                            if (result == MessageBoxResult.Cancel)
+                            {
+                                return;
+                            }
+                            else
+                            {
+                                var category = splited[1];
+                                vm.CommandNavigateToCategoryPage.Execute(category);
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            // invalid ns
+                            return;
+                        }
+                    }
                     WebBrowser.Opacity = 0;
                     ProgressBar.Visibility = Visibility.Visible;
                     ProgressBar.IsIndeterminate = true;
@@ -116,6 +150,7 @@ namespace WikiaWP
 
         private void NavigateToWikiPage(string title)
         {
+            //MessageBox.Show(title);// todo
             //WebBrowser.IsScriptEnabled = true;
 
             WebBrowser.Navigate(
