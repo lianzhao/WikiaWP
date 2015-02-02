@@ -26,5 +26,13 @@ namespace Wikia.Articles
                 return thumbnail == null ? null : Regex.Replace(thumbnail, YOffsetReplacePattern, YOffsetReplace);
             }
         }
+
+        public string OriginalImageSource
+        {
+            get
+            {
+                return thumbnail == null ? null : Regex.Replace(thumbnail, @"\/latest.*path-prefix", @"/latest?path-prefix");
+            }
+        }
     }
 }

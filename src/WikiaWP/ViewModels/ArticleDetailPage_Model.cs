@@ -294,6 +294,40 @@ namespace WikiaWP.ViewModels
             };
         #endregion
 
+        public CommandModel<ReactiveCommand, String> CommandNavigateToFilePage
+        {
+            get { return _CommandNavigateToFilePageLocator(this).Value; }
+            set { _CommandNavigateToFilePageLocator(this).SetValueAndTryNotify(value); }
+        }
+        #region Property CommandModel<ReactiveCommand, String> CommandNavigateToFilePage Setup
+        protected Property<CommandModel<ReactiveCommand, String>> _CommandNavigateToFilePage = new Property<CommandModel<ReactiveCommand, String>> { LocatorFunc = _CommandNavigateToFilePageLocator };
+        static Func<BindableBase, ValueContainer<CommandModel<ReactiveCommand, String>>> _CommandNavigateToFilePageLocator = RegisterContainerLocator<CommandModel<ReactiveCommand, String>>("CommandNavigateToFilePage", model => model.Initialize("CommandNavigateToFilePage", ref model._CommandNavigateToFilePage, ref _CommandNavigateToFilePageLocator, _CommandNavigateToFilePageDefaultValueFactory));
+        static Func<BindableBase, CommandModel<ReactiveCommand, String>> _CommandNavigateToFilePageDefaultValueFactory =
+            model =>
+            {
+                var resource = "NavigateToFilePage";           // Command resource  
+                var commandId = "NavigateToFilePage";
+                var cmd = new ReactiveCommand(canExecute: true) { ViewModel = model }; //New Command Core
+                cmd
+                    .Subscribe(async e =>
+                    {
+                        var title = e.EventArgs.Parameter as string;
+                        if (string.IsNullOrEmpty(title))
+                        {
+                            return;
+                        }
+                        var newVm = ViewModelLocator<FileDetailPage_Model>.Instance.Resolve();
+                        newVm.Title = title;
+                        await CastToCurrentType(model).StageManager.DefaultStage.Show(newVm);
+                    })
+                    .DisposeWith(model);
+
+                var cmdmdl = cmd.CreateCommandModel(resource);
+                return cmdmdl;
+                return cmdmdl;
+            };
+        #endregion
+
         public void ClearData()
         {
             Title = null;

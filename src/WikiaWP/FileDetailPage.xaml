@@ -6,13 +6,25 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"    
     xmlns:vm="clr-namespace:WikiaWP.ViewModels" 
-    xmlns:mvvm="clr-namespace:MVVMSidekick.Views;assembly=MVVMSidekick_Wp8">
+    xmlns:mvvm="clr-namespace:MVVMSidekick.Views;assembly=MVVMSidekick_Wp8"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    shell:SystemTray.IsVisible="True">
     <FrameworkElement.Resources>
         <vm:FileDetailPage_Model x:Key="DesignVM" />
+        <shell:ProgressIndicator x:Key="idk" Text="正在加载..."
+                                 IsVisible="{Binding DataContext.IsUIBusy, ElementName=LayoutRoot}"
+                                 IsIndeterminate="True"/>
     </FrameworkElement.Resources>
 
-    <Grid x:Name="LayoutRoot" Background="White" DataContext="{StaticResource DesignVM}" >
-     
+    <shell:SystemTray.ProgressIndicator>
+        <Binding Source="{StaticResource idk}"/>
+    </shell:SystemTray.ProgressIndicator>
+
+    <Grid x:Name="LayoutRoot" DataContext="{StaticResource DesignVM}" >
+        <!--<phone:Pivot x:Name="Pivot" Title="{Binding Title}" LoadingPivotItem="Pivot_OnLoadingPivotItem">
+        </phone:Pivot>-->
+        <Image Source="{Binding ImageSource}"/>
     </Grid>
 
 </mvvm:MVVMPage>

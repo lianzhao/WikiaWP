@@ -95,8 +95,8 @@ namespace WikiaWP
                         }
                         else if (ns.Equals("File", StringComparison.OrdinalIgnoreCase))
                         {
-                            // do nothing
-                            // todo navigate to file page
+                            vm.CommandNavigateToFilePage.Execute(splited[1]);
+                            return;
                         }
                         else if (ns.Equals("Category", StringComparison.OrdinalIgnoreCase))
                         {

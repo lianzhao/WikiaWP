@@ -55,7 +55,7 @@ namespace Wikia.Articles
             int height = 0)
         {
             var articles = await GetArticlesAsync(new[] { title }, @abstract, width, height);
-            return articles == null ? null : articles.FirstOrDefault(m => m.title == title);
+            return articles == null ? null : articles.FirstOrDefault();
         }
 
         public Task<IEnumerable<ExpandedArticle>> GetArticlesAsync(
