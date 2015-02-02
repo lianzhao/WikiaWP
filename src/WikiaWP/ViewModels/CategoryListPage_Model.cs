@@ -27,10 +27,13 @@ namespace WikiaWP.ViewModels
 
         public const int CategoriesPageSize = CategoryMembersApiClient.MaxCount;
 
+        public const int FilesPageSize = CategoryMembersApiClient.MaxCount;
+
         public CategoryListPage_Model()
         {
             Articles = new ObservableCollection<ListItem_Model>();
             Categories = new ObservableCollection<ListItem_Model>();
+            Files = new ObservableCollection<ListItem_Model>();
         }
 
         // If you have install the code sniplets, use "propvm + [tab] +[tab]" create a property。
@@ -41,6 +44,8 @@ namespace WikiaWP.ViewModels
         public string ArticlesContinue { get; set; }
 
         public string CategoriesContinue { get; set; }
+
+        public string FilesContinue { get; set; }
 
         public string Title
         {
@@ -73,6 +78,17 @@ namespace WikiaWP.ViewModels
         protected Property<ObservableCollection<ListItem_Model>> _Articles = new Property<ObservableCollection<ListItem_Model>> { LocatorFunc = _ArticlesLocator };
         static Func<BindableBase, ValueContainer<ObservableCollection<ListItem_Model>>> _ArticlesLocator = RegisterContainerLocator<ObservableCollection<ListItem_Model>>("Articles", model => model.Initialize("Articles", ref model._Articles, ref _ArticlesLocator, _ArticlesDefaultValueFactory));
         static Func<ObservableCollection<ListItem_Model>> _ArticlesDefaultValueFactory = () => { return default(ObservableCollection<ListItem_Model>); };
+        #endregion
+
+        public ObservableCollection<ListItem_Model> Files
+        {
+            get { return _FilesLocator(this).Value; }
+            set { _FilesLocator(this).SetValueAndTryNotify(value); }
+        }
+        #region Property ObservableCollection<ListItem_Model> Files Setup
+        protected Property<ObservableCollection<ListItem_Model>> _Files = new Property<ObservableCollection<ListItem_Model>> { LocatorFunc = _FilesLocator };
+        static Func<BindableBase, ValueContainer<ObservableCollection<ListItem_Model>>> _FilesLocator = RegisterContainerLocator<ObservableCollection<ListItem_Model>>("Files", model => model.Initialize("Files", ref model._Files, ref _FilesLocator, _FilesDefaultValueFactory));
+        static Func<ObservableCollection<ListItem_Model>> _FilesDefaultValueFactory = () => { return default(ObservableCollection<ListItem_Model>); };
         #endregion
 
         public ListItem_Model SelectedItem
@@ -108,7 +124,18 @@ namespace WikiaWP.ViewModels
         static Func<int> _CategoryCountDefaultValueFactory = () => { return default(int); };
         #endregion
 
-        
+        public int FileCount
+        {
+            get { return _FileCountLocator(this).Value; }
+            set { _FileCountLocator(this).SetValueAndTryNotify(value); }
+        }
+        #region Property int FileCount Setup
+        protected Property<int> _FileCount = new Property<int> { LocatorFunc = _FileCountLocator };
+        static Func<BindableBase, ValueContainer<int>> _FileCountLocator = RegisterContainerLocator<int>("FileCount", model => model.Initialize("FileCount", ref model._FileCount, ref _FileCountLocator, _FileCountDefaultValueFactory));
+        static Func<int> _FileCountDefaultValueFactory = () => { return default(int); };
+        #endregion
+
+
         public int PivotSelectedIndex
         {
             get { return _PivotSelectedIndexLocator(this).Value; }
@@ -119,7 +146,7 @@ namespace WikiaWP.ViewModels
         static Func<BindableBase, ValueContainer<int>> _PivotSelectedIndexLocator = RegisterContainerLocator<int>("PivotSelectedIndex", model => model.Initialize("PivotSelectedIndex", ref model._PivotSelectedIndex, ref _PivotSelectedIndexLocator, _PivotSelectedIndexDefaultValueFactory));
         static Func<int> _PivotSelectedIndexDefaultValueFactory = () => { return default(int); };
         #endregion
-        
+
         public CommandModel<ReactiveCommand, String> CommandLoadArticles
         {
             get { return _CommandLoadArticlesLocator(this).Value; }
@@ -253,7 +280,7 @@ namespace WikiaWP.ViewModels
                                             count: CategoriesPageSize);
                                     vm.CategoriesContinue = result.offset;
                                     var subcats =
-                                        result.items.Select(art => 
+                                        result.items.Select(art =>
                                             new ListItem_Model
                                                 {
                                                     Title = art.title,
@@ -267,6 +294,62 @@ namespace WikiaWP.ViewModels
                                     vm.Categories.AddRange(subcats);
                                 }
                                 vm.UpdatePivotSelectedIndex();
+                            }
+                        }
+                    )
+                    .DoNotifyDefaultEventRouter(vm, commandId)
+                    .Subscribe()
+                    .DisposeWith(vm);
+
+                var cmdmdl = cmd.CreateCommandModel(resource);
+                cmdmdl.ListenToIsUIBusy(model: vm, canExecuteWhenBusy: false);
+                return cmdmdl;
+            };
+        #endregion
+
+        public CommandModel<ReactiveCommand, String> CommandLoadFiles
+        {
+            get { return _CommandLoadFilesLocator(this).Value; }
+            set { _CommandLoadFilesLocator(this).SetValueAndTryNotify(value); }
+        }
+        #region Property CommandModel<ReactiveCommand, String> CommandLoadFiles Setup
+        protected Property<CommandModel<ReactiveCommand, String>> _CommandLoadFiles = new Property<CommandModel<ReactiveCommand, String>> { LocatorFunc = _CommandLoadFilesLocator };
+        static Func<BindableBase, ValueContainer<CommandModel<ReactiveCommand, String>>> _CommandLoadFilesLocator = RegisterContainerLocator<CommandModel<ReactiveCommand, String>>("CommandLoadFiles", model => model.Initialize("CommandLoadFiles", ref model._CommandLoadFiles, ref _CommandLoadFilesLocator, _CommandLoadFilesDefaultValueFactory));
+        static Func<BindableBase, CommandModel<ReactiveCommand, String>> _CommandLoadFilesDefaultValueFactory =
+            model =>
+            {
+                var resource = "LoadFiles";           // Command resource  
+                var commandId = "LoadFiles";
+                var vm = CastToCurrentType(model);
+                var cmd = new ReactiveCommand(canExecute: true) { ViewModel = model }; //New Command Core
+                cmd
+                    .DoExecuteUIBusyTask(
+                        vm,
+                        async e =>
+                        {
+                            using (var api = new ApiClient())
+                            {
+                                var result =
+                                    await
+                                    api.Wikia.Articles.GetListArticlesAsync(
+                                        vm.Title,
+                                        namespaces: new[] { 6 },
+                                        offset: vm.FilesContinue,
+                                        count: FilesPageSize);
+                                vm.FilesContinue = result.offset;
+                                var items =
+                                    result.items.Select(art =>
+                                        new ListItem_Model
+                                        {
+                                            Title = art.title,
+                                            Link = string.Format("File:{0}", art.title),
+                                            Content = art.@abstract,
+                                            ImageSource =
+                                                art.thumbnail == null
+                                                    ? AppResources.PlaceholderImageSource
+                                                    : art.ThumbnailFixYOffset
+                                        }).ToList();
+                                vm.Files.AddRange(items);
                             }
                         }
                     )
@@ -303,6 +386,12 @@ namespace WikiaWP.ViewModels
                             var newVm = ViewModelLocator<CategoryListPage_Model>.Instance.Resolve();
                             newVm.Title = vm.SelectedItem.Title;
                             newVm.IsCuratedContent = false;
+                            await vm.StageManager.DefaultStage.Show(newVm);
+                        }
+                        else if (vm.SelectedItem.Link.StartsWith("File:"))
+                        {
+                            var newVm = ViewModelLocator<FileDetailPage_Model>.Instance.Resolve();
+                            newVm.Title = vm.SelectedItem.Title;
                             await vm.StageManager.DefaultStage.Show(newVm);
                         }
                         else

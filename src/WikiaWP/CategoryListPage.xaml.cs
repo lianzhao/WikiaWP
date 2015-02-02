@@ -91,6 +91,17 @@ namespace WikiaWP
             vm.CommandLoadCategories.Execute(null);
         }
 
+        private void FilesPivotItem_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            var vm = LayoutRoot.DataContext as CategoryListPage_Model;
+            if (vm == null)
+            {
+                return;
+            }
+
+            vm.CommandLoadFiles.Execute(null);
+        }
+
         private void LongListSelector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var vm = LayoutRoot.DataContext as CategoryListPage_Model;

@@ -95,6 +95,37 @@
                     </phone:LongListSelector.ListFooterTemplate>
                 </phone:LongListSelector>
             </phone:PivotItem>
+            <phone:PivotItem x:Name="FilesPivotItem" Header="文件"
+                             Loaded="FilesPivotItem_OnLoaded">
+                <phone:LongListSelector x:Name="FilesLongListSelector" ItemsSource="{Binding Files}"
+                                        LayoutMode="Grid" GridCellSize="200,200"
+                                        SelectionChanged="LongListSelector_OnSelectionChanged">
+                    <phone:LongListSelector.ListHeader>
+                        <TextBlock Text="{Binding FileCount, StringFormat=共\{0\}个文件}" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                    </phone:LongListSelector.ListHeader>
+                    <phone:LongListSelector.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="4">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Image Grid.Row="0" Grid.RowSpan="2" Source="{Binding ImageSource}"/>
+                                <Rectangle Grid.Row="1" Fill="Gray" Opacity="0.5"></Rectangle>
+                                <TextBlock Grid.Row="1" Text="{Binding Title}" VerticalAlignment="Bottom"
+                                           TextWrapping="Wrap" Style="{StaticResource PhoneTextLargeStyle}"
+                                           FontSize="{StaticResource PhoneFontSizeMediumLarge}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </phone:LongListSelector.ItemTemplate>
+                    <phone:LongListSelector.ListFooterTemplate>
+                        <DataTemplate>
+                            <!--Placeholder-->
+                            <Grid Height="100"></Grid>
+                        </DataTemplate>
+                    </phone:LongListSelector.ListFooterTemplate>
+                </phone:LongListSelector>
+            </phone:PivotItem>
         </phone:Pivot>
     </Grid>
 
