@@ -27,6 +27,10 @@ namespace WikiaWP.ViewModels
             if (IsInDesignMode)
             {
                 Title = "Maelys Blackfyre TheMico.jpg";
+                ImageSource =
+                    "http://vignette3.wikia.nocookie.net/asoiaf/images/5/54/Maelys_Blackfyre_TheMico.jpg/revision/latest?path-prefix=zh";
+                Content =
+                    " 授权协议 该文件来自本维基的姊妹项目A wiki of ice and fire。 该文件可能受到版权保护，具体的版权信息，请至AWOIAF的（File:Maelys Blackfyre TheMico.jpg ）页面查询。 ";
             }
         }
 
@@ -52,48 +56,27 @@ namespace WikiaWP.ViewModels
         static Func<string> _ImageSourceDefaultValueFactory = () => { return default(string); };
         #endregion
 
-        public CommandModel<ReactiveCommand, String> CommandLoadImageInfo
+        public string Content
         {
-            get { return _CommandLoadImageInfoLocator(this).Value; }
-            set { _CommandLoadImageInfoLocator(this).SetValueAndTryNotify(value); }
+            get { return _ContentLocator(this).Value; }
+            set { _ContentLocator(this).SetValueAndTryNotify(value); }
         }
-        #region Property CommandModel<ReactiveCommand, String> CommandLoadImageInfo Setup
-        protected Property<CommandModel<ReactiveCommand, String>> _CommandLoadImageInfo = new Property<CommandModel<ReactiveCommand, String>> { LocatorFunc = _CommandLoadImageInfoLocator };
-        static Func<BindableBase, ValueContainer<CommandModel<ReactiveCommand, String>>> _CommandLoadImageInfoLocator = RegisterContainerLocator<CommandModel<ReactiveCommand, String>>("CommandLoadImageInfo", model => model.Initialize("CommandLoadImageInfo", ref model._CommandLoadImageInfo, ref _CommandLoadImageInfoLocator, _CommandLoadImageInfoDefaultValueFactory));
-        static Func<BindableBase, CommandModel<ReactiveCommand, String>> _CommandLoadImageInfoDefaultValueFactory =
-            model =>
-            {
-                var resource = "LoadImageInfo";           // Command resource  
-                var commandId = "LoadImageInfo";
-                var vm = CastToCurrentType(model);
-                var cmd = new ReactiveCommand(canExecute: true) { ViewModel = model }; //New Command Core
-                cmd
-                    .DoExecuteUIBusyTask(
-                        vm,
-                        async e =>
-                        {
-                            if (string.IsNullOrEmpty(vm.Title))
-                            {
-                                return;
-                            }
-
-                            using (var api = new ApiClient())
-                            {
-                                var article = await api.Wikia.Articles.GetArticleAsync(vm.Title, @abstract: 500);
-                                vm.ImageSource = article.OriginalImageSource;
-                            }
-                        }
-                    )
-                    .DoNotifyDefaultEventRouter(vm, commandId)
-                    .Subscribe()
-                    .DisposeWith(vm);
-
-                var cmdmdl = cmd.CreateCommandModel(resource);
-                cmdmdl.ListenToIsUIBusy(model: vm, canExecuteWhenBusy: false);
-                return cmdmdl;
-            };
+        #region Property string Content Setup
+        protected Property<string> _Content = new Property<string> { LocatorFunc = _ContentLocator };
+        static Func<BindableBase, ValueContainer<string>> _ContentLocator = RegisterContainerLocator<string>("Content", model => model.Initialize("Content", ref model._Content, ref _ContentLocator, _ContentDefaultValueFactory));
+        static Func<string> _ContentDefaultValueFactory = () => { return default(string); };
         #endregion
 
+        public string UploadInfo
+        {
+            get { return _UploadInfoLocator(this).Value; }
+            set { _UploadInfoLocator(this).SetValueAndTryNotify(value); }
+        }
+        #region Property string UploadInfo Setup
+        protected Property<string> _UploadInfo = new Property<string> { LocatorFunc = _UploadInfoLocator };
+        static Func<BindableBase, ValueContainer<string>> _UploadInfoLocator = RegisterContainerLocator<string>("UploadInfo", model => model.Initialize("UploadInfo", ref model._UploadInfo, ref _UploadInfoLocator, _UploadInfoDefaultValueFactory));
+        static Func<string> _UploadInfoDefaultValueFactory = () => { return default(string); };
+        #endregion
 
         #region Life Time Event Handling
 
@@ -136,7 +119,18 @@ namespace WikiaWP.ViewModels
             using (var api = new ApiClient())
             {
                 var article = await api.Wikia.Articles.GetArticleAsync(string.Format("File:{0}", Title), @abstract: 500);
+                if (article == null)
+                {
+                    return;
+                }
                 ImageSource = article.OriginalImageSource;
+                Content = article.@abstract;
+                UploadInfo = article.revision == null
+                                 ? null
+                                 : string.Format(
+                                     "由用户{0}于{1}上传",
+                                     article.revision.user,
+                                     article.revision.UploadedUtc.ToString());
             }
         }
 

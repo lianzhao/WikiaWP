@@ -21,11 +21,53 @@
         <Binding Source="{StaticResource idk}"/>
     </shell:SystemTray.ProgressIndicator>
 
+    <phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar Mode="Minimized" Opacity="0.25" StateChanged="ApplicationBar_OnStateChanged">
+            <shell:ApplicationBar.MenuItems>
+                <shell:ApplicationBarMenuItem Text="查看详情" Click="ApplicationBarMenuItem_OnClick"/>
+            </shell:ApplicationBar.MenuItems>
+        </shell:ApplicationBar>
+    </phone:PhoneApplicationPage.ApplicationBar>
+
     <Grid x:Name="LayoutRoot" DataContext="{StaticResource DesignVM}" >
-        <!--<phone:Pivot x:Name="Pivot" Title="{Binding Title}" LoadingPivotItem="Pivot_OnLoadingPivotItem">
-        </phone:Pivot>-->
-        <Image Source="{Binding ImageSource}" ImageOpened="Image_OnImageOpened"/>
+        <phone:Pivot x:Name="Pivot" Title="{Binding Title}" Visibility="Collapsed">
+            <!--<phone:PivotItem Header="图片">
+                <Grid>
+                    <ProgressBar Name="ProgressBar" Value="0" IsIndeterminate="True"/>
+                    <ScrollViewer>
+                        <Image Name="Image" Source="{Binding ImageSource}" ImageOpened="Image_OnImageOpened"/>
+                    </ScrollViewer>
+                </Grid>
+            </phone:PivotItem>-->
+            <phone:PivotItem Header="详情">
+                <StackPanel>
+                    <TextBlock Text="{Binding UploadInfo}"/>
+                    <TextBlock Text="{Binding Content}" Style="{StaticResource PhoneTextNormalStyle}" TextWrapping="Wrap"/>
+                </StackPanel>
+            </phone:PivotItem>
+        </phone:Pivot>
         <ProgressBar Name="ProgressBar" Value="0" IsIndeterminate="True"/>
+        <ScrollViewer>
+            <Image Name="Image" Source="{Binding ImageSource}" ImageOpened="Image_OnImageOpened"/>
+        </ScrollViewer>
+        <!--<Grid Name="FileInfoGrid">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+                       Text="{Binding Title}" Style="{StaticResource PhoneTextLargeStyle}"/>
+            <TextBlock></TextBlock>
+        </Grid>-->
+        <phone:Pivot></phone:Pivot>
     </Grid>
 
 </mvvm:MVVMPage>
