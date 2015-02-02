@@ -111,6 +111,9 @@
     <Compile Include="CategoryListPage.xaml.cs">
       <DependentUpon>CategoryListPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="FileDetailPage.xaml.cs">
+      <DependentUpon>FileDetailPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Models\ListItem_Model.cs" />
     <Compile Include="Models\ModelExtensions.cs" />
     <Compile Include="Models\PagingInfo_Model.cs" />
@@ -125,11 +128,13 @@
     <Compile Include="Startups\AboutPage.cs" />
     <Compile Include="Startups\ArticleDetailPage.cs" />
     <Compile Include="Startups\CategoryListPage.cs" />
+    <Compile Include="Startups\FileDetailPage.cs" />
     <Compile Include="Startups\SearchPage.cs" />
     <Compile Include="Models\ArticleComment_Model.cs" />
     <Compile Include="ViewModels\AboutPage_Model.cs" />
     <Compile Include="ViewModels\ArticleDetailPage_Model.cs" />
     <Compile Include="ViewModels\CategoryListPage_Model.cs" />
+    <Compile Include="ViewModels\FileDetailPage_Model.cs" />
     <Compile Include="ViewModels\MainPage_Model.cs">
     </Compile>
     <Compile Include="App.xaml.cs">
@@ -275,6 +280,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="CategoryListPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="FileDetailPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
