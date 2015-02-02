@@ -39,8 +39,10 @@ namespace WikiaWP
             this.InitializeComponent();
         }
 
-
-
+        private void Image_OnImageOpened(object sender, RoutedEventArgs e)
+        {
+            ProgressBar.Visibility = Visibility.Collapsed;
+        }
     }
 }
 

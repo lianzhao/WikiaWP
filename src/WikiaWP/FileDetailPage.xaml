@@ -24,7 +24,8 @@
     <Grid x:Name="LayoutRoot" DataContext="{StaticResource DesignVM}" >
         <!--<phone:Pivot x:Name="Pivot" Title="{Binding Title}" LoadingPivotItem="Pivot_OnLoadingPivotItem">
         </phone:Pivot>-->
-        <Image Source="{Binding ImageSource}"/>
+        <Image Source="{Binding ImageSource}" ImageOpened="Image_OnImageOpened"/>
+        <ProgressBar Name="ProgressBar" Value="0" IsIndeterminate="True"/>
     </Grid>
 
 </mvvm:MVVMPage>
