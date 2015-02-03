@@ -161,7 +161,6 @@
     <Content Include="Assets\Dark\cancel.png" />
     <Content Include="Assets\Dark\check.png" />
     <Content Include="Assets\Dark\close.png" />
-    <Content Include="Assets\Dark\DarkIcons.dll" />
     <Content Include="Assets\Dark\delete.png" />
     <Content Include="Assets\Dark\download.png" />
     <Content Include="Assets\Dark\edit.png" />
@@ -213,7 +212,6 @@
     <Content Include="Assets\Light\feature.settings.png" />
     <Content Include="Assets\Light\feature.video.png" />
     <Content Include="Assets\Light\folder.png" />
-    <Content Include="Assets\Light\LightIcons.dll" />
     <Content Include="Assets\Light\like.png" />
     <Content Include="Assets\Light\microphone.png" />
     <Content Include="Assets\Light\minus.png" />
