@@ -450,6 +450,7 @@ namespace WikiaWP.ViewModels
                 var category = await api.MediaWiki.Query.AllCategories.GetCategoryAsyc(Title);
                 ArticleCount = category.pages;
                 CategoryCount = category.subcats;
+                FileCount = category.files;
             }
         }
 
