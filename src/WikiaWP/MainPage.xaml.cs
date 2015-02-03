@@ -18,6 +18,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 
 using Microsoft.Phone.Controls;
+using Microsoft.Phone.Net.NetworkInformation;
 using Microsoft.Phone.Shell;
 using Microsoft.Phone.Tasks;
 
@@ -129,6 +130,21 @@ namespace WikiaWP
             else
             {
                 vm.CommandNavigateToSelected.Execute(null);
+            }
+        }
+
+        private void MainPage_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            var network = NetworkInterface.NetworkInterfaceType;
+            if (network == NetworkInterfaceType.None)
+            {
+                MessageBox.Show("无法连接网络");
+                //while (NavigationService.CanGoBack)
+                //{
+                //    NavigationService.GoBack();
+                //}
+                //NavigationService.GoBack();
+                Application.Current.Terminate();
             }
         }
     }

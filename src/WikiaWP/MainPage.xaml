@@ -14,7 +14,8 @@
     SupportedOrientations="Portrait" Orientation="Portrait"
     shell:SystemTray.IsVisible="True"    
     xmlns:mvvm="clr-namespace:MVVMSidekick.Views;assembly=MVVMSidekick_Wp8"
-    xmlns:vm="clr-namespace:WikiaWP.ViewModels">
+    xmlns:vm="clr-namespace:WikiaWP.ViewModels"
+    Loaded="MainPage_OnLoaded">
     <FrameworkElement.Resources>
         <vm:MainPage_Model x:Key="DesignVM" />
         <shell:ProgressIndicator x:Key="idk" Text="正在加载..."
