@@ -139,11 +139,6 @@ namespace WikiaWP
             if (network == NetworkInterfaceType.None)
             {
                 MessageBox.Show("无法连接网络");
-                //while (NavigationService.CanGoBack)
-                //{
-                //    NavigationService.GoBack();
-                //}
-                //NavigationService.GoBack();
                 Application.Current.Terminate();
             }
         }
