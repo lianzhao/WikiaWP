@@ -1,4 +1,4 @@
-﻿namespace ZhAsoiafWikiaApiPlus.Models
+﻿namespace ZhAsoiafWiki.Plus.Models
 {
     public class Article
     {

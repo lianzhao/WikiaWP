@@ -7,6 +7,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 
+using ZhAsoiafWiki.Plus.Models;
+
 using ZhAsoiafWikiaApiPlus.Models;
 
 namespace ZhAsoiafWikiaApiPlus.Controllers

@@ -206,10 +206,8 @@
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApiClient.cs" />
-    <Compile Include="Models\Article.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ModelExtensions.cs" />
-    <Compile Include="Models\SearchCriteria.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
@@ -297,6 +295,10 @@
     <ProjectReference Include="..\ZhAsoiafWikiaSDK\ZhAsoiafWikiaSDK.csproj">
       <Project>{1d4e2a60-adcb-4058-96c1-70962b651878}</Project>
       <Name>ZhAsoiafWikiaSDK</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZhAsoiafWikiPlus\ZhAsoiafWikiPlus.csproj">
+      <Project>{7824D484-7F2F-4811-B2AC-C8C1F37DDA05}</Project>
+      <Name>ZhAsoiafWikiPlus</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
