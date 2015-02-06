@@ -30,6 +30,8 @@ namespace ZhAsoiafWiki.Plus.Web.Controllers
                     }
                     return new Article
                                {
+                                   Id = article.id,
+                                   Namespace = article.ns,
                                    Title = article.title,
                                    Uri = article.url,
                                    Abstract = article.@abstract,

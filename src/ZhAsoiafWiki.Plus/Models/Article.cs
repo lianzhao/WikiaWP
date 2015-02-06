@@ -2,6 +2,10 @@
 {
     public class Article
     {
+        public int Id { get; set; }
+
+        public int Namespace { get; set; }
+
         public string Title { get; set; } 
 
         public string Abstract { get; set; }
