@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructures", "Infrastr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZhAsoiafWikiaApiPlus", "ZhAsoiafWikiaApiPlus\ZhAsoiafWikiaApiPlus.csproj", "{D9210FF4-2A55-4A18-B2B1-EFF7C9CC6DD9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZhAsoiafWikiPlus", "ZhAsoiafWikiPlus\ZhAsoiafWikiPlus.csproj", "{7824D484-7F2F-4811-B2AC-C8C1F37DDA05}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,6 +87,14 @@ Global
 		{D9210FF4-2A55-4A18-B2B1-EFF7C9CC6DD9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D9210FF4-2A55-4A18-B2B1-EFF7C9CC6DD9}.Release|ARM.ActiveCfg = Release|Any CPU
 		{D9210FF4-2A55-4A18-B2B1-EFF7C9CC6DD9}.Release|x86.ActiveCfg = Release|Any CPU
+		{7824D484-7F2F-4811-B2AC-C8C1F37DDA05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7824D484-7F2F-4811-B2AC-C8C1F37DDA05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7824D484-7F2F-4811-B2AC-C8C1F37DDA05}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{7824D484-7F2F-4811-B2AC-C8C1F37DDA05}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7824D484-7F2F-4811-B2AC-C8C1F37DDA05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7824D484-7F2F-4811-B2AC-C8C1F37DDA05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7824D484-7F2F-4811-B2AC-C8C1F37DDA05}.Release|ARM.ActiveCfg = Release|Any CPU
+		{7824D484-7F2F-4811-B2AC-C8C1F37DDA05}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
