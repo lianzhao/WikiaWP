@@ -15,9 +15,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaWikiSDK", "MediaWikiSD
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructures", "Infrastructures", "{A6D848C2-E5E8-4485-A83D-550F33A3921C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZhAsoiafWikiApiPlus.Web", "ZhAsoiafWikiaApiPlus\ZhAsoiafWikiApiPlus.Web.csproj", "{D9210FF4-2A55-4A18-B2B1-EFF7C9CC6DD9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZhAsoiafWiki.Plus", "ZhAsoiafWiki.Plus\ZhAsoiafWiki.Plus.csproj", "{BE00723A-36AF-4039-AB4C-7F77DA08D917}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZhAsoiafWikiPlus", "ZhAsoiafWikiPlus\ZhAsoiafWikiPlus.csproj", "{7824D484-7F2F-4811-B2AC-C8C1F37DDA05}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZhAsoiafWiki.Plus.Web", "ZhAsoiafWiki.Plus.Web\ZhAsoiafWiki.Plus.Web.csproj", "{FE650F7B-8C68-4971-B717-202CD23E8DC7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -79,22 +79,22 @@ Global
 		{374873A0-41A9-4318-9A3F-9E838BE7F30F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{374873A0-41A9-4318-9A3F-9E838BE7F30F}.Release|ARM.ActiveCfg = Release|Any CPU
 		{374873A0-41A9-4318-9A3F-9E838BE7F30F}.Release|x86.ActiveCfg = Release|Any CPU
-		{D9210FF4-2A55-4A18-B2B1-EFF7C9CC6DD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D9210FF4-2A55-4A18-B2B1-EFF7C9CC6DD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D9210FF4-2A55-4A18-B2B1-EFF7C9CC6DD9}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{D9210FF4-2A55-4A18-B2B1-EFF7C9CC6DD9}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{D9210FF4-2A55-4A18-B2B1-EFF7C9CC6DD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D9210FF4-2A55-4A18-B2B1-EFF7C9CC6DD9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D9210FF4-2A55-4A18-B2B1-EFF7C9CC6DD9}.Release|ARM.ActiveCfg = Release|Any CPU
-		{D9210FF4-2A55-4A18-B2B1-EFF7C9CC6DD9}.Release|x86.ActiveCfg = Release|Any CPU
-		{7824D484-7F2F-4811-B2AC-C8C1F37DDA05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7824D484-7F2F-4811-B2AC-C8C1F37DDA05}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7824D484-7F2F-4811-B2AC-C8C1F37DDA05}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{7824D484-7F2F-4811-B2AC-C8C1F37DDA05}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{7824D484-7F2F-4811-B2AC-C8C1F37DDA05}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7824D484-7F2F-4811-B2AC-C8C1F37DDA05}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7824D484-7F2F-4811-B2AC-C8C1F37DDA05}.Release|ARM.ActiveCfg = Release|Any CPU
-		{7824D484-7F2F-4811-B2AC-C8C1F37DDA05}.Release|x86.ActiveCfg = Release|Any CPU
+		{BE00723A-36AF-4039-AB4C-7F77DA08D917}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE00723A-36AF-4039-AB4C-7F77DA08D917}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE00723A-36AF-4039-AB4C-7F77DA08D917}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{BE00723A-36AF-4039-AB4C-7F77DA08D917}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BE00723A-36AF-4039-AB4C-7F77DA08D917}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE00723A-36AF-4039-AB4C-7F77DA08D917}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE00723A-36AF-4039-AB4C-7F77DA08D917}.Release|ARM.ActiveCfg = Release|Any CPU
+		{BE00723A-36AF-4039-AB4C-7F77DA08D917}.Release|x86.ActiveCfg = Release|Any CPU
+		{FE650F7B-8C68-4971-B717-202CD23E8DC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE650F7B-8C68-4971-B717-202CD23E8DC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE650F7B-8C68-4971-B717-202CD23E8DC7}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{FE650F7B-8C68-4971-B717-202CD23E8DC7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FE650F7B-8C68-4971-B717-202CD23E8DC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE650F7B-8C68-4971-B717-202CD23E8DC7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE650F7B-8C68-4971-B717-202CD23E8DC7}.Release|ARM.ActiveCfg = Release|Any CPU
+		{FE650F7B-8C68-4971-B717-202CD23E8DC7}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

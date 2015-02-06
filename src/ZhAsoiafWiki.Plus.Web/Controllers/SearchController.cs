@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 
@@ -11,7 +8,7 @@ using ZhAsoiafWiki.Plus.Models;
 
 using ZhAsoiafWikiaApiPlus.Models;
 
-namespace ZhAsoiafWikiaApiPlus.Controllers
+namespace ZhAsoiafWiki.Plus.Web.Controllers
 {
     public class SearchController : ApiController
     {
