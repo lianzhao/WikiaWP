@@ -8,7 +8,7 @@
     <ProjectGuid>{7824D484-7F2F-4811-B2AC-C8C1F37DDA05}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ZhAsoiafWikiPlus</RootNamespace>
+    <RootNamespace>ZhAsoiafWiki.Plus</RootNamespace>
     <AssemblyName>ZhAsoiafWikiPlus</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
