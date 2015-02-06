@@ -198,12 +198,15 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\ApiClient.cs" />
+    <Compile Include="Models\Article.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
@@ -275,6 +278,24 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LianZhao.NetFx\LianZhao.NetFx.csproj">
+      <Project>{397EB213-EAAE-46EE-9385-ADE458C4EA59}</Project>
+      <Name>LianZhao.NetFx</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MediaWikiSDK\MediaWikiSDK.csproj">
+      <Project>{374873a0-41a9-4318-9a3f-9e838be7f30f}</Project>
+      <Name>MediaWikiSDK</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WikiaSdk\WikiaSdk.csproj">
+      <Project>{e605bf40-0ae6-4e92-af2c-dede63fa6064}</Project>
+      <Name>WikiaSdk</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZhAsoiafWikiaSDK\ZhAsoiafWikiaSDK.csproj">
+      <Project>{1d4e2a60-adcb-4058-96c1-70962b651878}</Project>
+      <Name>ZhAsoiafWikiaSDK</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
