@@ -2,7 +2,7 @@
 {
     public class SearchCriteria
     {
-        public string Keyword { get; set; }
+        public string Query { get; set; }
 
         public int Page { get; set; }
 
@@ -10,7 +10,7 @@
 
         public bool IsValidRequest()
         {
-            return !string.IsNullOrEmpty(Keyword) && Page >= 0;
+            return !string.IsNullOrEmpty(Query) && Page >= 0;
         }
 
         public bool IsExactSearch()

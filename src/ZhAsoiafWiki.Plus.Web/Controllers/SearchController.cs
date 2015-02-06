@@ -23,7 +23,7 @@ namespace ZhAsoiafWiki.Plus.Web.Controllers
             {
                 try
                 {
-                    var article = await api.Wikia.Articles.GetArticleAsync(criteria.Keyword);
+                    var article = await api.Wikia.Articles.GetArticleAsync(criteria.Query);
                     if (article == null)
                     {
                         return null;
