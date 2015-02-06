@@ -23,5 +23,16 @@
         {
             return Page == 0;
         }
+
+        public ArticleCriteria ToArticleCriteria()
+        {
+            return new ArticleCriteria
+                       {
+                           Title = Query,
+                           AbstractLength = AbstractLength,
+                           ThumbnailWidth = ThumbnailWidth,
+                           ThumbnailHeight = ThumbnailHeight
+                       };
+        }
     }
 }
