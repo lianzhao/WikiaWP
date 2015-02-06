@@ -13,13 +13,13 @@ namespace ZhAsoiafWikiaApiPlus.Controllers
 {
     public class SearchController : ApiController
     {
-        public async Task<Article> Get(string id)
+        public async Task<Article> Get([FromUri]SearchCriteria criteria)
         {
             using (var api = new ApiClient())
             {
                 try
                 {
-                    var article = await api.Wikia.Articles.GetArticleAsync(id);
+                    var article = await api.Wikia.Articles.GetArticleAsync(criteria.Keyword);
                     if (article == null)
                     {
                         return null;
