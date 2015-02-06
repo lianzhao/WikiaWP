@@ -15,6 +15,11 @@ namespace ZhAsoiafWikiaApiPlus.Controllers
     {
         public async Task<Article> Get([FromUri]SearchCriteria criteria)
         {
+            if (!criteria.IsValidRequest())
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
+
             using (var api = new ApiClient())
             {
                 try
