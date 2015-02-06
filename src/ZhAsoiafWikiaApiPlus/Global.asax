@@ -1,1 +1,1 @@
-﻿<%@ Application Codebehind="Global.asax.cs" Inherits="ZhAsoiafWikiaApiPlus.WebApiApplication" Language="C#" %>
+﻿<%@ Application Codebehind="Global.asax.cs" Inherits="ZhAsoiafWiki.Plus.Web.WebApiApplication" Language="C#" %>

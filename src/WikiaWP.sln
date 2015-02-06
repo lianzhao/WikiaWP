@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaWikiSDK", "MediaWikiSD
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructures", "Infrastructures", "{A6D848C2-E5E8-4485-A83D-550F33A3921C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZhAsoiafWikiaApiPlus", "ZhAsoiafWikiaApiPlus\ZhAsoiafWikiaApiPlus.csproj", "{D9210FF4-2A55-4A18-B2B1-EFF7C9CC6DD9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZhAsoiafWikiApiPlus.Web", "ZhAsoiafWikiaApiPlus\ZhAsoiafWikiApiPlus.Web.csproj", "{D9210FF4-2A55-4A18-B2B1-EFF7C9CC6DD9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZhAsoiafWikiPlus", "ZhAsoiafWikiPlus\ZhAsoiafWikiPlus.csproj", "{7824D484-7F2F-4811-B2AC-C8C1F37DDA05}"
 EndProject
