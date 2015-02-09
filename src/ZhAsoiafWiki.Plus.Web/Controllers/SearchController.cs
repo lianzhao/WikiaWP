@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -30,7 +31,22 @@ namespace ZhAsoiafWiki.Plus.Web.Controllers
             }
             else
             {
-                //todo
+                using (var api = new ApiClient())
+                {
+                    var fallback = new WikiaArticleLoopup(api.Wikia);
+                    var lookup = new CacheArticleLookup(fallbackLookup: fallback);
+                    var resultSet = await api.Wikia.Search.Search(criteria.Query, criteria.Page, criteria.PageSize);
+                    result.Articles =
+                        await
+                        Task.WhenAll(
+                            resultSet.items.Select(
+                                async item =>
+                                await lookup.InvokeAsync(item.title)
+                                ?? new Article { Id = item.id, Namespace = item.ns, Title = item.title, Uri = item.url }));
+                    result.TotalCount = resultSet.total;
+                    result.Page = criteria.Page;
+                    result.PageSize = criteria.PageSize;
+                }
             }
             return result;
         }
