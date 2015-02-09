@@ -12,18 +12,27 @@ namespace ZhAsoiafWiki.Plus.Web.Controllers
 {
     public class SearchController : ApiController
     {
-        public async Task<Article> Get([FromUri]SearchCriteria criteria)
+        public async Task<SearchResult> Get([FromUri]SearchCriteria criteria)
         {
             if (!criteria.IsValidRequest())
             {
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
             }
 
-            var fallback =
-                new LazyAsyncFunc<string, Article>(
-                    new Lazy<IAsyncFunc<string, Article>>(() => new WikiaArticleLoopup()));
-            var lookup = new CacheArticleLookup(fallbackLookup: fallback);
-            return await lookup.InvokeAsync(criteria.Query);
+            var result = new SearchResult();
+            if (criteria.IsExactSearch())
+            {
+                var fallback =
+                    new LazyAsyncFunc<string, Article>(
+                        new Lazy<IAsyncFunc<string, Article>>(() => new WikiaArticleLoopup()));
+                var lookup = new CacheArticleLookup(fallbackLookup: fallback);
+                result.MatchArticle = await lookup.InvokeAsync(criteria.Query);
+            }
+            else
+            {
+                //todo
+            }
+            return result;
         }
     }
 }
