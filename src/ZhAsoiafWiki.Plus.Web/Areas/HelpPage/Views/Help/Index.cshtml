@@ -1,4 +1,4 @@
-@using System.Web.Http
+ï»¿@using System.Web.Http
 @using System.Web.Http.Controllers
 @using System.Web.Http.Description
 @using System.Collections.ObjectModel
@@ -6,7 +6,7 @@
 @model Collection<ApiDescription>
 
 @{
-    ViewBag.Title = "±ùÓë»ğÖ®¸èÖĞÎÄÎ¬»ù+ API Help Page";
+    ViewBag.Title = "å†°ä¸ç«ä¹‹æ­Œä¸­æ–‡ç»´åŸº+ API Help Page";
 
     // Group APIs by controller
     ILookup<HttpControllerDescriptor, ApiDescription> apiGroups = Model.ToLookup(api => api.ActionDescriptor.ControllerDescriptor);
@@ -25,7 +25,7 @@
         <div class="content-wrapper">
             <h2>Introduction</h2>
             <p>
-                À´³¢ÊÔÒÔÏÂÒ»Ğ©API°É
+                æ¥å°è¯•ä»¥ä¸‹ä¸€äº›APIå§
             </p>
         </div>
     </section>
