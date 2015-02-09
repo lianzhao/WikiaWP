@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net.Http;
-using System.Threading.Tasks;
 
 using LianZhao;
 
-namespace ZhAsoiafWikiaApiPlus.Models
+namespace ZhAsoiafWiki.Plus.Web.Models
 {
     public class ApiClient : DisposableObjectOwner
     {
@@ -18,10 +16,6 @@ namespace ZhAsoiafWikiaApiPlus.Models
         private readonly Lazy<Wikia.Asoiaf.Zh.ApiClient> _zhAsoiafWikiLazy;
 
         private readonly Lazy<MediaWiki.ApiClient> _mediaWikiLazy;
-
-        public static IDictionary<string, string> MainDictionary { get; private set; }
-
-        public static IDictionary<string,string> RedirectDictionary { get; private set; }
 
         public ApiClient()
             : this(new HttpClient(), true)
@@ -63,19 +57,6 @@ namespace ZhAsoiafWikiaApiPlus.Models
             get
             {
                 return _mediaWikiLazy.Value;
-            }
-        }
-
-        public static async Task RefreshCacheAsync()
-        {
-            using (var api = new ApiClient())
-            {
-                var task1 = api.ZhAsoiafWiki.Dictionaries.GetMainDictAsync();
-                var task2 = api.ZhAsoiafWiki.Dictionaries.GetRedirectDictAsync();
-                var tasks = new[] { task1 as Task, task2 };
-                await Task.WhenAll(tasks);
-                MainDictionary = task1.Result;
-                RedirectDictionary = task2.Result;
             }
         }
     }
