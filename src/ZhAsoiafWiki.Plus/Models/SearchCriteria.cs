@@ -6,13 +6,13 @@
 
         public int Page { get; set; }
 
-        public int? PageSize { get; set; }
+        public int PageSize { get; set; }
 
-        public int? AbstractLength { get; set; }
+        public int AbstractLength { get; set; }
 
-        public int? ThumbnailWidth { get; set; }
+        public int ThumbnailWidth { get; set; }
 
-        public int? ThumbnailHeight { get; set; }
+        public int ThumbnailHeight { get; set; }
 
         public bool IsValidRequest()
         {
