@@ -20,10 +20,10 @@ namespace ZhAsoiafWiki.Plus.Web.Controllers
             }
 
             var fallback =
-                new LazyAsyncFunc<ArticleCriteria, Article>(
-                    new Lazy<IAsyncFunc<ArticleCriteria, Article>>(() => new WikiaArticleLoopup()));
+                new LazyAsyncFunc<string, Article>(
+                    new Lazy<IAsyncFunc<string, Article>>(() => new WikiaArticleLoopup()));
             var lookup = new CacheArticleLookup(fallbackLookup: fallback);
-            return await lookup.InvokeAsync(criteria.ToArticleCriteria());
+            return await lookup.InvokeAsync(criteria.Query);
         }
     }
 }

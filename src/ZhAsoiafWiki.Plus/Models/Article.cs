@@ -12,8 +12,6 @@
 
         public string Uri { get; set; }
 
-        public string ImageThumbnailUri { get; set; }
-
         public string ImageUri { get; set; }
     }
 }

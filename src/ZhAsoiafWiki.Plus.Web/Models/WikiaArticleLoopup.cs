@@ -7,10 +7,11 @@ using LianZhao;
 using LianZhao.Patterns.Func;
 
 using Wikia;
+using Wikia.Articles;
 
 namespace ZhAsoiafWiki.Plus.Models
 {
-    public class WikiaArticleLoopup : DisposableObjectOwner, IAsyncFunc<ArticleCriteria, Article>
+    public class WikiaArticleLoopup : DisposableObjectOwner, IAsyncFunc<string, Article>
     {
         private readonly ApiClient _api;
 
@@ -25,17 +26,11 @@ namespace ZhAsoiafWiki.Plus.Models
             _api = api;
         }
 
-        public async Task<Article> InvokeAsync(ArticleCriteria criteria, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Article> InvokeAsync(string title, CancellationToken cancellationToken = new CancellationToken())
         {
             try
             {
-                var article =
-                    await
-                    _api.Articles.GetArticleAsync(
-                        criteria.Title,
-                        criteria.AbstractLength,
-                        criteria.ThumbnailWidth,
-                        criteria.ThumbnailHeight);
+                var article = await _api.Articles.GetArticleAsync(title, ArticlesApiClient.MaxAbstractLength);
                 if (article == null)
                 {
                     return null;
@@ -47,7 +42,6 @@ namespace ZhAsoiafWiki.Plus.Models
                                Title = article.title,
                                Uri = article.url,
                                Abstract = article.@abstract,
-                               ImageThumbnailUri = article.thumbnail,
                                ImageUri = article.OriginalImageSource,
                            };
             }

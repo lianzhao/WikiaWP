@@ -35,7 +35,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Models\Article.cs" />
-    <Compile Include="Models\ArticleCriteria.cs" />
     <Compile Include="Models\SearchCriteria.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

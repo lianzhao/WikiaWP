@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 using LianZhao;
@@ -16,6 +15,8 @@ namespace Wikia.Articles
 {
     public class ArticlesApiClient : DisposableObjectOwner
     {
+        public const int MaxAbstractLength = 500;
+
         private readonly string _site;
 
         private readonly HttpClient _httpClient;
