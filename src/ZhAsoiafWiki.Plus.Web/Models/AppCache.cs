@@ -17,10 +17,11 @@ namespace ZhAsoiafWiki.Plus.Web.Models
             cache[CacheStatusKey] = status;
         }
 
-        public static IDictionary<string, string> GetCachedDictionary(this ObjectCache cache, CacheModule module)
+        public static T GetCacheModule<T>(this ObjectCache cache, CacheModule module)
+            where T : class
         {
             var key = module.ToString();
-            return cache[key] as IDictionary<string, string>;
+            return cache[key] as T;
         }
 
         public static void SetCacheModule(this ObjectCache cache, CacheModule module, object value)

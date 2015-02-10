@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Runtime.Caching;
 using System.Threading.Tasks;
 using System.Web.Http;
 
+using LianZhao.Collections.Generic;
 using LianZhao.Patterns.Func;
 
 using ZhAsoiafWiki.Plus.Models;
@@ -26,7 +29,8 @@ namespace ZhAsoiafWiki.Plus.Web.Controllers
                 var lookup = new CacheArticleLookup(fallbackLookup: fallback);
                 if (criteria.IsExactSearch())
                 {
-                    var article = await lookup.InvokeAsync(criteria.Query);
+                    var keyword = MapKeyword(criteria.Query);
+                    var article = await lookup.InvokeAsync(keyword);
                     return article == null ? await SearchAsync(criteria, api, lookup) : new SearchResult { MatchArticle = article };
                 }
                 return await SearchAsync(criteria, api, lookup);
@@ -49,6 +53,32 @@ namespace ZhAsoiafWiki.Plus.Web.Controllers
             result.PageSize = (resultSet.total / resultSet.batches)
                               + ((resultSet.total % resultSet.batches) == 0 ? 0 : 1);
             return result;
+        }
+
+        private static string MapKeyword(string keyword)
+        {
+            foreach (var dict in GetDictionaries())
+            {
+                if (dict == null)
+                {
+                    continue;
+                }
+
+                string match;
+                dict.TryGetValue(keyword, out match, StringComparison.OrdinalIgnoreCase);
+                if (!string.IsNullOrEmpty(match))
+                {
+                    return match;
+                }
+            }
+            return keyword;
+        }
+
+        private static IEnumerable<IDictionary<string, string>> GetDictionaries()
+        {
+            var cache = MemoryCache.Default;
+            yield return cache.GetCacheModule<IDictionary<string, string>>(CacheModule.EnZhDictionary);
+            yield return cache.GetCacheModule<IDictionary<string, string>>(CacheModule.RedirectDictionary);
         }
     }
 }
