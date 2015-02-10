@@ -32,6 +32,14 @@ namespace ZhAsoiafWiki.Plus.Web.Controllers
                     stopwatch.Stop();
                     rv.Add(CacheModule.EnZhDictionary.ToString(), stopwatch.ElapsedMilliseconds);
                 }
+                if (module.HasFlag(CacheModule.RedirectDictionary))
+                {
+                    stopwatch.Restart();
+                    var dict = await api.ZhAsoiafWiki.Dictionaries.GetRedirectDictAsync();
+                    cache.SetRedirectDictionary(dict);
+                    stopwatch.Stop();
+                    rv.Add(CacheModule.RedirectDictionary.ToString(), stopwatch.ElapsedMilliseconds);
+                }
             }
             return rv;
         }
