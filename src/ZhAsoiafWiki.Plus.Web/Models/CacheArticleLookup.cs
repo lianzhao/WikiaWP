@@ -29,6 +29,8 @@ namespace ZhAsoiafWiki.Plus.Web.Models
         {
             var cacheKey = GetCacheKey(title);
             var article = _cache[cacheKey] as Article;
+            var cacheStatus = _cache.GetStatus() ?? new CacheStatus();
+            cacheStatus.TotalRequest++;
             if (article == null)
             {
                 if (_fallbackLookup == null)
@@ -43,8 +45,10 @@ namespace ZhAsoiafWiki.Plus.Web.Models
             }
             else
             {
+                cacheStatus.MatchRequest++;
                 _cache.Set(cacheKey, article, DateTimeOffset.Now.Add(CacheTimeout));
             }
+            _cache.SetStatus(cacheStatus);
             return article;
         }
 
