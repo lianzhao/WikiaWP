@@ -43,6 +43,10 @@
       <Project>{374873A0-41A9-4318-9A3F-9E838BE7F30F}</Project>
       <Name>MediaWikiSDK</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ZhAsoiafWiki.Plus\ZhAsoiafWiki.Plus.csproj">
+      <Project>{BE00723A-36AF-4039-AB4C-7F77DA08D917}</Project>
+      <Name>ZhAsoiafWiki.Plus</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiClient.cs" />
@@ -50,6 +54,7 @@
     <Compile Include="Dictionaries\DictionariesApiClient.cs" />
     <Compile Include="Pages\PageItem.cs" />
     <Compile Include="Pages\PagesApiClient.cs" />
+    <Compile Include="Plus\PlusApiClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

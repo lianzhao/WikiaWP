@@ -6,6 +6,7 @@ using LianZhao;
 using ZhAsoiafWiki.Categories;
 using ZhAsoiafWiki.Dictionaries;
 using ZhAsoiafWiki.Pages;
+using ZhAsoiafWiki.Plus;
 
 namespace ZhAsoiafWiki
 {
@@ -20,6 +21,8 @@ namespace ZhAsoiafWiki
         private readonly Lazy<CategoriesApiClient> _categoriesLazy;
 
         private readonly Lazy<PagesApiClient> _pagesLazy;
+
+        private readonly Lazy<PlusApiClient> _plusLazy;
 
         public ApiClient()
             : this(new HttpClient(), isOwner: true)
@@ -37,6 +40,7 @@ namespace ZhAsoiafWiki
             _dictionariesLazy = new Lazy<DictionariesApiClient>(() => new DictionariesApiClient(_httpClient, isOwner: false));
             _categoriesLazy = new Lazy<CategoriesApiClient>(() => new CategoriesApiClient(_httpClient, isOwner: false));
             _pagesLazy = new Lazy<PagesApiClient>(() => new PagesApiClient(_httpClient, isOwner: false));
+            _plusLazy = new Lazy<PlusApiClient>(() => new PlusApiClient(_httpClient, isOwner: false));
         }
 
         public DictionariesApiClient Dictionaries
@@ -60,6 +64,14 @@ namespace ZhAsoiafWiki
             get
             {
                 return _pagesLazy.Value;
+            }
+        }
+
+        public PlusApiClient Plus
+        {
+            get
+            {
+                return _plusLazy.Value;
             }
         }
     }
