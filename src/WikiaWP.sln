@@ -17,8 +17,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructures", "Infrastr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZhAsoiafWiki.Plus", "ZhAsoiafWiki.Plus\ZhAsoiafWiki.Plus.csproj", "{BE00723A-36AF-4039-AB4C-7F77DA08D917}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZhAsoiafWiki.Plus.Web", "ZhAsoiafWiki.Plus.Web\ZhAsoiafWiki.Plus.Web.csproj", "{FE650F7B-8C68-4971-B717-202CD23E8DC7}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,14 +85,6 @@ Global
 		{BE00723A-36AF-4039-AB4C-7F77DA08D917}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BE00723A-36AF-4039-AB4C-7F77DA08D917}.Release|ARM.ActiveCfg = Release|Any CPU
 		{BE00723A-36AF-4039-AB4C-7F77DA08D917}.Release|x86.ActiveCfg = Release|Any CPU
-		{FE650F7B-8C68-4971-B717-202CD23E8DC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FE650F7B-8C68-4971-B717-202CD23E8DC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FE650F7B-8C68-4971-B717-202CD23E8DC7}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{FE650F7B-8C68-4971-B717-202CD23E8DC7}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{FE650F7B-8C68-4971-B717-202CD23E8DC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FE650F7B-8C68-4971-B717-202CD23E8DC7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FE650F7B-8C68-4971-B717-202CD23E8DC7}.Release|ARM.ActiveCfg = Release|Any CPU
-		{FE650F7B-8C68-4971-B717-202CD23E8DC7}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -104,5 +94,6 @@ Global
 		{397EB213-EAAE-46EE-9385-ADE458C4EA59} = {A6D848C2-E5E8-4485-A83D-550F33A3921C}
 		{1D4E2A60-ADCB-4058-96C1-70962B651878} = {A6D848C2-E5E8-4485-A83D-550F33A3921C}
 		{374873A0-41A9-4318-9A3F-9E838BE7F30F} = {A6D848C2-E5E8-4485-A83D-550F33A3921C}
+		{BE00723A-36AF-4039-AB4C-7F77DA08D917} = {A6D848C2-E5E8-4485-A83D-550F33A3921C}
 	EndGlobalSection
 EndGlobal
