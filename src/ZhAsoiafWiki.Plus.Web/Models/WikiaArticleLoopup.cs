@@ -6,21 +6,22 @@ using System.Threading.Tasks;
 using LianZhao;
 using LianZhao.Patterns.Func;
 
-using Wikia;
 using Wikia.Articles;
 
-namespace ZhAsoiafWiki.Plus.Models
+using ZhAsoiafWiki.Plus.Models;
+
+namespace ZhAsoiafWiki.Plus.Web.Models
 {
     public class WikiaArticleLoopup : DisposableObjectOwner, IAsyncFunc<string, Article>
     {
-        private readonly ApiClient _api;
+        private readonly Wikia.ApiClient _api;
 
         public WikiaArticleLoopup()
-            : this(new ApiClient(Wikia.Asoiaf.Zh.ApiClient.Site), isOwner: true)
+            : this(new Wikia.ApiClient(ApiClient.Site), isOwner: true)
         {
         }
 
-        public WikiaArticleLoopup(ApiClient api, bool isOwner = false)
+        public WikiaArticleLoopup(Wikia.ApiClient api, bool isOwner = false)
             : base(api, isOwner)
         {
             _api = api;

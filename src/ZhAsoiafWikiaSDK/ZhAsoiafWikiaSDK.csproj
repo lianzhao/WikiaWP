@@ -8,7 +8,7 @@
     <ProjectGuid>{1D4E2A60-ADCB-4058-96C1-70962B651878}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Wikia.Asoiaf.Zh</RootNamespace>
+    <RootNamespace>ZhAsoiafWiki</RootNamespace>
     <AssemblyName>ZhAsoiafWikiaSDK</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>

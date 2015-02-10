@@ -10,7 +10,7 @@ using LianZhao;
 
 using Newtonsoft.Json;
 
-namespace Wikia.Asoiaf.Zh.Dictionaries
+namespace ZhAsoiafWiki.Dictionaries
 {
     public class DictionariesApiClient : DisposableObjectOwner
     {

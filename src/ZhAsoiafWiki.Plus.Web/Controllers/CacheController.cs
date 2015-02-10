@@ -4,8 +4,6 @@ using System.Runtime.Caching;
 using System.Threading.Tasks;
 using System.Web.Http;
 
-using Antlr.Runtime.Misc;
-
 using ZhAsoiafWiki.Plus.Web.Models;
 
 namespace ZhAsoiafWiki.Plus.Web.Controllers
@@ -24,7 +22,7 @@ namespace ZhAsoiafWiki.Plus.Web.Controllers
             var cache = MemoryCache.Default;
             var stopwatch = new Stopwatch();
             var rv = new Dictionary<string, long>();
-            using (var api = new ApiClient())
+            using (var api = new Models.ApiClient())
             {
                 if (module.HasFlag(CacheModule.EnZhDictionary))
                 {

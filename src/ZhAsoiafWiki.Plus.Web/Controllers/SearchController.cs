@@ -23,7 +23,7 @@ namespace ZhAsoiafWiki.Plus.Web.Controllers
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
             }
 
-            using (var api = new ApiClient())
+            using (var api = new Models.ApiClient())
             {
                 var fallback = new WikiaArticleLoopup(api.Wikia);
                 var lookup = new CacheArticleLookup(fallbackLookup: fallback);
@@ -37,7 +37,7 @@ namespace ZhAsoiafWiki.Plus.Web.Controllers
             }
         }
 
-        private static async Task<SearchResult> SearchAsync(SearchCriteria criteria, ApiClient api, IAsyncFunc<string, Article> lookup)
+        private static async Task<SearchResult> SearchAsync(SearchCriteria criteria, Models.ApiClient api, IAsyncFunc<string, Article> lookup)
         {
             var result = new SearchResult();
             var resultSet = await api.Wikia.Search.Search(criteria.Query, criteria.Page, criteria.PageSize);

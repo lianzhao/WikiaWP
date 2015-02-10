@@ -1,27 +1,20 @@
-﻿using System.Reactive;
-using System.Reactive.Linq;
-using MVVMSidekick.ViewModels;
-using MVVMSidekick.Views;
-using MVVMSidekick.Reactive;
-using MVVMSidekick.Services;
-using MVVMSidekick.Commands;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Collections.ObjectModel;
-using System.Runtime.Serialization;
-
-using Windows.Media.MediaProperties;
+using System.Linq;
+using System.Threading.Tasks;
 
 using LianZhao.Collections.Generic;
 using LianZhao.Linq;
 
-using Wikia.Asoiaf.Zh.Pages;
+using MVVMSidekick.Reactive;
+using MVVMSidekick.ViewModels;
+using MVVMSidekick.Views;
 
 using WikiaWP.Models;
 using WikiaWP.Resources;
+
+using ZhAsoiafWiki.Pages;
 
 namespace WikiaWP.ViewModels
 {

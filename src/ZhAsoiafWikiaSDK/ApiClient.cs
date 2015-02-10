@@ -3,11 +3,11 @@ using System.Net.Http;
 
 using LianZhao;
 
-using Wikia.Asoiaf.Zh.Categories;
-using Wikia.Asoiaf.Zh.Dictionaries;
-using Wikia.Asoiaf.Zh.Pages;
+using ZhAsoiafWiki.Categories;
+using ZhAsoiafWiki.Dictionaries;
+using ZhAsoiafWiki.Pages;
 
-namespace Wikia.Asoiaf.Zh
+namespace ZhAsoiafWiki
 {
     public class ApiClient : DisposableObjectOwner
     {

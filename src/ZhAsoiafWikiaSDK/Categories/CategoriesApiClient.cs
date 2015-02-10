@@ -8,7 +8,7 @@ using LianZhao;
 
 using Newtonsoft.Json;
 
-namespace Wikia.Asoiaf.Zh.Categories
+namespace ZhAsoiafWiki.Categories
 {
     public class CategoriesApiClient : DisposableObjectOwner
     {

@@ -4,24 +4,31 @@ using System.Net.Http;
 using System.Threading.Tasks;
 
 using LianZhao;
+using ZhAsoiafWikiApiClient = ZhAsoiafWiki.ApiClient;
 
 namespace WikiaWP
 {
     public class ApiClient : DisposableObjectOwner
     {
-        private const string Site = "http://zh.asoiaf.wikia.com";
-
         private readonly HttpClient _httpClient;
 
         private readonly Lazy<Wikia.ApiClient> _wikiaLazy;
 
-        private readonly Lazy<Wikia.Asoiaf.Zh.ApiClient> _zhAsoiafWikiLazy;
+        private readonly Lazy<ZhAsoiafWikiApiClient> _zhAsoiafWikiLazy;
 
         private readonly Lazy<MediaWiki.ApiClient> _mediaWikiLazy;
 
         public static IDictionary<string, string> MainDictionary { get; private set; }
 
         public static IDictionary<string,string> RedirectDictionary { get; private set; }
+
+        public static string Site
+        {
+            get
+            {
+                return ZhAsoiafWikiApiClient.Site;
+            }
+        }
 
         public ApiClient()
             : this(new HttpClient(), true)
@@ -38,7 +45,7 @@ namespace WikiaWP
             _httpClient = httpClient;
             _wikiaLazy = new Lazy<Wikia.ApiClient>(() => new Wikia.ApiClient(Site, _httpClient, isOwner: false));
             _zhAsoiafWikiLazy =
-                new Lazy<Wikia.Asoiaf.Zh.ApiClient>(() => new Wikia.Asoiaf.Zh.ApiClient(_httpClient, isOwner: false));
+                new Lazy<ZhAsoiafWiki.ApiClient>(() => new ZhAsoiafWiki.ApiClient(_httpClient, isOwner: false));
             _mediaWikiLazy = new Lazy<MediaWiki.ApiClient>(() => new MediaWiki.ApiClient(Site, _httpClient, isOwner: false));
         }
 
@@ -50,7 +57,7 @@ namespace WikiaWP
             }
         }
 
-        public Wikia.Asoiaf.Zh.ApiClient ZhAsoiafWiki
+        public ZhAsoiafWiki.ApiClient ZhAsoiafWiki
         {
             get
             {

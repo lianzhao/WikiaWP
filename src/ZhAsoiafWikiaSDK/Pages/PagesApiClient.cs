@@ -8,7 +8,7 @@ using LianZhao;
 
 using Newtonsoft.Json;
 
-namespace Wikia.Asoiaf.Zh.Pages
+namespace ZhAsoiafWiki.Pages
 {
     public class PagesApiClient : DisposableObjectOwner
     {
