@@ -4,6 +4,8 @@ using System.Runtime.Caching;
 using System.Threading.Tasks;
 using System.Web.Http;
 
+using Antlr.Runtime.Misc;
+
 using ZhAsoiafWiki.Plus.Web.Models;
 
 namespace ZhAsoiafWiki.Plus.Web.Controllers
@@ -28,7 +30,7 @@ namespace ZhAsoiafWiki.Plus.Web.Controllers
                 {
                     stopwatch.Restart();
                     var dict = await api.ZhAsoiafWiki.Dictionaries.GetMainDictAsync();
-                    cache.SetEnZhDictionary(dict);
+                    cache.SetCacheModule(CacheModule.EnZhDictionary, dict);
                     stopwatch.Stop();
                     rv.Add(CacheModule.EnZhDictionary.ToString(), stopwatch.ElapsedMilliseconds);
                 }
@@ -36,7 +38,7 @@ namespace ZhAsoiafWiki.Plus.Web.Controllers
                 {
                     stopwatch.Restart();
                     var dict = await api.ZhAsoiafWiki.Dictionaries.GetRedirectDictAsync();
-                    cache.SetRedirectDictionary(dict);
+                    cache.SetCacheModule(CacheModule.RedirectDictionary, dict);
                     stopwatch.Stop();
                     rv.Add(CacheModule.RedirectDictionary.ToString(), stopwatch.ElapsedMilliseconds);
                 }

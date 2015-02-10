@@ -5,10 +5,6 @@ namespace ZhAsoiafWiki.Plus.Web.Models
 {
     public static class AppCache
     {
-        public const string EnZhDictionaryKey = "EnZhDictionary";
-
-        public const string RedirectDictionaryKey = "RedirectDictionary";
-
         public static readonly string CacheStatusKey = typeof(CacheStatus).FullName;
 
         public static CacheStatus GetStatus(this ObjectCache cache)
@@ -21,24 +17,16 @@ namespace ZhAsoiafWiki.Plus.Web.Models
             cache[CacheStatusKey] = status;
         }
 
-        public static IDictionary<string, string> GetEnZhDictionary(this ObjectCache cache)
+        public static IDictionary<string, string> GetCachedDictionary(this ObjectCache cache, CacheModule module)
         {
-            return cache[EnZhDictionaryKey] as IDictionary<string, string>;
+            var key = module.ToString();
+            return cache[key] as IDictionary<string, string>;
         }
 
-        public static void SetEnZhDictionary(this ObjectCache cache, IDictionary<string, string> dictionary)
+        public static void SetCacheModule(this ObjectCache cache, CacheModule module, object value)
         {
-            cache[EnZhDictionaryKey] = dictionary;
-        }
-
-        public static IDictionary<string, string> GetRedirectDictionary(this ObjectCache cache)
-        {
-            return cache[RedirectDictionaryKey] as IDictionary<string, string>;
-        }
-
-        public static void SetRedirectDictionary(this ObjectCache cache, IDictionary<string, string> dictionary)
-        {
-            cache[RedirectDictionaryKey] = dictionary;
+            var key = module.ToString();
+            cache[key] = value;
         }
     }
 }
