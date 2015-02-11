@@ -41,6 +41,7 @@
     <Compile Include="ApiClient.cs" />
     <Compile Include="Articles\ArticlesApiClient.cs" />
     <Compile Include="Articles\ListExpandedArticleResultSet.cs" />
+    <Compile Include="HttpClientExtensions.cs" />
     <Compile Include="Mercury\Comment.cs" />
     <Compile Include="Articles\ExpandedArticle.cs" />
     <Compile Include="Articles\ExpandedArticleResultSet.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="Search\Item.cs" />
     <Compile Include="Search\SearchApiClient.cs" />
     <Compile Include="Search\SearchResultSet.cs" />
+    <Compile Include="WikiHttpException.cs" />
     <Compile Include="WikiaImageFormatter.cs" />
   </ItemGroup>
   <ItemGroup>

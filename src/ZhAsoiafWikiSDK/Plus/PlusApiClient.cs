@@ -57,7 +57,7 @@ namespace ZhAsoiafWiki.Plus
             var uri = builder.ToString();
             try
             {
-                var json = await _httpClient.GetStringAsync(uri);
+                var json = await _httpClient.GetWikiResultAsync(uri);
                 return JsonConvert.DeserializeObject<SearchResult>(json);
             }
             catch (Exception ex)

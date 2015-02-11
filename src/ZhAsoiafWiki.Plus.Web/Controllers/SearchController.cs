@@ -9,6 +9,8 @@ using System.Web.Http;
 using LianZhao.Collections.Generic;
 using LianZhao.Patterns.Func;
 
+using Wikia.Search;
+
 using ZhAsoiafWiki.Plus.Models;
 using ZhAsoiafWiki.Plus.Web.Models;
 
@@ -40,7 +42,16 @@ namespace ZhAsoiafWiki.Plus.Web.Controllers
         private static async Task<SearchResult> SearchAsync(SearchCriteria criteria, Models.ApiClient api, IAsyncFunc<string, Article> lookup)
         {
             var result = new SearchResult();
-            var resultSet = await api.Wikia.Search.Search(criteria.Query, criteria.Page, criteria.PageSize);
+
+            SearchResultSet resultSet;
+            try
+            {
+                resultSet = await api.Wikia.Search.Search(criteria.Query, criteria.Page, criteria.PageSize);
+            }
+            catch (Wikia.WikiHttpException ex)
+            {
+                throw new HttpResponseException(ex.Response.StatusCode);
+            }
             result.Articles =
                 await
                 Task.WhenAll(

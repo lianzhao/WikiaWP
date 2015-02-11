@@ -55,7 +55,7 @@ namespace Wikia.Search
             var uri = sb.ToString();
             try
             {
-                var json = await _httpClient.GetStringAsync(uri);
+                var json = await _httpClient.GetWikiResultAsync(uri);
                 return JsonConvert.DeserializeObject<SearchResultSet>(json);
             }
             catch (Exception ex)

@@ -52,11 +52,13 @@
     <Compile Include="ApiClient.cs" />
     <Compile Include="Categories\CategoriesApiClient.cs" />
     <Compile Include="Dictionaries\DictionariesApiClient.cs" />
+    <Compile Include="HttpClientExtensions.cs" />
     <Compile Include="Pages\PageItem.cs" />
     <Compile Include="Pages\PagesApiClient.cs" />
     <Compile Include="Plus\PlusApiClient.cs" />
     <Compile Include="Plus\PlusApiClientExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WikiHttpException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
