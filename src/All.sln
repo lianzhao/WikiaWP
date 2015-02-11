@@ -19,6 +19,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZhAsoiafWikiSDK", "ZhAsoiaf
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZhAsoiafWiki.Plus.Web", "ZhAsoiafWiki.Plus.Web\ZhAsoiafWiki.Plus.Web.csproj", "{FE650F7B-8C68-4971-B717-202CD23E8DC7}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0.SolutionItems", "0.SolutionItems", "{D76F0276-8315-4671-9FEC-3888CFEBB6D8}"
+	ProjectSection(SolutionItems) = preProject
+		..\ThirdPartyNotice.md = ..\ThirdPartyNotice.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
