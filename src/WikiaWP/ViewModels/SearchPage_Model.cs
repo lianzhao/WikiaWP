@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
@@ -147,11 +149,36 @@ namespace WikiaWP.ViewModels
                                 return;
                             }
                             vm.ClearMatchItemAndSearchResult();
+
                             using (var api = new ApiClient())
                             {
-                                var result =
-                                    await api.ZhAsoiafWiki.Plus.Search(vm.SearchText);
-                                vm.ShowSearchResult(result);
+                                try
+                                {
+                                    var result =
+                                        await api.ZhAsoiafWiki.Plus.Search(vm.SearchText);
+                                    vm.ShowSearchResult(result);
+                                }
+                                catch (ZhAsoiafWiki.WikiHttpException ex)
+                                {
+                                    if (ex.Response.StatusCode == HttpStatusCode.NotFound)
+                                    {
+                                        vm.EnsurePagingInfo();
+                                        vm.MatchItemPanelVisibility = Visibility.Collapsed;
+                                        vm.SearchResultPanelVisibility = Visibility.Visible;
+                                    }
+                                    else
+                                    {
+                                        throw;
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    if (Debugger.IsAttached)
+                                    {
+                                        Debugger.Break();
+                                    }
+                                    vm.ShowToastMessage("发生错误");
+                                }
                             }
                         }
                     )
@@ -204,11 +231,11 @@ namespace WikiaWP.ViewModels
                                     await
                                     api.ZhAsoiafWiki.Plus.Search(
                                         new SearchCriteria
-                                            {
-                                                Query = vm.SearchText,
-                                                Page = vm.PagingInfo.CurrentPage + 1,
-                                                PageSize = vm.PagingInfo.PageSize
-                                            });
+                                        {
+                                            Query = vm.SearchText,
+                                            Page = vm.PagingInfo.CurrentPage + 1,
+                                            PageSize = vm.PagingInfo.PageSize
+                                        });
                                 vm.ShowSearchResult(result);
                             }
                         }
@@ -413,6 +440,14 @@ namespace WikiaWP.ViewModels
                             Math.Min(result.MatchArticle.ImageHeight, result.MatchArticle.ImageWidth) / 2));
                 MatchItemPanelVisibility = Visibility.Visible;
                 SearchResultPanelVisibility = Visibility.Collapsed;
+            }
+        }
+
+        private void EnsurePagingInfo()
+        {
+            if (PagingInfo == null)
+            {
+                PagingInfo = new PagingInfo_Model { HasMore = true };
             }
         }
     }
