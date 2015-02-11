@@ -387,13 +387,22 @@ namespace WikiaWP.ViewModels
                 PagingInfo.PageSize = result.PageSize;
                 PagingInfo.LoadNextPageOffset = result.PageSize / 5;
                 SearchResults.AddRange(
-                    result.Articles.Select(article => article.ToListItemModel()));
+                    result.Articles.Select(
+                        article =>
+                        article.ToListItemModel(
+                            img =>
+                            WikiaImageFormatter.ToSquareImageThumbnailUri(
+                                img,
+                                article.ImageWidth,
+                                article.ImageHeight,
+                                ListItem_Model.ListModeImageSize))));
                 MatchItemPanelVisibility = Visibility.Collapsed;
                 SearchResultPanelVisibility = Visibility.Visible;
             }
             else
             {
-                MatchItem = result.MatchArticle.ToListItemModel();// todo thumbnail
+                MatchItem = result.MatchArticle.ToListItemModel(
+                    img => WikiaImageFormatter.ToImageThumbnailUri(img, 100));//todo size
                 MatchItemPanelVisibility = Visibility.Visible;
                 SearchResultPanelVisibility = Visibility.Collapsed;
             }
