@@ -63,6 +63,7 @@ namespace ZhAsoiafWiki.Plus.Web.Controllers
             result.Page = resultSet.currentBatch;
             result.PageSize = (resultSet.total / resultSet.batches)
                               + ((resultSet.total % resultSet.batches) == 0 ? 0 : 1);
+            result.PageCount = resultSet.batches;
             return result;
         }
 

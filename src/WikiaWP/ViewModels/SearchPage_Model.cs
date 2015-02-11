@@ -194,7 +194,17 @@ namespace WikiaWP.ViewModels
                         vm,
                         async e =>
                         {
-                            vm.PagingInfo = vm.PagingInfo ?? new PagingInfo_Model();
+                            if (vm.PagingInfo == null)
+                            {
+                                vm.PagingInfo = new PagingInfo_Model();
+                            }
+                            else
+                            {
+                                if (!vm.PagingInfo.HasMore)
+                                {
+                                    return;
+                                }
+                            }
                             using (var api = new ApiClient())
                             {
                                 var result =
@@ -382,10 +392,11 @@ namespace WikiaWP.ViewModels
             {
                 PagingInfo = PagingInfo ?? new PagingInfo_Model();
                 PagingInfo.TotalCount = result.TotalCount;
-                PagingInfo.PageCount = result.GetPageCount();
+                PagingInfo.PageCount = result.PageCount;
                 PagingInfo.CurrentPage = result.Page;
                 PagingInfo.PageSize = result.PageSize;
                 PagingInfo.LoadNextPageOffset = result.PageSize / 5;
+                PagingInfo.HasMore = PagingInfo.CurrentPage < PagingInfo.PageCount;
                 SearchResults.AddRange(
                     result.Articles.Select(
                         article =>
