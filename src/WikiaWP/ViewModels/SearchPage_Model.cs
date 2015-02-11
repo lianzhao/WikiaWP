@@ -17,8 +17,11 @@ using System.Windows;
 
 using Windows.Phone.Management.Deployment;
 
+using Coding4Fun.Toolkit.Controls;
+
 using LianZhao.Collections.Generic;
 
+using Microsoft.Phone.Shell;
 using Microsoft.Phone.Wallet;
 
 using Wikia;
@@ -202,6 +205,25 @@ namespace WikiaWP.ViewModels
                             {
                                 if (!vm.PagingInfo.HasMore)
                                 {
+                                    await vm.Dispatcher.InvokeAsync(
+                                        () =>
+                                            {
+                                                SystemTray.IsVisible = false;
+                                                var toast = new ToastPrompt();
+                                                toast.Message = "没有更多条目了";
+                                                EventHandler<PopUpEventArgs<string, PopUpResult>> toast_Completed =
+                                                    (sender, args) =>
+                                                        {
+                                                            SystemTray.IsVisible = true;
+                                                            var control = sender as ToastPrompt;
+                                                            if (control != null)
+                                                            {
+                                                                control.Dispose();
+                                                            }
+                                                        };
+                                                toast.Completed += toast_Completed;
+                                                toast.Show();
+                                            });
                                     return;
                                 }
                             }
