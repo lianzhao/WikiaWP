@@ -1,29 +1,17 @@
-﻿using System.Reactive;
-using System.Reactive.Linq;
-using MVVMSidekick.ViewModels;
-using MVVMSidekick.Views;
-using MVVMSidekick.Reactive;
-using MVVMSidekick.Services;
-using MVVMSidekick.Commands;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Runtime.Serialization;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
-
-using Windows.Phone.Management.Deployment;
-
-using Coding4Fun.Toolkit.Controls;
 
 using LianZhao.Collections.Generic;
 
 using Microsoft.Phone.Shell;
-using Microsoft.Phone.Wallet;
+
+using MVVMSidekick.Reactive;
+using MVVMSidekick.ViewModels;
+using MVVMSidekick.Views;
 
 using Wikia;
 
@@ -223,22 +211,6 @@ namespace WikiaWP.ViewModels
                                                 await Task.Delay(2000);
                                                 SystemTray.BackgroundColor = currentColor;
                                                 SystemTray.ProgressIndicator = currentIndicator;
-
-                                                //SystemTray.IsVisible = false;
-                                                //var toast = new ToastPrompt();
-                                                //toast.Message = "没有更多条目了";
-                                                //EventHandler<PopUpEventArgs<string, PopUpResult>> toast_Completed =
-                                                //    (sender, args) =>
-                                                //        {
-                                                //            SystemTray.IsVisible = true;
-                                                //            var control = sender as ToastPrompt;
-                                                //            if (control != null)
-                                                //            {
-                                                //                control.Dispose();
-                                                //            }
-                                                //        };
-                                                //toast.Completed += toast_Completed;
-                                                //toast.Show();
                                             });
                                     return;
                                 }
@@ -369,7 +341,7 @@ namespace WikiaWP.ViewModels
         /// </summary>
         /// <param name="view">View that firing Load event</param>
         /// <returns>Task awaiter</returns>
-        protected override async Task OnBindedViewLoad(MVVMSidekick.Views.IView view)
+        protected override async Task OnBindedViewLoad(IView view)
         {
             await base.OnBindedViewLoad(view);
 
