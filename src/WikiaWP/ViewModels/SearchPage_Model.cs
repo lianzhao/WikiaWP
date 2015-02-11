@@ -194,24 +194,7 @@ namespace WikiaWP.ViewModels
                             {
                                 if (!vm.PagingInfo.HasMore)
                                 {
-                                    await vm.Dispatcher.InvokeAsync(
-                                        async () =>
-                                            {
-                                                var currentIndicator = SystemTray.ProgressIndicator;
-                                                var currentColor = SystemTray.BackgroundColor;
-                                                var newIndicator = new ProgressIndicator
-                                                                       {
-                                                                           Text = "没有更多条目了",
-                                                                           IsIndeterminate = false,
-                                                                           IsVisible = true
-                                                                       };
-                                                SystemTray.BackgroundColor =
-                                                    (Color)Application.Current.Resources["PhoneAccentColor"];
-                                                SystemTray.ProgressIndicator = newIndicator;
-                                                await Task.Delay(2000);
-                                                SystemTray.BackgroundColor = currentColor;
-                                                SystemTray.ProgressIndicator = currentIndicator;
-                                            });
+                                    await vm.ShowToastMessage("没有更多条目了");
                                     return;
                                 }
                             }
