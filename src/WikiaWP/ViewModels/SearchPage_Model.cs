@@ -14,6 +14,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Runtime.Serialization;
 using System.Windows;
+using System.Windows.Media;
 
 using Windows.Phone.Management.Deployment;
 
@@ -206,23 +207,38 @@ namespace WikiaWP.ViewModels
                                 if (!vm.PagingInfo.HasMore)
                                 {
                                     await vm.Dispatcher.InvokeAsync(
-                                        () =>
+                                        async () =>
                                             {
-                                                SystemTray.IsVisible = false;
-                                                var toast = new ToastPrompt();
-                                                toast.Message = "没有更多条目了";
-                                                EventHandler<PopUpEventArgs<string, PopUpResult>> toast_Completed =
-                                                    (sender, args) =>
-                                                        {
-                                                            SystemTray.IsVisible = true;
-                                                            var control = sender as ToastPrompt;
-                                                            if (control != null)
-                                                            {
-                                                                control.Dispose();
-                                                            }
-                                                        };
-                                                toast.Completed += toast_Completed;
-                                                toast.Show();
+                                                var currentIndicator = SystemTray.ProgressIndicator;
+                                                var currentColor = SystemTray.BackgroundColor;
+                                                var newIndicator = new ProgressIndicator
+                                                                       {
+                                                                           Text = "没有更多条目了",
+                                                                           IsIndeterminate = false,
+                                                                           IsVisible = true
+                                                                       };
+                                                SystemTray.BackgroundColor =
+                                                    (Color)Application.Current.Resources["PhoneAccentColor"];
+                                                SystemTray.ProgressIndicator = newIndicator;
+                                                await Task.Delay(2000);
+                                                SystemTray.BackgroundColor = currentColor;
+                                                SystemTray.ProgressIndicator = currentIndicator;
+
+                                                //SystemTray.IsVisible = false;
+                                                //var toast = new ToastPrompt();
+                                                //toast.Message = "没有更多条目了";
+                                                //EventHandler<PopUpEventArgs<string, PopUpResult>> toast_Completed =
+                                                //    (sender, args) =>
+                                                //        {
+                                                //            SystemTray.IsVisible = true;
+                                                //            var control = sender as ToastPrompt;
+                                                //            if (control != null)
+                                                //            {
+                                                //                control.Dispose();
+                                                //            }
+                                                //        };
+                                                //toast.Completed += toast_Completed;
+                                                //toast.Show();
                                             });
                                     return;
                                 }
