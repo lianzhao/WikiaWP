@@ -1,5 +1,3 @@
-using System.Text.RegularExpressions;
-
 namespace Wikia.Articles
 {
     public class ExpandedArticle
