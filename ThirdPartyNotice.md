@@ -8,6 +8,9 @@
 
 >License: http://phone.codeplex.com/license
 
+* Coding4Fun Toolkit
+>License: http://coding4fun.codeplex.com/license
+
 Provided for Informational Purposes Only
 Ms-PL License
 
