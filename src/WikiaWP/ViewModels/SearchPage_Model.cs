@@ -401,8 +401,12 @@ namespace WikiaWP.ViewModels
             }
             else
             {
-                MatchItem = result.MatchArticle.ToListItemModel(
-                    img => WikiaImageFormatter.ToImageThumbnailUri(img, 100));//todo size
+                MatchItem =
+                    result.MatchArticle.ToListItemModel(
+                        img =>
+                        WikiaImageFormatter.ToImageThumbnailUri(
+                            img,
+                            Math.Min(result.MatchArticle.ImageHeight, result.MatchArticle.ImageWidth) / 2));
                 MatchItemPanelVisibility = Visibility.Visible;
                 SearchResultPanelVisibility = Visibility.Collapsed;
             }
