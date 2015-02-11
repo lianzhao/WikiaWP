@@ -84,6 +84,7 @@
     <Compile Include="Search\Item.cs" />
     <Compile Include="Search\SearchApiClient.cs" />
     <Compile Include="Search\SearchResultSet.cs" />
+    <Compile Include="WikiaImageFormatter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">

@@ -13,5 +13,10 @@ namespace ZhAsoiafWiki.Plus.Models
         public int PageSize { get; set; }
 
         public IEnumerable<Article> Articles { get; set; }
+
+        public int GetPageCount()
+        {
+            return TotalCount / PageSize;
+        }
     }
 }

@@ -26,12 +26,14 @@ using Wikia;
 using WikiaWP.Models;
 using WikiaWP.Resources;
 
+using ZhAsoiafWiki.Plus;
+using ZhAsoiafWiki.Plus.Models;
+
 namespace WikiaWP.ViewModels
 {
     //[DataContract]
     public class SearchPage_Model : ViewModelBase<SearchPage_Model>
     {
-        public Func<string, string> SearchTextMappingFunc { get; set; }
 
         // If you have install the code sniplets, use "propvm + [tab] +[tab]" create a property。
         // 如果您已经安装了 MVVMSidekick 代码片段，请用 propvm +tab +tab 输入属性
@@ -152,37 +154,12 @@ namespace WikiaWP.ViewModels
                             {
                                 return;
                             }
+                            vm.ClearMatchItemAndSearchResult();
                             using (var api = new ApiClient())
                             {
-                                var searchText = vm.SearchText;
-                                if (vm.SearchTextMappingFunc != null)
-                                {
-                                    searchText = vm.SearchTextMappingFunc.Invoke(vm.SearchText);
-                                }
-                                var article =
-                                    await
-                                    api.Wikia.Articles.GetArticleAsync(
-                                        searchText,
-                                        @abstract: 500,
-                                        width: 400,
-                                        height: 500);
-                                if (article == null)
-                                {
-                                    vm.ClearMatchItemAndSearchResult();
-                                    vm.MatchItemPanelVisibility = Visibility.Collapsed;
-                                    vm.SearchResultPanelVisibility = Visibility.Visible;
-                                    await LoadMoreAsyncImpl(vm);
-                                    return;
-                                }
-                                vm.MatchItem = new ListItem_Model
-                                                   {
-                                                       Title = article.title,
-                                                       Content = article.@abstract,
-                                                       ImageSource =
-                                                           article.ThumbnailFixYOffset ?? AppResources.PlaceholderImageSource
-                                                   };
-                                vm.MatchItemPanelVisibility = Visibility.Visible;
-                                vm.SearchResultPanelVisibility = Visibility.Collapsed;
+                                var result =
+                                    await api.ZhAsoiafWiki.Plus.Search(vm.SearchText);
+                                vm.ShowSearchResult(result);
                             }
                         }
                     )
@@ -217,9 +194,20 @@ namespace WikiaWP.ViewModels
                         vm,
                         async e =>
                         {
-                            vm.MatchItemPanelVisibility = Visibility.Collapsed;
-                            vm.SearchResultPanelVisibility = Visibility.Visible;
-                            await LoadMoreAsyncImpl(vm);
+                            vm.PagingInfo = vm.PagingInfo ?? new PagingInfo_Model();
+                            using (var api = new ApiClient())
+                            {
+                                var result =
+                                    await
+                                    api.ZhAsoiafWiki.Plus.Search(
+                                        new SearchCriteria
+                                            {
+                                                Query = vm.SearchText,
+                                                Page = vm.PagingInfo.CurrentPage + 1,
+                                                PageSize = vm.PagingInfo.PageSize
+                                            });
+                                vm.ShowSearchResult(result);
+                            }
                         }
                     )
                     .DoNotifyDefaultEventRouter(vm, commandId)
@@ -231,50 +219,7 @@ namespace WikiaWP.ViewModels
                 return cmdmdl;
             };
         #endregion
-
-        private static async Task LoadMoreAsyncImpl(SearchPage_Model vm)
-        {
-            if (string.IsNullOrWhiteSpace(vm.SearchText))
-            {
-                return;
-            }
-
-            vm.PagingInfo = vm.PagingInfo ?? new PagingInfo_Model();
-            using (var api = new ApiClient())
-            {
-                var result =
-                    await
-                    api.Wikia.Search.Search(
-                        vm.SearchText,
-                        vm.PagingInfo.CurrentPage + 1,
-                        vm.PagingInfo.PageSize > 0 ? vm.PagingInfo.PageSize : 0);
-                vm.PagingInfo = new PagingInfo_Model
-                                    {
-                                        TotalCount = result.total,
-                                        PageCount = result.batches,
-                                        CurrentPage = result.currentBatch,
-                                        PageSize = (result.next - 1) / result.currentBatch,
-                                        HasMore = result.batches > result.currentBatch
-                                    };
-                vm.PagingInfo.LoadNextPageOffset = vm.PagingInfo.PageSize / 5;
-                var ids = result.items.Select(item => item.id).ToArray();
-                var articles = await api.Wikia.Articles.GetArticlesAsync(ids, @abstract: 500);
-                foreach (var item in result.items)
-                {
-                    var id = item.id;
-                    var listItem = new ListItem_Model { Title = item.title };
-                    var article = articles.FirstOrDefault(art => art.id == id);
-                    if (article != null)
-                    {
-                        listItem.Content = article.@abstract;
-                        listItem.ImageSource = article.thumbnail ?? AppResources.PlaceholderImageSource;
-                    }
-                    vm.SearchResults.Add(listItem);
-                }
-            }
-        }
-
-
+        
         public CommandModel<ReactiveCommand, String> CommandNavigateToDetailPage
         {
             get { return _CommandNavigateToDetailPageLocator(this).Value; }
@@ -431,6 +376,30 @@ namespace WikiaWP.ViewModels
             PagingInfo = null;
         }
 
+        private void ShowSearchResult(SearchResult result)
+        {
+            if (result.MatchArticle == null)
+            {
+                PagingInfo = PagingInfo ?? new PagingInfo_Model();
+                PagingInfo.TotalCount = result.TotalCount;
+                PagingInfo.PageCount = result.GetPageCount();
+                PagingInfo.CurrentPage = result.Page;
+                PagingInfo.PageSize = result.PageSize;
+                PagingInfo.LoadNextPageOffset = result.PageSize / 5;
+                SearchResults.AddRange(
+                    result.Articles.Select(article => article.ToListItemModel()));
+                MatchItemPanelVisibility = Visibility.Collapsed;
+                SearchResultPanelVisibility = Visibility.Visible;
+            }
+            else
+            {
+                MatchItem = result.MatchArticle.ToListItemModel(
+                    imageWidth: 400,
+                    imageHeight: 500);
+                MatchItemPanelVisibility = Visibility.Visible;
+                SearchResultPanelVisibility = Visibility.Collapsed;
+            }
+        }
     }
 
 }

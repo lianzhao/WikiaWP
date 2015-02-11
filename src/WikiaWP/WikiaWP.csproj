@@ -367,6 +367,10 @@
       <Project>{E605BF40-0AE6-4E92-AF2C-DEDE63FA6064}</Project>
       <Name>WikiaSdk</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ZhAsoiafWiki.Plus\ZhAsoiafWiki.Plus.csproj">
+      <Project>{BE00723A-36AF-4039-AB4C-7F77DA08D917}</Project>
+      <Name>ZhAsoiafWiki.Plus</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ZhAsoiafWikiSDK\ZhAsoiafWikiSDK.csproj">
       <Project>{1D4E2A60-ADCB-4058-96C1-70962B651878}</Project>
       <Name>ZhAsoiafWikiSDK</Name>

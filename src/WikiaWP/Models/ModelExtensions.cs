@@ -2,7 +2,10 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 
+using Wikia;
 using Wikia.Mercury;
+
+using WikiaWP.Resources;
 
 namespace WikiaWP.Models
 {
@@ -29,6 +32,25 @@ namespace WikiaWP.Models
                                          c.comments.Select(
                                              sub => sub.ToArticleComment_Model(comments)).ToList())
                        };
+        }
+
+        public static ListItem_Model ToListItemModel(
+            this ZhAsoiafWiki.Plus.Models.Article article,
+            int imageWidth = 0,
+            int imageHeight = 0)
+        {
+            var model = new ListItem_Model
+                            {
+                                Title = article.Title,
+                                Content = article.Abstract,
+                                Link = "", // todo
+                                ImageSource =
+                                    WikiaImageFormatter.ToImageThumbnailUri(
+                                        article.ImageUri,
+                                        imageWidth,
+                                        imageHeight) ?? AppResources.PlaceholderImageSource
+                            };
+            return model;
         }
     }
 }

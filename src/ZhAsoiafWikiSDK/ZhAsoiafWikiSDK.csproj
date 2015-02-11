@@ -55,6 +55,7 @@
     <Compile Include="Pages\PageItem.cs" />
     <Compile Include="Pages\PagesApiClient.cs" />
     <Compile Include="Plus\PlusApiClient.cs" />
+    <Compile Include="Plus\PlusApiClientExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
