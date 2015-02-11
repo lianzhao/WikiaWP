@@ -7,6 +7,10 @@ namespace WikiaWP.Models
     //[DataContract(IsReference=true) ] //if you want
     public class ListItem_Model : BindableBase<ListItem_Model>
     {
+        public const int ListModeImageSize = 100;
+
+        public const int GridModeImageSize = 200;
+
         public ListItem_Model()
         {
             // Use propery to init value here:

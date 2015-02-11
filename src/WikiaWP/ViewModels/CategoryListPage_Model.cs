@@ -257,15 +257,15 @@ namespace WikiaWP.ViewModels
                                             art => art.id,
                                             (item, art) =>
                                             new ListItem_Model
-                                            {
-                                                Title = item.title,
-                                                Link = string.Format("Category:{0}", item.title),
-                                                Content = item.title,
-                                                ImageSource =
-                                                    art.thumbnail == null
-                                                        ? AppResources.PlaceholderImageSource
-                                                        : art.ThumbnailFixYOffset
-                                            }).ToList();
+                                                {
+                                                    Title = item.title,
+                                                    Link = string.Format("Category:{0}", item.title),
+                                                    Content = item.title,
+                                                    ImageSource =
+                                                        art.GetCustomSquareImageThumbnailUri(
+                                                            ListItem_Model.GridModeImageSize)
+                                                        ?? AppResources.PlaceholderImageSource
+                                                }).ToList();
                                     vm.Categories = new ObservableCollection<ListItem_Model>(subcats);
                                     vm.CategoryCount = vm.Categories.Count;
                                 }
@@ -280,16 +280,17 @@ namespace WikiaWP.ViewModels
                                             count: CategoriesPageSize);
                                     vm.CategoriesContinue = result.offset;
                                     var subcats =
-                                        result.items.Select(art =>
+                                        result.items.Select(
+                                            art =>
                                             new ListItem_Model
                                                 {
                                                     Title = art.title,
                                                     Link = string.Format("Category:{0}", art.title),
                                                     Content = art.@abstract,
                                                     ImageSource =
-                                                        art.thumbnail == null
-                                                            ? AppResources.PlaceholderImageSource
-                                                            : art.ThumbnailFixYOffset
+                                                        art.GetCustomSquareImageThumbnailUri(
+                                                            ListItem_Model.GridModeImageSize)
+                                                        ?? AppResources.PlaceholderImageSource
                                                 }).ToList();
                                     vm.Categories.AddRange(subcats);
                                 }
@@ -338,17 +339,18 @@ namespace WikiaWP.ViewModels
                                         count: FilesPageSize);
                                 vm.FilesContinue = result.offset;
                                 var items =
-                                    result.items.Select(art =>
+                                    result.items.Select(
+                                        art =>
                                         new ListItem_Model
-                                        {
-                                            Title = art.title,
-                                            Link = string.Format("File:{0}", art.title),
-                                            Content = art.@abstract,
-                                            ImageSource =
-                                                art.thumbnail == null
-                                                    ? AppResources.PlaceholderImageSource
-                                                    : art.ThumbnailFixYOffset
-                                        }).ToList();
+                                            {
+                                                Title = art.title,
+                                                Link = string.Format("File:{0}", art.title),
+                                                Content = art.@abstract,
+                                                ImageSource =
+                                                    art.GetCustomSquareImageThumbnailUri(
+                                                        ListItem_Model.GridModeImageSize)
+                                                    ?? AppResources.PlaceholderImageSource
+                                            }).ToList();
                                 vm.Files.AddRange(items);
                             }
                         }
@@ -499,15 +501,14 @@ namespace WikiaWP.ViewModels
                     result.items.Select(
                         art =>
                         new ListItem_Model
-                        {
-                            Title = art.title,
-                            Link = art.title,
-                            Content = art.@abstract,
-                            ImageSource =
-                                art.thumbnail == null
-                                    ? AppResources.PlaceholderImageSource
-                                    : art.ThumbnailFixYOffset
-                        }).ToList();
+                            {
+                                Title = art.title,
+                                Link = art.title,
+                                Content = art.@abstract,
+                                ImageSource =
+                                    art.GetCustomSquareImageThumbnailUri(ListItem_Model.GridModeImageSize)
+                                    ?? AppResources.PlaceholderImageSource
+                            }).ToList();
 
                 Articles.AddRange(pages);
                 UpdatePivotSelectedIndex();

@@ -123,7 +123,7 @@ namespace WikiaWP.ViewModels
                 {
                     return;
                 }
-                ImageSource = article.OriginalImageSource;
+                ImageSource = article.GetOriginalImageUri();
                 Content = article.@abstract;
                 UploadInfo = article.revision == null
                                  ? null

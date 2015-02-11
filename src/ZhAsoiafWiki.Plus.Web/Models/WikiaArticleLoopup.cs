@@ -36,15 +36,21 @@ namespace ZhAsoiafWiki.Plus.Web.Models
                 {
                     return null;
                 }
-                return new Article
-                           {
-                               Id = article.id,
-                               Namespace = article.ns,
-                               Title = article.title,
-                               Uri = article.url,
-                               Abstract = article.@abstract,
-                               ImageUri = article.OriginalImageSource,
-                           };
+                var rv = new Article
+                             {
+                                 Id = article.id,
+                                 Namespace = article.ns,
+                                 Title = article.title,
+                                 Uri = article.url,
+                                 Abstract = article.@abstract,
+                                 ImageUri = article.GetOriginalImageUri(),
+                             };
+                if (article.original_dimensions != null)
+                {
+                    rv.ImageWidth = article.original_dimensions.width;
+                    rv.ImageHeight = article.original_dimensions.height;
+                }
+                return rv;
             }
             catch (Exception ex)
             {

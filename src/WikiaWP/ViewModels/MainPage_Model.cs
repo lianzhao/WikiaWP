@@ -404,17 +404,21 @@ namespace WikiaWP.ViewModels
                         {
                             Title = art.title,
                             Content = art.@abstract,
-                            ImageSource = art.ThumbnailFixYOffset ?? AppResources.PlaceholderImageSource,
+                            ImageSource =
+                                art.GetCustomSquareImageThumbnailUri(ListItem_Model.GridModeImageSize)
+                                ?? AppResources.PlaceholderImageSource,
                             Link = art.title,
                             Group = group
-                        }).Concat(new ListItem_Model
-                        {
-                            Title = "更多...",
-                            Content = category,
-                            Link = string.Format("Category:{0}", category),
-                            ImageSource = AppResources.PlaceholderImageSource,
-                            Group = group
-                        });
+                        })
+                    .Concat(
+                        new ListItem_Model
+                            {
+                                Title = "更多...",
+                                Content = category,
+                                Link = string.Format("Category:{0}", category),
+                                ImageSource = AppResources.PlaceholderImageSource,
+                                Group = group
+                            });
         }
 
         private async Task<IEnumerable<ListItem_Model>> GetList3Group(Task<IEnumerable<PageItem>> task, string group)

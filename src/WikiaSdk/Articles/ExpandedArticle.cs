@@ -4,10 +4,6 @@ namespace Wikia.Articles
 {
     public class ExpandedArticle
     {
-        public const string YOffsetReplacePattern = @"y-offset/-(\w+)";
-
-        public const string YOffsetReplace = @"y-offset/0";
-
         public int id { get; set; }
         public string title { get; set; }
         public int ns { get; set; }
@@ -19,20 +15,20 @@ namespace Wikia.Articles
         public string thumbnail { get; set; }
         public Original_Dimensions original_dimensions { get; set; }
 
-        public string ThumbnailFixYOffset
+        public string GetOriginalImageUri()
         {
-            get
-            {
-                return thumbnail == null ? null : Regex.Replace(thumbnail, YOffsetReplacePattern, YOffsetReplace);
-            }
+            return WikiaImageFormatter.ToOriginalImageUri(thumbnail);
         }
 
-        public string OriginalImageSource
+        public string GetCustomSquareImageThumbnailUri(int size = 0)
         {
-            get
-            {
-                return thumbnail == null ? null : Regex.Replace(thumbnail, @"\/latest.*path-prefix", @"/latest?path-prefix");
-            }
+            return string.IsNullOrEmpty(thumbnail) || original_dimensions == null
+                       ? thumbnail
+                       : WikiaImageFormatter.ToSquareImageThumbnailUri(
+                           thumbnail,
+                           original_dimensions.width,
+                           original_dimensions.height,
+                           size);
         }
     }
 }

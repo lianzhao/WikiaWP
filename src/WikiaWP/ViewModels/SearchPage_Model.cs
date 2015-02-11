@@ -393,9 +393,7 @@ namespace WikiaWP.ViewModels
             }
             else
             {
-                MatchItem = result.MatchArticle.ToListItemModel(
-                    imageWidth: 400,
-                    imageHeight: 500);
+                MatchItem = result.MatchArticle.ToListItemModel();// todo thumbnail
                 MatchItemPanelVisibility = Visibility.Visible;
                 SearchResultPanelVisibility = Visibility.Collapsed;
             }

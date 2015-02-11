@@ -13,5 +13,9 @@
         public string Uri { get; set; }
 
         public string ImageUri { get; set; }
+
+        public int ImageWidth { get; set; }
+
+        public int ImageHeight { get; set; }
     }
 }

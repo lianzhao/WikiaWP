@@ -36,8 +36,7 @@ namespace WikiaWP.Models
 
         public static ListItem_Model ToListItemModel(
             this ZhAsoiafWiki.Plus.Models.Article article,
-            int imageWidth = 0,
-            int imageHeight = 0)
+            Func<string,string> imageUriConverter = null)
         {
             var model = new ListItem_Model
                             {
@@ -45,10 +44,10 @@ namespace WikiaWP.Models
                                 Content = article.Abstract,
                                 Link = "", // todo
                                 ImageSource =
-                                    WikiaImageFormatter.ToImageThumbnailUri(
-                                        article.ImageUri,
-                                        imageWidth,
-                                        imageHeight) ?? AppResources.PlaceholderImageSource
+                                    (imageUriConverter == null
+                                         ? article.ImageUri
+                                         : imageUriConverter.Invoke(article.ImageUri))
+                                    ?? AppResources.PlaceholderImageSource
                             };
             return model;
         }
