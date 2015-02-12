@@ -52,6 +52,8 @@
     <Compile Include="Patterns\Composite\CompositeObject.cs" />
     <Compile Include="Patterns\Composite\Composites.cs" />
     <Compile Include="Patterns\Composite\IComposite.cs" />
+    <Compile Include="Patterns\Func\Action.cs" />
+    <Compile Include="Patterns\Func\AsyncAction.cs" />
     <Compile Include="Patterns\Func\AsyncFunc.cs" />
     <Compile Include="Patterns\Func\AsyncLazyFunc.cs" />
     <Compile Include="Patterns\Func\CompositeAction.cs" />
@@ -59,6 +61,9 @@
     <Compile Include="Patterns\Func\CompositeAsyncFunc.cs" />
     <Compile Include="Patterns\Func\CompositeFunc.cs" />
     <Compile Include="Patterns\Func\CompositeTryFunc.cs" />
+    <Compile Include="Patterns\Func\DelegateAction.cs" />
+    <Compile Include="Patterns\Func\DelegateAsyncAction.cs" />
+    <Compile Include="Patterns\Func\DelegateAsyncFunc.cs" />
     <Compile Include="Patterns\Func\DelegateFunc.cs" />
     <Compile Include="Patterns\Func\EmptyAction.cs" />
     <Compile Include="Patterns\Func\EmptyFunc.cs" />

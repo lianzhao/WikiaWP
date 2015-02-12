@@ -148,6 +148,8 @@
     <Compile Include="Startups\StartupFunctions.cs" />
     <Compile Include="ViewModels\SearchPage_Model.cs" />
     <Compile Include="ViewModels\ViewModelExtensions.cs" />
+    <Compile Include="WikiAsyncAction.cs" />
+    <Compile Include="WikiAsyncFunc.cs" />
     <Compile Include="WikiDictTryFunc.cs" />
   </ItemGroup>
   <ItemGroup>

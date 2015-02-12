@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Media;
 
 using LianZhao.Collections.Generic;
+using LianZhao.Patterns.Func;
 
 using Microsoft.Phone.Shell;
 
@@ -149,37 +150,20 @@ namespace WikiaWP.ViewModels
                                 return;
                             }
                             vm.ClearMatchItemAndSearchResult();
-
-                            using (var api = new ApiClient())
-                            {
-                                try
-                                {
-                                    var result =
-                                        await api.ZhAsoiafWiki.Plus.Search(vm.SearchText);
-                                    vm.ShowSearchResult(result);
-                                }
-                                catch (ZhAsoiafWiki.WikiHttpException ex)
-                                {
-                                    if (ex.Response.StatusCode == HttpStatusCode.NotFound)
+                            var func = WikiAsyncFunc.Create(
+                                async api =>
                                     {
-                                        vm.EnsurePagingInfo();
-                                        vm.MatchItemPanelVisibility = Visibility.Collapsed;
-                                        vm.SearchResultPanelVisibility = Visibility.Visible;
-                                    }
-                                    else
-                                    {
-                                        throw;
-                                    }
-                                }
-                                catch (Exception ex)
-                                {
-                                    if (Debugger.IsAttached)
-                                    {
-                                        Debugger.Break();
-                                    }
-                                    vm.ShowToastMessageAsync("发生错误");
-                                }
-                            }
+                                        var result = await api.ZhAsoiafWiki.Plus.Search(vm.SearchText);
+                                        vm.ShowSearchResult(result);
+                                    }).IgnoreHttpError(
+                                        HttpStatusCode.NotFound,
+                                        () =>
+                                            {
+                                                vm.EnsurePagingInfo();
+                                                vm.MatchItemPanelVisibility = Visibility.Collapsed;
+                                                vm.SearchResultPanelVisibility = Visibility.Visible;
+                                            }).IgnoreError(ex => vm.ShowToastMessageAsync("发生错误"));
+                            await func.InvokeAsync();
                         }
                     )
                     .DoNotifyDefaultEventRouter(vm, commandId)

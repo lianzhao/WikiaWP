@@ -45,5 +45,10 @@ namespace LianZhao.Patterns.Func
         {
             return new DelegateFunc<Void, TTo>(_ => func.Invoke());
         }
+
+        public static IAsyncFunc<TFrom, TTo> FromDelegate<TFrom, TTo>(Func<TFrom, Task<TTo>> func)
+        {
+            return new DelegateAsyncFunc<TFrom, TTo>(func);
+        }
     }
 }
