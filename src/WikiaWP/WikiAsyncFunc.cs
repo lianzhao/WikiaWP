@@ -4,8 +4,7 @@ using System.Threading.Tasks;
 
 using LianZhao.Patterns.Func;
 
-using Microsoft.Phone.Reactive;
-
+using Action = System.Action;
 using Void = LianZhao.Void;
 
 namespace WikiaWP
@@ -146,7 +145,7 @@ namespace WikiaWP
                     {
                         return;
                     }
-                    var httpStatusCodeProvider = e.Error as IFunc<LianZhao.Void, HttpStatusCode>;
+                    var httpStatusCodeProvider = e.Error as IFunc<Void, HttpStatusCode>;
                     if (httpStatusCodeProvider == null)
                     {
                         return;
@@ -201,7 +200,7 @@ namespace WikiaWP
         public static WikiAsyncFunc<Void> IgnoreHttpError(
             this WikiAsyncFunc<Void> wikiFunc,
             HttpStatusCode error,
-            System.Action action)
+            Action action)
         {
             Action<WikiAsyncFunc<Void>.UnhandledErrorEventArgs<HttpStatusCode>> errorHandler = e =>
                 {
