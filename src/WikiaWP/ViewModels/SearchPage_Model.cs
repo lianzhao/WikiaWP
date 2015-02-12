@@ -177,7 +177,7 @@ namespace WikiaWP.ViewModels
                                     {
                                         Debugger.Break();
                                     }
-                                    vm.ShowToastMessage("发生错误");
+                                    vm.ShowToastMessageAsync("发生错误");
                                 }
                             }
                         }
@@ -221,7 +221,7 @@ namespace WikiaWP.ViewModels
                             {
                                 if (!vm.PagingInfo.HasMore)
                                 {
-                                    await vm.ShowToastMessage("没有更多条目了");
+                                    await vm.ShowToastMessageAsync("没有更多条目了");
                                     return;
                                 }
                             }

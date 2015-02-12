@@ -13,7 +13,7 @@ namespace WikiaWP.ViewModels
     {
         public static readonly TimeSpan DefaultShowToastMessageTime = TimeSpan.FromSeconds(2);
 
-        public static async Task ShowToastMessage<TViewModel>(this ViewModelBase<TViewModel> vm, string message, TimeSpan time = default(TimeSpan))
+        public static async Task ShowToastMessageAsync<TViewModel>(this ViewModelBase<TViewModel> vm, string message, TimeSpan time = default(TimeSpan))
             where TViewModel : ViewModelBase<TViewModel>
         {
             if (message == null)
