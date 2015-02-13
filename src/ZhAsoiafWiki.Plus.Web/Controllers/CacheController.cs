@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Net.Http;
 using System.Runtime.Caching;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -22,7 +24,8 @@ namespace ZhAsoiafWiki.Plus.Web.Controllers
             var cache = MemoryCache.Default;
             var stopwatch = new Stopwatch();
             var rv = new Dictionary<string, long>();
-            using (var api = new Models.ApiClient())
+            using (var httpClient = new HttpClient {Timeout = TimeSpan.FromMinutes(10)})
+            using (var api = new Models.ApiClient(httpClient))
             {
                 if (module.HasFlag(CacheModule.EnZhDictionary))
                 {
@@ -39,6 +42,13 @@ namespace ZhAsoiafWiki.Plus.Web.Controllers
                     cache.SetCacheModule(CacheModule.RedirectDictionary, dict);
                     stopwatch.Stop();
                     rv.Add(CacheModule.RedirectDictionary.ToString(), stopwatch.ElapsedMilliseconds);
+                }
+                if (module.HasFlag(CacheModule.Articles))
+                {
+                    stopwatch.Restart();
+                    await AppCache.RefreshArticlesAsync(api);
+                    stopwatch.Stop();
+                    rv.Add(CacheModule.Articles.ToString(), stopwatch.ElapsedMilliseconds);
                 }
             }
             return rv;

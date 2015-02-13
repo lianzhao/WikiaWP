@@ -1,11 +1,23 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Caching;
+using System.Threading.Tasks;
+
+using ZhAsoiafWiki.Plus.Models;
 
 namespace ZhAsoiafWiki.Plus.Web.Models
 {
     public static class AppCache
     {
         public static readonly string CacheStatusKey = typeof(CacheStatus).FullName;
+
+        public static IEnumerable<Article> Articles { get; private set; }
+
+        public static async Task RefreshArticlesAsync(ApiClient api)
+        {
+            var result = await api.Wikia.Articles.GetListArticlesAsync(count: 25000);
+            Articles = result.items.Select(item => item.ToPlusArticleModel()).ToList();
+        }
 
         public static CacheStatus GetStatus(this ObjectCache cache)
         {

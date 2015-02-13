@@ -32,25 +32,7 @@ namespace ZhAsoiafWiki.Plus.Web.Models
             try
             {
                 var article = await _api.Articles.GetArticleAsync(title, ArticlesApiClient.MaxAbstractLength);
-                if (article == null)
-                {
-                    return null;
-                }
-                var rv = new Article
-                             {
-                                 Id = article.id,
-                                 Namespace = article.ns,
-                                 Title = article.title,
-                                 Uri = article.url,
-                                 Abstract = article.@abstract,
-                                 ImageUri = article.GetOriginalImageUri(),
-                             };
-                if (article.original_dimensions != null)
-                {
-                    rv.ImageWidth = article.original_dimensions.width;
-                    rv.ImageHeight = article.original_dimensions.height;
-                }
-                return rv;
+                return article.ToPlusArticleModel();
             }
             catch (Exception ex)
             {
