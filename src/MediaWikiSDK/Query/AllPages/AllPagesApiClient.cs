@@ -40,7 +40,7 @@ namespace MediaWiki.Query.AllPages
             _httpClient = httpClient;
         }
 
-        public async Task<IEnumerable<Page>> GetAllCategoriesAsync(
+        public async Task<IEnumerable<Page>> GetAllPagesAsync(
             string titlePrefix = null,
             int @namespace = 0,
             apfilterredir redirect = apfilterredir.all,
