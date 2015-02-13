@@ -1,4 +1,4 @@
-namespace MediaWiki.Query.AllCategories
+namespace MediaWiki.Query
 {
     public enum SortDirection
     {

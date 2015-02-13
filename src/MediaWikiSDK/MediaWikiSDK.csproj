@@ -48,7 +48,16 @@
     <Compile Include="Query\AllCategories\Category.cs" />
     <Compile Include="Query\AllCategories\Query.cs" />
     <Compile Include="Query\AllCategories\QueryContinue.cs" />
-    <Compile Include="Query\AllCategories\SortDirection.cs" />
+    <Compile Include="Query\AllPages\apfilterlanglinks.cs" />
+    <Compile Include="Query\AllPages\apfilterredir.cs" />
+    <Compile Include="Query\SortDirection.cs" />
+    <Compile Include="Query\AllPages\Allpages.cs" />
+    <Compile Include="Query\AllPages\AllPagesApiClient.cs" />
+    <Compile Include="Query\AllPages\AllPagesResultSet.cs" />
+    <Compile Include="Query\AllPages\Page.cs" />
+    <Compile Include="Query\AllPages\Pageprops.cs" />
+    <Compile Include="Query\AllPages\Query.cs" />
+    <Compile Include="Query\AllPages\QueryContinue.cs" />
     <Compile Include="Query\CategoryMembers\Categorymember.cs" />
     <Compile Include="Query\CategoryMembers\CategoryMemberResultSet.cs" />
     <Compile Include="Query\CategoryMembers\Categorymembers.cs" />
