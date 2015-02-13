@@ -6,6 +6,20 @@ namespace ZhAsoiafWiki.Plus.Web.Models
 {
     public static class ModelExtensions
     {
+        public static SimpleArticle ToPlusSimpleArticleModel(this ExpandedArticle article)
+        {
+            if (article == null)
+            {
+                return null;
+            }
+            return new SimpleArticle
+            {
+                Id = article.id,
+                Namespace = article.ns,
+                Title = article.title
+            };
+        }
+
         public static Article ToPlusArticleModel(this ExpandedArticle article)
         {
             if (article == null)

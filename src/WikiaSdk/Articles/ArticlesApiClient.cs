@@ -156,9 +156,10 @@ namespace Wikia.Articles
             string category = null,
             IEnumerable<int> namespaces = null,
             int count = 0,
-            string offset = null)
+            string offset = null,
+            bool expand = true)
         {
-            var builder = new StringBuilder(_site).Append("/api/v1/Articles/List?expand=1");
+            var builder = new StringBuilder(_site).Append("/api/v1/Articles/List?expand=").Append(expand ? "1" : "0");
             if (!string.IsNullOrEmpty(category))
             {
                 builder.Append("&category=").Append(category);

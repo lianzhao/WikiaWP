@@ -11,12 +11,12 @@ namespace ZhAsoiafWiki.Plus.Web.Models
     {
         public static readonly string CacheStatusKey = typeof(CacheStatus).FullName;
 
-        public static IEnumerable<Article> Articles { get; private set; }
+        public static IEnumerable<SimpleArticle> Articles { get; private set; }
 
         public static async Task RefreshArticlesAsync(ApiClient api)
         {
-            var result = await api.Wikia.Articles.GetListArticlesAsync(count: 25000);
-            Articles = result.items.Select(item => item.ToPlusArticleModel()).ToList();
+            var result = await api.Wikia.Articles.GetListArticlesAsync(count: 25000, expand: false);
+            Articles = result.items.Select(item => item.ToPlusSimpleArticleModel()).ToList();
         }
 
         public static CacheStatus GetStatus(this ObjectCache cache)
