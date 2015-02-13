@@ -1,0 +1,17 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Web.Http;
+
+using ZhAsoiafWiki.Plus.Models;
+using ZhAsoiafWiki.Plus.Web.Models;
+
+namespace ZhAsoiafWiki.Plus.Web.Controllers
+{
+    public class ArticlesController : ApiController
+    {
+        public Task<IEnumerable<SimpleArticle>> Get()
+        {
+            return Task.FromResult(AppCache.Articles);
+        }
+    }
+}
