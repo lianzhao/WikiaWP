@@ -3,6 +3,8 @@ using System.Linq;
 using System.Runtime.Caching;
 using System.Threading.Tasks;
 
+using MediaWiki.Query.AllPages;
+
 using ZhAsoiafWiki.Plus.Models;
 
 namespace ZhAsoiafWiki.Plus.Web.Models
@@ -15,8 +17,19 @@ namespace ZhAsoiafWiki.Plus.Web.Models
 
         public static async Task RefreshArticlesAsync(ApiClient api)
         {
-            var result = await api.Wikia.Articles.GetListArticlesAsync(count: 25000, expand: false);
-            Articles = result.items.Select(item => item.ToPlusSimpleArticleModel()).ToList();
+            //var result = await api.Wikia.Articles.GetListArticlesAsync(count: 25, expand: false);
+            //Articles = result.items.Select(item => item.ToPlusSimpleArticleModel()).ToList();
+            var pages = await api.MediaWiki.Query.AllPages.GetAllPagesAsync(redirect: apfilterredir.nonredirects);
+            Articles =
+                pages.Select(
+                    p =>
+                    new SimpleArticle
+                        {
+                            Id = p.pageid,
+                            Namespace = p.ns,
+                            Title = p.title,
+                            PinYin = p.pageprops == null ? null : p.pageprops.defaultsort
+                        });
         }
 
         public static CacheStatus GetStatus(this ObjectCache cache)

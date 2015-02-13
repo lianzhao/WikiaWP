@@ -7,5 +7,7 @@
         public int Namespace { get; set; }
 
         public string Title { get; set; }
+
+        public string PinYin { get; set; }
     }
 }
