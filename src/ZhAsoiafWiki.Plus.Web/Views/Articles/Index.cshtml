@@ -1,0 +1,36 @@
+﻿@using ZhAsoiafWiki.Plus.Web.Models
+@model ZhAsoiafWiki.Plus.Web.Models.ArticlesIndexViewModel
+
+@{
+    ViewBag.Title = "articles";
+    Layout = "_Layout";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div>
+    <p></p>
+    <p>@Model.Articles.Count articles found</p>
+</div>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <td>Id</td>
+        <td>Title</td>
+        <td>Namespace</td>
+        <td>PinYin</td>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var article in Model.Articles)
+    {
+        <tr>
+            <td>@article.Id</td>
+            <td><a href="@article.GetLinkUri()" target="_blank">@article.Title</a></td>
+            <td>@article.Namespace</td>
+            <td>@article.PinYin</td>
+        </tr>
+    }
+    </tbody>
+</table>

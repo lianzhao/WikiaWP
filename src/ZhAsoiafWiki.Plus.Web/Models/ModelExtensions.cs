@@ -30,6 +30,11 @@ namespace ZhAsoiafWiki.Plus.Web.Models
         //    };
         //}
 
+        public static string GetLinkUri(this SimpleArticle article)
+        {
+            return string.Format("{0}/wiki/{1}", ApiClient.Site, article.Title);
+        }
+
         public static Article ToPlusArticleModel(this ExpandedArticle article)
         {
             if (article == null)

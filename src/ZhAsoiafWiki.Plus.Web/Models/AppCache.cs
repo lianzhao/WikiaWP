@@ -13,7 +13,7 @@ namespace ZhAsoiafWiki.Plus.Web.Models
     {
         public static readonly string CacheStatusKey = typeof(CacheStatus).FullName;
 
-        public static IEnumerable<SimpleArticle> Articles { get; private set; }
+        public static IReadOnlyCollection<SimpleArticle> Articles { get; private set; }
 
         public static async Task RefreshArticlesAsync(ApiClient api)
         {
@@ -29,7 +29,7 @@ namespace ZhAsoiafWiki.Plus.Web.Models
                             Namespace = p.ns,
                             Title = p.title,
                             PinYin = p.pageprops == null ? null : p.pageprops.defaultsort
-                        });
+                        }).ToList();
         }
 
         public static CacheStatus GetStatus(this ObjectCache cache)

@@ -10,7 +10,7 @@ namespace ZhAsoiafWiki.Plus.Web.Controllers
     [Route("api/articles")]
     public class ArticlesApiController : ApiController
     {
-        public Task<IEnumerable<SimpleArticle>> Get()
+        public Task<IReadOnlyCollection<SimpleArticle>> Get()
         {
             return Task.FromResult(AppCache.Articles);
         }
