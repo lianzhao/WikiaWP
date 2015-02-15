@@ -50,6 +50,7 @@
     <Compile Include="Query\AllCategories\QueryContinue.cs" />
     <Compile Include="Query\AllPages\apfilterlanglinks.cs" />
     <Compile Include="Query\AllPages\apfilterredir.cs" />
+    <Compile Include="Query\AllPages\approp.cs" />
     <Compile Include="Query\SortDirection.cs" />
     <Compile Include="Query\AllPages\Allpages.cs" />
     <Compile Include="Query\AllPages\AllPagesApiClient.cs" />

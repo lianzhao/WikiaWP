@@ -43,6 +43,7 @@ namespace MediaWiki.Query.AllPages
         public async Task<IEnumerable<Page>> GetAllPagesAsync(
             string titlePrefix = null,
             int @namespace = 0,
+            approp prop = approp.none,
             apfilterredir redirect = apfilterredir.all,
             apfilterlanglinks langlinks = apfilterlanglinks.all,
             SortDirection sortDirection = SortDirection.ascending)
@@ -58,6 +59,7 @@ namespace MediaWiki.Query.AllPages
                         null,
                         titlePrefix,
                         @namespace,
+                        prop,
                         redirect,
                         langlinks,
                         sortDirection,
@@ -80,13 +82,14 @@ namespace MediaWiki.Query.AllPages
             string to = null,
             string titlePrefix = null,
             int @namespace = 0,
+            approp prop = approp.none,
             apfilterredir redirect = apfilterredir.all,
             apfilterlanglinks langlinks = apfilterlanglinks.all,
             SortDirection sortDirection = SortDirection.ascending,
             int count = 0)
         {
             var builder =
-                new StringBuilder(_site).Append("/api.php?action=query&generator=allpages&prop=pageprops&format=json");
+                new StringBuilder(_site).Append("/api.php?action=query&generator=allpages&format=json");
 
             if (!string.IsNullOrEmpty(from))
             {
@@ -103,6 +106,10 @@ namespace MediaWiki.Query.AllPages
             if (count > 0)
             {
                 builder.Append("&gaplimit=").Append(count);
+            }
+            if (prop != approp.none)
+            {
+                builder.Append("&prop=").Append(prop.ToString());
             }
             builder.Append("&gapnamespace=").Append(@namespace);
             builder.Append("&gapfilterredir=").Append(redirect.ToString());
