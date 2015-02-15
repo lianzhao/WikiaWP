@@ -15,6 +15,11 @@ namespace ZhAsoiafWiki.Plus.Web.Models
 
         public static IReadOnlyCollection<SimpleArticle> Articles { get; private set; }
 
+        static AppCache()
+        {
+            Articles = Enumerable.Empty<SimpleArticle>().ToList();
+        }
+
         public static async Task RefreshArticlesAsync(ApiClient api)
         {
             //var result = await api.Wikia.Articles.GetListArticlesAsync(count: 25, expand: false);
