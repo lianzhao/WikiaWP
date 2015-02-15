@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Caching;
 using System.Threading.Tasks;
@@ -22,19 +23,35 @@ namespace ZhAsoiafWiki.Plus.Web.Models
 
         public static async Task RefreshArticlesAsync(ApiClient api)
         {
-            //var result = await api.Wikia.Articles.GetListArticlesAsync(count: 25, expand: false);
-            //Articles = result.items.Select(item => item.ToPlusSimpleArticleModel()).ToList();
-            var pages = await api.MediaWiki.Query.AllPages.GetAllPagesAsync(redirect: apfilterredir.nonredirects);
-            Articles =
-                pages.Select(
-                    p =>
-                    new SimpleArticle
+            var pages =
+                await
+                api.MediaWiki.Query.AllPages.GetAllPagesAsync(
+                    prop: approp.info | approp.pageprops | approp.links | approp.langlinks);
+            Articles = pages.Select(
+                p =>
+                    {
+                        var rv = new SimpleArticle
+                                     {
+                                         Id = p.pageid,
+                                         Namespace = p.ns,
+                                         Title = p.title,
+                                         PinYin = p.pageprops == null ? null : p.pageprops.defaultsort,
+                                         RedirectTo =
+                                             (p.redirect != null && p.links != null && p.links.Length > 0)
+                                                 ? p.links[0].title
+                                                 : null,
+                                     };
+                        var enLink = p.langlinks == null
+                                         ? null
+                                         : p.langlinks.FirstOrDefault(
+                                             ll => ll.lang.Equals("en", StringComparison.InvariantCultureIgnoreCase));
+                        if (enLink != null)
                         {
-                            Id = p.pageid,
-                            Namespace = p.ns,
-                            Title = p.title,
-                            PinYin = p.pageprops == null ? null : p.pageprops.defaultsort
-                        }).ToList();
+                            rv.EnLink = enLink._;
+                        }
+
+                        return rv;
+                    }).ToList();
         }
 
         public static CacheStatus GetStatus(this ObjectCache cache)

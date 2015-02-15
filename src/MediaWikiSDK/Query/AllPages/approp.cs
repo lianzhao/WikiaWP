@@ -5,64 +5,64 @@ namespace MediaWiki.Query.AllPages
     [Flags]
     public enum approp
     {
-        none = 0,
+        none = 0x0,
 
-        categories = 2 ^ 0,
+        categories = 1,
 
-        categoryinfo = 2 ^ 1,
+        categoryinfo = 2,
 
-        contributors = 2 ^ 2,
+        contributors = 4,
 
-        coordinates = 2 ^ 3,
+        coordinates = 8,
 
-        deletedrevisions = 2 ^ 4,
+        deletedrevisions = 16,
 
-        duplicatefiles = 2 ^ 5,
+        duplicatefiles = 32,
 
-        extlinks = 2 ^ 6,
+        extlinks = 64,
 
-        extracts = 2 ^ 7,
+        extracts = 128,
 
-        fileusage = 2 ^ 8,
+        fileusage = 256,
 
-        flagged = 2 ^ 9,
+        flagged = 512,
 
-        flowinfo = 2 ^ 10,
+        flowinfo = 1024,
 
-        globalusage = 2 ^ 11,
+        globalusage = 2048,
 
-        imageinfo = 2 ^ 12,
+        imageinfo = 4096,
 
-        images = 2 ^ 13,
+        images = 8192,
 
-        info = 2 ^ 14,
+        info = 16384,
 
-        iwlinks = 2 ^ 15,
+        iwlinks = 32768,
 
-        langlinks = 2 ^ 16,
+        langlinks = 65536,
 
-        links = 2 ^ 17,
+        links = 131072,
 
-        linkshere = 2 ^ 18,
+        linkshere = 262144,
 
-        pageimages = 2 ^ 19,
+        pageimages = 524288,
 
-        pageprops = 2 ^ 20,
+        pageprops = 1048576,
 
-        pageterms = 2 ^ 21,
+        pageterms = 2097152,
 
-        redirects = 2 ^ 22,
+        redirects = 4194304,
 
-        revisions = 2 ^ 23,
+        revisions = 8388608,
 
-        stashimageinfo = 2 ^ 24,
+        stashimageinfo = 16777216,
 
-        templates = 2 ^ 25,
+        templates = 33554432,
 
-        transcludedin = 2 ^ 26,
+        transcludedin = 67108864,
 
-        transcodestatus = 2 ^ 27,
+        transcodestatus = 134217728,
 
-        videoinfo = 2 ^ 28
+        videoinfo = 268435456
     }
 }

@@ -106,10 +106,14 @@ namespace MediaWiki.Query.AllPages
             if (count > 0)
             {
                 builder.Append("&gaplimit=").Append(count);
+                if (prop.HasFlag(approp.links))
+                {
+                    builder.Append("&pllimit=").Append(count);
+                }
             }
             if (prop != approp.none)
             {
-                builder.Append("&prop=").Append(prop.ToString());
+                builder.Append("&prop=").Append(prop.ToString().Replace(", ", "|"));
             }
             builder.Append("&gapnamespace=").Append(@namespace);
             builder.Append("&gapfilterredir=").Append(redirect.ToString());
