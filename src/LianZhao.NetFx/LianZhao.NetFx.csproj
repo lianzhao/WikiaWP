@@ -53,6 +53,8 @@
     <Compile Include="Media\Point3D_Equals.cs" />
     <Compile Include="Media\Point3D_Subtract.cs" />
     <Compile Include="Media\Point3D_ToString.cs" />
+    <Compile Include="Media\Size2D.cs" />
+    <Compile Include="Media\Size2D_Equals.cs" />
     <Compile Include="Media\Size3D.cs" />
     <Compile Include="Media\Size3D_Equals.cs" />
     <Compile Include="Media\Vector3D.cs" />
