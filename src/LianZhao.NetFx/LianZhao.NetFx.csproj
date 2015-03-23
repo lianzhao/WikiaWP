@@ -63,6 +63,7 @@
     <Compile Include="Media\Size3D.cs" />
     <Compile Include="Media\Size3D_Equals.cs" />
     <Compile Include="Media\Vector2D.cs" />
+    <Compile Include="Media\Vector2D_AngleBetween.cs" />
     <Compile Include="Media\Vector3D.cs" />
     <Compile Include="Media\Vector2D_Add.cs" />
     <Compile Include="Media\Vector3D_Add.cs" />
