@@ -46,6 +46,7 @@
     <Compile Include="DisposableObjectOwner.cs" />
     <Compile Include="ExceptionEventArgs.cs" />
     <Compile Include="FuncExtensions.cs" />
+    <Compile Include="GuidExtensions.cs" />
     <Compile Include="Linq\Enumerable_Concat.cs" />
     <Compile Include="Linq\Enumerable_JoinToString.cs" />
     <Compile Include="Media\Point2D.cs" />
